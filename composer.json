@@ -1,0 +1,24 @@
+{
+    "name": "liftedlogic/ll-bag-starter",
+    "description": "LL Before & After WordPress Plugin Starter",
+    "type": "wordpress-plugin",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.0",
+        "illuminate/container": "^10.0",
+        "illuminate/support": "^10.0",
+        "illuminate/database": "^10.0",
+        "illuminate/events": "^10.0"
+    },
+    "require-dev": {
+        "php-stubs/wordpress-stubs": "^6.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "LiftedLogic\\LLBag\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}
