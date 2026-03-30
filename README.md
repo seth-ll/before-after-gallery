@@ -1,6 +1,6 @@
 # LL Before & After Starter
 
-WordPress plugin starter for the LL Before & After plugin. Includes a registered `ll_before_after` custom post type, Illuminate components (container, support, database), Vite with hot module reloading, and Tailwind CSS v3.
+WordPress plugin starter for the LL Before & After plugin.
 
 ## Requirements
 
@@ -17,7 +17,7 @@ composer install
 npm install
 ```
 
-**2. Symlink into your local WordPress install**
+**2. Symlink into your local WordPress install plugin folder**
 
 ```bash
 ln -s "/path/to/ll-bag-starter" "/path/to/wordpress/wp-content/plugins/ll-bag-starter"
