@@ -9,6 +9,30 @@ class Fields {
 
   public function registerFields(): void {
     acf_add_local_field_group([
+      'key'    => 'group_ll_ba_category',
+      'title'  => 'Before & After Category Settings',
+      'fields' => [
+        [
+          'key'           => 'field_ll_ba_category_bg_image',
+          'label'         => 'Background Image',
+          'name'          => 'll_ba_category_bg_image',
+          'type'          => 'image',
+          'return_format' => 'id',
+          'instructions'  => 'Used as the background image for this category card on the Before & After archive.',
+        ],
+      ],
+      'location' => [
+        [
+          [
+            'param'    => 'taxonomy',
+            'operator' => '==',
+            'value'    => 'category',
+          ],
+        ],
+      ],
+    ]);
+
+    acf_add_local_field_group([
       'key'    => 'group_ll_before_after',
       'title'  => 'Before & After Details',
       'fields' => [
