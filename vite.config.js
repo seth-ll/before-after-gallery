@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import fullReload from 'vite-plugin-full-reload';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const hotFile   = resolve(__dirname, 'hot');
@@ -30,7 +31,10 @@ function wordPressHMR() {
 }
 
 export default defineConfig({
-    plugins: [wordPressHMR()],
+    plugins: [
+        wordPressHMR(),
+        fullReload(['templates/**/*.php']),
+    ],
 
     build: {
         outDir:   'public/build',
@@ -38,7 +42,8 @@ export default defineConfig({
         emptyOutDir: true,
         rollupOptions: {
             input: {
-                admin: resolve(__dirname, 'resources/js/admin.js'),
+                admin:    resolve(__dirname, 'resources/js/admin.js'),
+                frontend: resolve(__dirname, 'resources/js/frontend.js'),
             },
         },
     },
