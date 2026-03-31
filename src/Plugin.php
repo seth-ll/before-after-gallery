@@ -27,8 +27,8 @@ class Plugin {
     $this->container->singleton(Fields::class);
     $this->container->singleton(SettingsPage::class);
     $this->container->singleton(TemplateLoader::class);
-    $this->container->singleton(Shortcodes::class);
-    $this->container->singleton(AjaxHandler::class);
+    // $this->container->singleton(Shortcodes::class);
+    // $this->container->singleton(AjaxHandler::class);
 
     $this->container->singleton(FilterSettingsPage::class, function () {
       return new FilterSettingsPage($this->container->make(FilterManager::class));
@@ -44,8 +44,8 @@ class Plugin {
     $this->container->make(Fields::class)->register();
     $this->container->make(SettingsPage::class)->register();
     $this->container->make(TemplateLoader::class)->register();
-    $this->container->make(Shortcodes::class)->register();
-    $this->container->make(AjaxHandler::class)->register();
+    // $this->container->make(Shortcodes::class)->register();
+    // $this->container->make(AjaxHandler::class)->register();
 
     if (is_admin()) {
       $this->container->make(AdminMenu::class)->register();

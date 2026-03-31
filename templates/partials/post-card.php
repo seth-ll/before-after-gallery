@@ -18,33 +18,33 @@ $title     = get_field(MetaBoxes::TITLE_KEY, $post->ID) ?: get_the_title($post);
 $permalink = get_permalink($post->ID);
 ?>
 
-<a href="<?php echo esc_url($permalink); ?>" class="relative block aspect-square overflow-hidden group">
+<a href="<?php echo esc_url($permalink); ?>" class="block overflow-hidden relative aspect-square group">
 
-    <div class="absolute inset-0 flex">
+    <div class="flex absolute inset-0">
         <?php if ($beforeId) : ?>
-        <div class="w-1/2 h-full overflow-hidden">
+        <div class="overflow-hidden w-1/2 h-full">
             <img
                 src="<?php echo esc_url(wp_get_attachment_image_url($beforeId, 'medium_large')); ?>"
                 alt="<?php esc_attr_e('Before', 'll-bag'); ?>"
-                class="w-full h-full object-cover"
+                class="object-cover w-full h-full"
             >
         </div>
         <?php endif; ?>
         <?php if ($afterId) : ?>
-        <div class="w-1/2 h-full overflow-hidden">
+        <div class="overflow-hidden w-1/2 h-full">
             <img
                 src="<?php echo esc_url(wp_get_attachment_image_url($afterId, 'medium_large')); ?>"
                 alt="<?php esc_attr_e('After', 'll-bag'); ?>"
-                class="w-full h-full object-cover"
+                class="object-cover w-full h-full"
             >
         </div>
         <?php endif; ?>
     </div>
 
-    <div class="absolute inset-y-0 left-1/2 w-px bg-white/60 -translate-x-1/2"></div>
+    <div class="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-white/60"></div>
     <div class="absolute inset-0 bg-black/20"></div>
 
-    <span class="absolute bottom-3 left-3 text-white text-sm font-medium leading-tight">
+    <span class="absolute bottom-3 left-3 text-sm font-medium leading-tight text-white">
         <?php echo esc_html($title); ?>
     </span>
 
