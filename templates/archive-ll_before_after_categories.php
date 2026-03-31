@@ -27,18 +27,18 @@ get_header();
 <div class="ll-ba-archive-categories">
 
     <div class="flex justify-between items-center px-4 py-4 md:px-0">
-        <?php $allPostsUrl = SettingsPage::getPostsPageUrl(); ?>
-        <?php if ($allPostsUrl) : ?>
-        <a href="<?php echo esc_url($allPostsUrl); ?>" class="flex gap-1 items-center text-sm">
-            View All Before &amp; Afters <span aria-hidden="true">→</span>
-        </a>
-        <?php endif; ?>
+      <?php $allPostsUrl = SettingsPage::getPostsPageUrl(); ?>
+      <?php if ($allPostsUrl) : ?>
+      <a href="<?php echo esc_url($allPostsUrl); ?>" class="flex gap-1 items-center text-sm">
+          View All Before &amp; Afters <span aria-hidden="true">→</span>
+      </a>
+      <?php endif; ?>
     </div>
 
     <?php if (!empty($categories)) : ?>
-    <div class="grid grid-cols-2 md:grid-cols-4">
+    <div class="grid grid-cols-2">
         <?php foreach ($categories as $category) :
-            TemplateLoader::get('partials/category-card.php', ['category' => $category]);
+          TemplateLoader::get('partials/category-card.php', ['category' => $category]);
         endforeach; ?>
     </div>
     <?php else : ?>

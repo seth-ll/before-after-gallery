@@ -18,20 +18,19 @@ $link        = $archiveLink
     : get_category_link($category->term_id);
 ?>
 
-<a href="<?php echo esc_url($link); ?>" class="relative block aspect-square overflow-hidden group">
-
+<a href="<?php echo esc_url($link); ?>" class="block overflow-hidden relative aspect-video group">
     <?php if ($bgImageUrl) : ?>
     <img
-        src="<?php echo esc_url($bgImageUrl); ?>"
-        alt="<?php echo esc_attr($category->name); ?>"
-        class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      src="<?php echo esc_url($bgImageUrl); ?>"
+      alt="<?php echo esc_attr($category->name); ?>"
+      class="object-cover absolute inset-0 w-full h-full transition-transform duration-500 group-hover:scale-105"
     >
     <?php endif; ?>
 
     <div class="absolute inset-0 bg-black/40"></div>
 
-    <span class="absolute bottom-3 left-3 text-white text-sm font-medium leading-tight">
-        <?php echo esc_html($category->name); ?>
+    <span class="absolute bottom-3 left-3 text-sm font-medium leading-tight text-white">
+      <?php echo esc_html($category->name); ?>
     </span>
 
 </a>
