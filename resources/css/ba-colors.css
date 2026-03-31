@@ -1,0 +1,35 @@
+:root {
+  --cards-radius: 0px;
+  --cards-background: var(--hex-codes-moss);
+  --overlays-dark: var(--hex-codes-50-overlay);
+  --overlays-elements: var(--hex-codes-white);
+  --ui-tags-radius: 1000px;
+  --ui-tags-fill: var(--hex-codes-white);
+  --ui-tags-elements: var(--hex-codes-gunmetal);
+  --nsfw-radius: 1000px;
+  --nsfw-text: var(--hex-codes-gunmetal);
+  --nsfw-text-selected: var(--hex-codes-gunmetal);
+  --nsfw-stroke: var(--hex-codes-light-grey);
+  --nsfw-stroke-selected: var(--hex-codes-light-grey);
+  --nsfw-fill: var(--hex-codes-sand);
+  --nsfw-fill-selected: var(--hex-codes-dandelion);
+  --treatment-tags-radius: 1000px;
+  --treatment-tags-fill: var(--hex-codes-white);
+  --treatment-tags-fill-hover: var(--hex-codes-sky);
+  --treatment-tags-text: var(--hex-codes-gunmetal);
+  --treatment-tags-text-hover: var(--hex-codes-gunmetal);
+  --detail-tabs-text: var(--hex-codes-charcoal);
+  --detail-tabs-text-hover: var(--hex-codes-teal);
+  --detail-tabs-text-active: var(--hex-codes-gunmetal);
+  --detail-tabs-stroke: var(--hex-codes-light-grey);
+  --detail-tabs-stroke-hover: var(--hex-codes-light-grey);
+  --detail-tabs-stroke-active: var(--hex-codes-gunmetal);
+  --filter-accordions-text: var(--hex-codes-gunmetal);
+  --filter-accordions-text-hover: var(--hex-codes-teal);
+  --filter-accordions-search-text: var(--hex-codes-charcoal);
+  --filter-accordions-stroke: var(--hex-codes-light-grey);
+  /* not plugin figma specific below */
+  --background-fill: var(--hex-codes-sand);
+  --text-heading: var(--hex-codes-gunmetal);
+  --text-body: var(--hex-codes-charcoal);
+}
