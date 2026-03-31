@@ -6,16 +6,22 @@ use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
 
 class TemplateLoader {
   public function register(): void {
-    add_filter('template_include', [$this, 'loadSingleTemplate']);
+    add_filter('template_include', [$this, 'loadTemplate']);
   }
 
-  public function loadSingleTemplate(string $template): string {
-    if (!is_singular(BeforeAfterPostType::SLUG)) {
-      return $template;
+  public function loadTemplate(string $template): string {
+    if (is_singular(BeforeAfterPostType::SLUG)) {
+      return self::resolve('single-ll_before_after.php') ?? $template;
     }
 
-    // TODO: implement theme override + fallback
-    // return self::resolve('single-ll_before_after.php') ?? $template;
+    if (is_post_type_archive(BeforeAfterPostType::SLUG)) {
+      return self::resolve('archive-ll_before_after.php') ?? $template;
+    }
+
+    if (is_category()) {
+      return self::resolve('archive-ll_before_after-posts.php') ?? $template;
+    }
+
     return $template;
   }
 

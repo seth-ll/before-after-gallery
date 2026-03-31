@@ -10,11 +10,25 @@
 
 defined('ABSPATH') || exit;
 
-$bgImageId  = get_term_meta($category->term_id, 'll_ba_category_bg_image', true);
+$bgImageId  = get_field('ll_ba_category_bg_image', $category);
 $bgImageUrl = $bgImageId ? wp_get_attachment_image_url((int) $bgImageId, 'large') : '';
 $link       = get_category_link($category->term_id);
 ?>
 
-<div class="ll-ba-category-card">
-    <!-- TODO: implement category card layout (bg image, name, link) -->
-</div>
+<a href="<?php echo esc_url($link); ?>" class="relative block aspect-square overflow-hidden group">
+
+    <?php if ($bgImageUrl) : ?>
+    <img
+        src="<?php echo esc_url($bgImageUrl); ?>"
+        alt="<?php echo esc_attr($category->name); ?>"
+        class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+    >
+    <?php endif; ?>
+
+    <div class="absolute inset-0 bg-black/40"></div>
+
+    <span class="absolute bottom-3 left-3 text-white text-sm font-medium leading-tight">
+        <?php echo esc_html($category->name); ?>
+    </span>
+
+</a>
