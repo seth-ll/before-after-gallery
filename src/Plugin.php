@@ -5,6 +5,7 @@ namespace LiftedLogic\LLBag;
 use Illuminate\Container\Container;
 use LiftedLogic\LLBag\Admin\AdminMenu;
 use LiftedLogic\LLBag\Admin\FilterSettingsPage;
+use LiftedLogic\LLBag\Admin\SettingsPage;
 use LiftedLogic\LLBag\Filters\FilterManager;
 use LiftedLogic\LLBag\Frontend\AjaxHandler;
 use LiftedLogic\LLBag\Frontend\Shortcodes;
@@ -24,6 +25,7 @@ class Plugin {
     $this->container->singleton(FilterManager::class);
     $this->container->singleton(BeforeAfterPostType::class);
     $this->container->singleton(Fields::class);
+    $this->container->singleton(SettingsPage::class);
     $this->container->singleton(TemplateLoader::class);
     $this->container->singleton(Shortcodes::class);
     $this->container->singleton(AjaxHandler::class);
@@ -40,6 +42,7 @@ class Plugin {
   public function boot(): void {
     $this->container->make(BeforeAfterPostType::class)->register();
     $this->container->make(Fields::class)->register();
+    $this->container->make(SettingsPage::class)->register();
     $this->container->make(TemplateLoader::class)->register();
     $this->container->make(Shortcodes::class)->register();
     $this->container->make(AjaxHandler::class)->register();

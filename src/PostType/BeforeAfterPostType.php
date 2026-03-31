@@ -2,6 +2,8 @@
 
 namespace LiftedLogic\LLBag\PostType;
 
+use LiftedLogic\LLBag\Admin\SettingsPage;
+
 class BeforeAfterPostType {
   public const SLUG = 'll_before_after';
   public const MENU_ICON = 'dashicons-camera';
@@ -15,13 +17,15 @@ class BeforeAfterPostType {
    * Scope category archives so they only show ll_before_after posts.
    */
   public function scopeCategoryArchive(\WP_Query $query): void {
-      // TODO: implement
-      // if (!is_admin() && $query->is_main_query() && $query->is_category()) {
-      //     $query->set('post_type', self::SLUG);
-      // }
+    if (!is_admin() && $query->is_main_query() && $query->is_category()) {
+      $query->set('post_type', self::SLUG);
+    }
   }
 
   public function registerPostType(): void {
+    $pageId      = (int) get_field(SettingsPage::FIELD_POSTS_PAGE, 'option');
+    $rewriteSlug = $pageId ? (get_page_uri($pageId) ?: 'll-before-after') : 'll-before-after';
+
     register_post_type(self::SLUG, [
       'labels' => [
         'name'               => __('Before & After', 'll-bag'),
@@ -44,8 +48,8 @@ class BeforeAfterPostType {
       'menu_position'   => 25,
       'supports'        => ['title', 'thumbnail'],
       'taxonomies'      => ['category', 'post_tag'],
-      'has_archive'     => true,
-      'rewrite'         => ['slug' => 'll-before-after'],
+      'has_archive'     => $rewriteSlug,
+      'rewrite'         => ['slug' => $rewriteSlug],
       'capability_type' => 'post',
     ]);
   }
