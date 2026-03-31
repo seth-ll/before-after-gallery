@@ -4,72 +4,66 @@ namespace LiftedLogic\LLBag\Frontend;
 
 use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
 
-class TemplateLoader
-{
-    public function register(): void
-    {
-        add_filter('template_include', [$this, 'loadSingleTemplate']);
+class TemplateLoader {
+  public function register(): void {
+    add_filter('template_include', [$this, 'loadSingleTemplate']);
+  }
+
+  public function loadSingleTemplate(string $template): string {
+    if (!is_singular(BeforeAfterPostType::SLUG)) {
+      return $template;
     }
 
-    public function loadSingleTemplate(string $template): string
-    {
-        if (!is_singular(BeforeAfterPostType::SLUG)) {
-            return $template;
-        }
+    // TODO: implement theme override + fallback
+    // return self::resolve('single-ll_before_after.php') ?? $template;
+    return $template;
+  }
 
-        // TODO: implement theme override + fallback
-        // return self::resolve('single-ll_before_after.php') ?? $template;
-        return $template;
+  /**
+   * Resolve a template file, checking theme override first.
+   * Use this in shortcodes and partials to load a template file.
+   *
+   * @param string               $file Relative path within templates/ (e.g. 'partials/post-card.php')
+   * @param array<string, mixed> $data Variables to extract into template scope
+   */
+  public static function get(string $file, array $data = []): void {
+    $themeFile  = get_stylesheet_directory() . '/ll-before-after/' . $file;
+    $pluginFile = LL_BAG_PATH . 'templates/' . $file;
+
+    $resolved = file_exists($themeFile) ? $themeFile : (file_exists($pluginFile) ? $pluginFile : null);
+
+    if ($resolved === null) {
+      return;
     }
 
-    /**
-     * Resolve a template file, checking theme override first.
-     * Use this in shortcodes and partials to load a template file.
-     *
-     * @param string               $file Relative path within templates/ (e.g. 'partials/post-card.php')
-     * @param array<string, mixed> $data Variables to extract into template scope
-     */
-    public static function get(string $file, array $data = []): void
-    {
-        $themeFile  = get_stylesheet_directory() . '/ll-before-after/' . $file;
-        $pluginFile = LL_BAG_PATH . 'templates/' . $file;
-
-        $resolved = file_exists($themeFile) ? $themeFile : (file_exists($pluginFile) ? $pluginFile : null);
-
-        if ($resolved === null) {
-            return;
-        }
-
-        if (!empty($data)) {
-            extract($data, EXTR_SKIP);
-        }
-
-        require $resolved;
+    if (!empty($data)) {
+      extract($data, EXTR_SKIP);
     }
 
-    /**
-     * Like get(), but captures output and returns it as a string.
-     *
-     * @param array<string, mixed> $data
-     */
-    public static function render(string $file, array $data = []): string
-    {
-        ob_start();
-        self::get($file, $data);
-        return (string) ob_get_clean();
-    }
+    require $resolved;
+  }
 
-    /**
-     * Return the resolved absolute path without loading it.
-     */
-    public static function resolve(string $file): ?string
-    {
-        $themeFile  = get_stylesheet_directory() . '/ll-before-after/' . $file;
-        $pluginFile = LL_BAG_PATH . 'templates/' . $file;
+  /**
+   * Like get(), but captures output and returns it as a string.
+   *
+   * @param array<string, mixed> $data
+   */
+  public static function render(string $file, array $data = []): string {
+    ob_start();
+    self::get($file, $data);
+    return (string) ob_get_clean();
+  }
 
-        if (file_exists($themeFile))  return $themeFile;
-        if (file_exists($pluginFile)) return $pluginFile;
+  /**
+   * Return the resolved absolute path without loading it.
+   */
+  public static function resolve(string $file): ?string {
+    $themeFile  = get_stylesheet_directory() . '/ll-before-after/' . $file;
+    $pluginFile = LL_BAG_PATH . 'templates/' . $file;
 
-        return null;
-    }
+    if (file_exists($themeFile))  return $themeFile;
+    if (file_exists($pluginFile)) return $pluginFile;
+
+    return null;
+  }
 }
