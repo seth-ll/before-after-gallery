@@ -23,6 +23,18 @@ class Vite
         }
     }
 
+    /**
+     * Enqueue frontend JS and CSS. Call from wp_enqueue_scripts.
+     */
+    public static function enqueueFrontendAssets(): void
+    {
+        if (self::isHot()) {
+            self::enqueueHotEntry('resources/js/frontend.js', 'll-bag-frontend');
+        } else {
+            self::enqueueBuiltEntry('resources/js/frontend.js', 'll-bag-frontend');
+        }
+    }
+
     private static function enqueueHotEntry(string $entry, string $handle): void
     {
         $base = rtrim((string) file_get_contents(self::$hotFile), "\n");

@@ -38,7 +38,8 @@ export default defineConfig({
         emptyOutDir: true,
         rollupOptions: {
             input: {
-                admin: resolve(__dirname, 'resources/js/admin.js'),
+                admin:    resolve(__dirname, 'resources/js/admin.js'),
+                frontend: resolve(__dirname, 'resources/js/frontend.js'),
             },
         },
     },
