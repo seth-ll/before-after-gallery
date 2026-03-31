@@ -1,10 +1,10 @@
 <?php
 /**
- * Template: Before & After posts archive (by category)
- * URL:       /category/{slug} (scoped to ll_before_after posts via scopeCategoryArchive)
+ * Template: Before & After category posts archive
+ * URL:       /{archive-slug}/category/{slug}
  *
  * Displays a grid of ll_before_after posts within the current category.
- * Override: place this file at {theme}/ll-before-after/archive-ll_before_after-posts.php
+ * Override: place this file at {theme}/ll-before-after/archive-ll_before_after_category.php
  */
 
 defined('ABSPATH') || exit;
@@ -28,7 +28,7 @@ get_header();
             <?php endif; ?>
             <?php endif; ?>
         </div>
-        <a href="<?php echo esc_url(get_post_type_archive_link(BeforeAfterPostType::SLUG)); ?>" class="text-sm flex items-center gap-1">
+        <a href="<?php echo esc_url(BeforeAfterPostType::getCategoriesArchiveUrl()); ?>" class="text-sm flex items-center gap-1">
             <span aria-hidden="true">←</span> All Categories
         </a>
     </div>

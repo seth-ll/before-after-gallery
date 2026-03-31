@@ -10,7 +10,41 @@ class BeforeAfterPostType {
 
   public function register(): void {
     add_action('init', [$this, 'registerPostType']);
+    add_action('init', [$this, 'registerRewriteRules']);
     add_action('pre_get_posts', [$this, 'scopeCategoryArchive']);
+    add_filter('query_vars', [$this, 'registerQueryVars']);
+  }
+
+  public function registerQueryVars(array $vars): array {
+    $vars[] = 'll_ba_view';
+    return $vars;
+  }
+
+  /**
+   * Return the URL for the categories archive (/{archive-slug}/categories/).
+   */
+  public static function getCategoriesArchiveUrl(): string {
+    $archiveLink = get_post_type_archive_link(self::SLUG);
+    return $archiveLink ? trailingslashit($archiveLink) . 'categories/' : '';
+  }
+
+  private function getRewriteSlug(): string {
+    $pageId = (int) get_field(SettingsPage::FIELD_POSTS_PAGE, 'option');
+    return $pageId ? (get_page_uri($pageId) ?: 'll-before-after') : 'll-before-after';
+  }
+
+  public function registerRewriteRules(): void {
+    $slug = $this->getRewriteSlug();
+    add_rewrite_rule(
+      '^' . preg_quote($slug, '/') . '/categories/?$',
+      'index.php?ll_ba_view=categories',
+      'top'
+    );
+    add_rewrite_rule(
+      '^' . preg_quote($slug, '/') . '/category/([^/]+)/?$',
+      'index.php?category_name=$matches[1]',
+      'top'
+    );
   }
 
   /**
@@ -23,8 +57,7 @@ class BeforeAfterPostType {
   }
 
   public function registerPostType(): void {
-    $pageId      = (int) get_field(SettingsPage::FIELD_POSTS_PAGE, 'option');
-    $rewriteSlug = $pageId ? (get_page_uri($pageId) ?: 'll-before-after') : 'll-before-after';
+    $rewriteSlug = $this->getRewriteSlug();
 
     register_post_type(self::SLUG, [
       'labels' => [

@@ -19,7 +19,11 @@ class TemplateLoader {
     }
 
     if (is_category()) {
-      return self::resolve('archive-ll_before_after-posts.php') ?? $template;
+      return self::resolve('archive-ll_before_after_category.php') ?? $template;
+    }
+
+    if (get_query_var('ll_ba_view') === 'categories') {
+      return self::resolve('archive-ll_before_after_categories.php') ?? $template;
     }
 
     return $template;

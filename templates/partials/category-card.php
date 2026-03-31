@@ -10,9 +10,12 @@
 
 defined('ABSPATH') || exit;
 
-$bgImageId  = get_field('ll_ba_category_bg_image', $category);
-$bgImageUrl = $bgImageId ? wp_get_attachment_image_url((int) $bgImageId, 'large') : '';
-$link       = get_category_link($category->term_id);
+$bgImageId   = get_field('ll_ba_category_bg_image', $category);
+$bgImageUrl  = $bgImageId ? wp_get_attachment_image_url((int) $bgImageId, 'large') : '';
+$archiveLink = get_post_type_archive_link(\LiftedLogic\LLBag\PostType\BeforeAfterPostType::SLUG);
+$link        = $archiveLink
+    ? trailingslashit($archiveLink) . 'category/' . $category->slug . '/'
+    : get_category_link($category->term_id);
 ?>
 
 <a href="<?php echo esc_url($link); ?>" class="relative block aspect-square overflow-hidden group">
