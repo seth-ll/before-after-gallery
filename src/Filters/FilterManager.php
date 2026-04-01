@@ -7,45 +7,51 @@ use Illuminate\Support\Collection;
 class FilterManager {
   public const OPTION_KEY = 'll_bag_filters';
 
+  private const BUILTINS = [
+    ['id' => '__builtin_category', 'label' => 'Categories', 'meta_key' => 'category',  'builtin' => true, 'display' => 'checkbox', 'enabled' => false, 'searchable' => false],
+    ['id' => '__builtin_post_tag', 'label' => 'Tags',       'meta_key' => 'post_tag',  'builtin' => true, 'display' => 'checkbox', 'enabled' => false, 'searchable' => false],
+  ];
+
   /**
-   * Return all configured filters.
+   * Return all configured filters with defaults
    *
-   * Each filter is an array with keys: id, label, meta_key, display (checkbox|dropdown).
+   * Each filter: id, label, meta_key (= taxonomy slug), display (checkbox|dropdown), enabled (bool), searchable (bool).
    *
-   * @return Collection<int, array<string, string>>
+   * @return Collection<int, array<string, mixed>>
    */
   public function all(): Collection {
-    /** @var array<int, array<string, string>> $filters */
+    /** @var array<int, array<string, mixed>> $filters */
     $filters = get_option(self::OPTION_KEY, []);
-    return collect($filters);
+
+    $savedIds = array_column($filters, 'id');
+    foreach (self::BUILTINS as $builtin) {
+      if (!in_array($builtin['id'], $savedIds, true)) {
+        $filters[] = $builtin;
+      }
+    }
+
+    return collect($filters)->map(function (array $filter): array {
+      return array_merge([
+        'enabled'    => false,
+        'searchable' => false,
+        'builtin'    => false,
+      ], $filter);
+    });
   }
 
   /**
-   * Persist the full filter list.
+   * Return only filters that are enabled for the sidebar
    *
-   * @param array<int, array<string, string>> $filters
+   * @return Collection<int, array<string, mixed>>
+   */
+  public function getEnabled(): Collection {
+    return $this->all()->filter(fn(array $filter): bool => (bool) ($filter['enabled'] ?? false))->values();
+  }
+
+  /**
+   * @param array<int, array<string, mixed>> $filters
    */
   public function save(array $filters): void {
     update_option(self::OPTION_KEY, $filters);
-  }
-
-  /**
-   * Return all distinct meta values for a given key across published posts.
-   *
-   * @return Collection<int, string>
-   */
-  public static function getDistinctValues(string $metaKey): Collection {
-    // TODO: implement
-    // global $wpdb;
-    // $results = $wpdb->get_col($wpdb->prepare(
-    //     "SELECT DISTINCT meta_value FROM {$wpdb->postmeta} pm
-    //      INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
-    //      WHERE pm.meta_key = %s AND p.post_type = %s AND p.post_status = 'publish'
-    //      ORDER BY meta_value ASC",
-    //     $metaKey,
-    //     \LiftedLogic\LLBag\PostType\BeforeAfterPostType::SLUG
-    // ));
-    // return collect($results ?? []);
-    return collect();
   }
 }
