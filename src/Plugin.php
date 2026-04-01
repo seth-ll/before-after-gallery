@@ -11,6 +11,7 @@ use LiftedLogic\LLBag\Frontend\AjaxHandler;
 use LiftedLogic\LLBag\Frontend\Shortcodes;
 use LiftedLogic\LLBag\Frontend\TemplateLoader;
 use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
+use LiftedLogic\LLBag\Hooks\Hooks;
 use LiftedLogic\LLBag\PostType\Fields;
 
 class Plugin {
@@ -22,6 +23,7 @@ class Plugin {
   }
 
   private function registerBindings(): void {
+    $this->container->singleton(Hooks::class);
     $this->container->singleton(FilterManager::class);
     $this->container->singleton(BeforeAfterPostType::class);
     $this->container->singleton(Fields::class);
@@ -40,6 +42,7 @@ class Plugin {
   }
 
   public function boot(): void {
+    $this->container->make(Hooks::class)->register();
     $this->container->make(BeforeAfterPostType::class)->register();
     $this->container->make(Fields::class)->register();
     $this->container->make(SettingsPage::class)->register();

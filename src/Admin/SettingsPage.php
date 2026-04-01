@@ -39,6 +39,13 @@ class SettingsPage {
       'title'  => 'Before & After Settings',
       'fields' => [
         [
+          'key' => 'field_ll_bag_archive_settings_tab',
+          'label' => 'Archive Settings',
+          'type' => 'tab',
+          'placement' => 'left',
+          'endpoint' => 0,
+        ],
+        [
           'key'           => 'field_ll_bag_posts_page',
           'label'         => 'All Posts Archive Page',
           'name'          => self::FIELD_POSTS_PAGE,
@@ -47,6 +54,43 @@ class SettingsPage {
           'return_format' => 'id',
           'allow_null'    => 1,
           'instructions'  => 'The page used for the "View All Before & Afters" link on the category archive.',
+        ],
+        [
+          'key' => 'field_ll_bag_global_options_tab',
+          'label' => 'Global Single Page Options',
+          'type' => 'tab',
+          'placement' => 'left',
+          'endpoint' => 0,
+        ],
+        [
+          'key' => 'field_ll_bag_cta_message',
+          'type' => 'message',
+          'message' => 'Leave CTA fields blank to omit CTA on single pages', 
+        ],
+        [
+          'key' => 'field_ll_ba_global_cta_title',
+          'label' => 'CTA Title',
+          'name' => 'll_ba_global_cta_title',
+          'type' => 'text',
+          'wrapper' => [
+            'width' => '50%',
+          ],
+        ],
+        [
+          'key' => 'field_ll_ba_global_cta_link',
+          'label' => 'CTA Link',
+          'name' => 'll_ba_global_cta_link',
+          'type' => 'link',
+          'return_format' => 'array',
+          'wrapper' => [
+            'width' => '50%',
+          ],
+        ],
+        [
+          'key' => 'field_ll_bag_related_treatments_slider_title',
+          'label' => 'Related Treatments Slider Title',
+          'name' => 'll_bag_related_treatments_slider_title',
+          'type' => 'text',
         ],
       ],
       'location' => [

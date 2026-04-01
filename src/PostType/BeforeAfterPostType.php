@@ -79,7 +79,7 @@ class BeforeAfterPostType {
       'show_in_rest'    => true,
       'menu_icon'       => self::MENU_ICON,
       'menu_position'   => 25,
-      'supports'        => ['title', 'thumbnail'],
+      'supports'        => ['title'],
       'taxonomies'      => ['category', 'post_tag'],
       'has_archive'     => $rewriteSlug,
       'rewrite'         => ['slug' => $rewriteSlug],
