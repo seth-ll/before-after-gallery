@@ -3,10 +3,25 @@
 namespace LiftedLogic\LLBag\Frontend;
 
 use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
+use LiftedLogic\LLBag\Support\Vite;
 
 class TemplateLoader {
   public function register(): void {
     add_filter('template_include', [$this, 'loadTemplate']);
+    add_action('wp_enqueue_scripts', [$this, 'maybeEnqueueFrontendAssets']);
+  }
+
+  public function maybeEnqueueFrontendAssets(): void {
+    if (!is_post_type_archive(BeforeAfterPostType::SLUG)) {
+      return;
+    }
+
+    Vite::enqueueFrontendAssets();
+    wp_localize_script('ll-bag-frontend', 'llBag', [
+      'ajaxUrl' => admin_url('admin-ajax.php'),
+      'nonce'   => wp_create_nonce(AjaxHandler::ACTION),
+      'action'  => AjaxHandler::ACTION,
+    ]);
   }
 
   public function loadTemplate(string $template): string {
