@@ -1,8 +1,10 @@
 @import './typography.css';
+@import './partials/single-post.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 .fit-image {
   position: absolute;

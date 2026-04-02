@@ -134,8 +134,8 @@ class Fields {
                 [
                   [
                     'field' => 'field_ll_ba_image_options',
-                    'operator' => '==',
-                    'value' => 'one-image',
+                    'operator' => '!=',
+                    'value' => 'two-images',
                   ],
                 ],
               ],
@@ -179,10 +179,43 @@ class Fields {
               ],
             ],
             [
+              'key' => 'field_ll_ba_comparison_slider',
+              'label' => 'Use Comparison Slider?',
+              'name' => 'll_ba_comparison_slider',
+              'type' => 'true_false',
+              'instructions' => 'For best results use two images that are cropped identically with the subject in the same area of the image.',
+              'default_value' => 0,
+              'ui' => 1,
+              'conditional_logic' => [
+                [
+                  [
+                    'field' => 'field_ll_ba_image_options',
+                    'operator' => '==',
+                    'value' => 'two-images',
+                  ],
+                ],
+              ],
+            ],
+            [
               'key' => 'field_ll_ba_video_url',
               'label' => 'Video URL',
               'name' => 'll_ba_video_url',
               'type' => 'url',
+              'conditional_logic' => [
+                [
+                  [
+                    'field' => 'field_ll_ba_image_options',
+                    'operator' => '==',
+                    'value' => 'video',
+                  ],
+                ],
+              ],
+            ],
+            [
+              'key' => 'field_ll_ba_video_title',
+              'label' => 'Video Title (For Screen Readers)',
+              'name' => 'll_ba_video_title',
+              'type' => 'text',
               'conditional_logic' => [
                 [
                   [
