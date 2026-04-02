@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    grid.style.opacity = '0.5';
+    grid.classList.add('is-filtering');
 
     try {
       const res  = await fetch(llBag.ajaxUrl, { method: 'POST', body: formData });
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         grid.innerHTML = data.data.html || `<p class="col-span-full py-12 text-sm text-center text-gray-500">${llBag.noResults ?? 'No results found.'}</p>`;
       }
     } finally {
-      grid.style.opacity = '';
+      grid.classList.remove('is-filtering');
     }
 
     updateActiveTags(active);
