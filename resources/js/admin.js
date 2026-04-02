@@ -14,6 +14,15 @@ function labelToMetaKey(label) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  document.getElementById('ll-bag-filter-tbody')?.addEventListener('change', (e) => {
+    const checked = e.target.closest('.ll-bag-card-display');
+    if (!checked?.checked) return;
+
+    document.querySelectorAll('.ll-bag-card-display').forEach(cb => {
+      if (cb !== checked) cb.checked = false;
+    });
+  });
+
   // prevent duplicate meta key detection on save
   document.querySelector('#ll-bag-filter-list')?.closest('form')
     ?.addEventListener('submit', (e) => {
