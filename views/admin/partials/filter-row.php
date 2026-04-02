@@ -75,6 +75,16 @@ $isCheckbox = ($filter['display'] ?? 'checkbox') === 'checkbox';
     >
   </td>
 
+  <td class="text-center align-middle">
+    <input
+      type="checkbox"
+      name="ll_bag_card_taxonomy"
+      value="<?= esc_attr($filter['meta_key']); ?>"
+      class="ll-bag-card-display"
+      <?php checked($cardTaxonomy ?? '', $filter['meta_key']); ?>
+    >
+  </td>
+
   <td>
     <?php if (!$isBuiltin) : ?>
       <button type="button" class="button-link-delete ll-bag-remove-filter">Remove</button>

@@ -3,7 +3,8 @@
  * Admin view: Filter Settings page
  *
  * Available variables:
- *   $filters  Illuminate\Support\Collection  Current filter config
+ *   $filters       Illuminate\Support\Collection  Current filter config
+ *   $cardTaxonomy  string                         Meta key of the card display taxonomy
  */
 
 defined('ABSPATH') || exit;
@@ -36,6 +37,7 @@ defined('ABSPATH') || exit;
 
     <?php wp_nonce_field('ll_bag_save_filters', 'll_bag_filters_nonce'); ?>
     <input type="hidden" name="action" value="ll_bag_save_filters">
+    <input type="hidden" name="ll_bag_card_taxonomy" value="">
 
     <table class="wp-list-table widefat striped ll-bag-filter-table" id="ll-bag-filter-list">
       <thead>
@@ -44,6 +46,7 @@ defined('ABSPATH') || exit;
           <th class="w-[35%]">Label</th>
           <th class="w-[15%]">Display</th>
           <th class="" title="This will enable the filter's display in the filter sidebar">Enabled in sidebar?</th>
+          <th class="" title="Show this taxonomy's terms as pills on each post card">Card display</th>
           <th class="w-[10%]">Actions</th>
         </tr>
       </thead>
