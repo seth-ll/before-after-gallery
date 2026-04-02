@@ -3,7 +3,8 @@ import '../css/theme-before-after.css';
 
 document.addEventListener('DOMContentLoaded', () => {
   const filtersEl = document.getElementById('ll-ba-filters');
-  const grid      = document.getElementById('ll-ba-grid');
+  const filterGroupsEl = document.getElementById('ll-ba-filter-groups');
+  const grid = document.getElementById('ll-ba-grid');
 
   if (!filtersEl || !grid) return;
 
@@ -30,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const search = e.target.closest('.ll-ba-option-search');
     if (!search) return;
 
-    const term    = search.value.toLowerCase();
-    const list    = search.closest('.ll-ba-filter-content')?.querySelector('.ll-ba-checkbox-list');
+    const term = search.value.toLowerCase();
+    const list = search.closest('.ll-ba-filter-content')?.querySelector('.ll-ba-checkbox-list');
     if (!list) return;
 
     list.querySelectorAll('.ll-ba-checkbox-option').forEach(opt => {
@@ -51,23 +52,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // ── Active tag: remove individual filter ──────────────────────────────────
-
+  // Remove active tag
   document.getElementById('ll-ba-active-tags')?.addEventListener('click', (e) => {
     const btn = e.target.closest('.ll-ba-tag-remove');
     if (!btn) return;
 
     const { metaKey, value } = btn.dataset;
-    const group = filtersEl.querySelector(`[data-meta-key="${metaKey}"]`);
+    const group = filterGroupsEl.querySelector(`[data-meta-key="${metaKey}"]`);
     if (!group) return;
 
     if (group.dataset.display === 'checkbox') {
-      const cb = [...group.querySelectorAll('.ll-ba-checkbox-filter')]
+      const checkbox = [...group.querySelectorAll('.ll-ba-checkbox-filter')]
         .find(el => el.value === value);
-      if (cb) cb.checked = false;
+      if (checkbox) checkbox.checked = false;
     } else {
-      const sel = group.querySelector('.ll-ba-dropdown-filter');
-      if (sel) sel.value = '';
+      const dropdown = group.querySelector('.ll-ba-dropdown-filter');
+      if (dropdown) dropdown.value = '';
     }
 
     applyFilters();
@@ -91,12 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const display = group.dataset.display;
 
       if (display === 'checkbox') {
-        const checked = [...group.querySelectorAll('.ll-ba-checkbox-filter:checked')]
+        const checkboxChecked = [...group.querySelectorAll('.ll-ba-checkbox-filter:checked')]
           .map(el => el.value);
-        if (checked.length) active[key] = checked;
+        if (checkboxChecked.length) active[key] = checkboxChecked;
       } else {
-        const val = group.querySelector('.ll-ba-dropdown-filter')?.value ?? '';
-        if (val) active[key] = val;
+        const dropdownValue = group.querySelector('.ll-ba-dropdown-filter')?.value ?? '';
+        if (dropdownValue) active[key] = dropdownValue;
       }
     });
 
@@ -149,12 +149,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       values.forEach(v => {
         // Use data-term-name for human-readable label (slug is the value)
-        const cb = group?.querySelector(`.ll-ba-checkbox-filter[value="${v}"]`);
-        const displayName = cb?.dataset.termName ?? v;
+        const checkbox = group?.querySelector(`.ll-ba-checkbox-filter[value="${v}"]`);
+        const displayName = checkbox?.dataset.termName ?? v;
 
-        const tag = document.createElement('span');
-        tag.className = 'll-ba-tag inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700';
-        tag.innerHTML = `${escHtml(label)}: ${escHtml(displayName)} <button type="button" class="ll-ba-tag-remove ml-1 hover:text-black" data-meta-key="${escAttr(key)}" data-value="${escAttr(v)}" aria-label="Remove filter">&times;</button>`;
+        const tag = document.createElement('li');
+        tag.className = 'll-ba-tag';
+        tag.innerHTML = `<button type="button" class="flex gap-1 items-center px-2 py-1 text-[11px] text-gray-700 bg-gray-100 rounded-full ll-ba-tag-remove hover:text-black" data-meta-key="${escAttr(key)}" data-value="${escAttr(v)}" aria-label="Remove filter">${escHtml(label)}: ${escHtml(displayName)} &times;</button>`;
         tags.appendChild(tag);
       });
     }
@@ -186,12 +186,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!group) return;
 
       if (group.dataset.display === 'checkbox') {
-        const cb = [...group.querySelectorAll('.ll-ba-checkbox-filter')]
+        const checkbox = [...group.querySelectorAll('.ll-ba-checkbox-filter')]
           .find(el => el.value === value);
-        if (cb) cb.checked = true;
+        if (checkbox) checkbox.checked = true;
       } else {
-        const sel = group.querySelector('.ll-ba-dropdown-filter');
-        if (sel) sel.value = value;
+        const dropdown = group.querySelector('.ll-ba-dropdown-filter');
+        if (dropdown) dropdown.value = value;
       }
     });
 
