@@ -26,44 +26,43 @@ $cardTaxonomy = $card['taxonomy'];
 $termCount    = count($card['terms']);
 
 $archiveUrl = get_post_type_archive_link(BeforeAfterPostType::SLUG);
-$pillClass  = 'px-2 py-1 text-[11px] leading-tight text-black rounded-full bg-white max-w-[10rem] truncate';
 ?>
 
-<div class="block overflow-hidden relative aspect-square outline group">
-  <div class="flex absolute inset-0">
+<div class="ll-ba-card">
+  <div class="ll-ba-card__images">
     <?php if ($beforeId) : ?>
-      <div class="overflow-hidden w-1/2 h-full">
+      <div class="ll-ba-card__half">
         <img
           src="<?= esc_url(wp_get_attachment_image_url($beforeId, 'medium_large')); ?>"
           alt="Before"
-          class="object-cover size-full"
+          class="ll-ba-card__img"
         >
       </div>
     <?php endif; ?>
 
     <?php if ($afterId) : ?>
-      <div class="overflow-hidden w-1/2 h-full">
+      <div class="ll-ba-card__half">
         <img
           src="<?= esc_url(wp_get_attachment_image_url($afterId, 'medium_large')); ?>"
           alt="After"
-          class="object-cover w-full h-full"
+          class="ll-ba-card__img"
         >
       </div>
     <?php endif; ?>
   </div>
 
-  <div class="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-white/60"></div>
-  <div class="absolute inset-0 bg-black/20"></div>
+  <div class="ll-ba-card__divider"></div>
+  <div class="ll-ba-card__overlay"></div>
 
   <!-- Card link overlay — sits beneath the pills -->
-  <a href="<?= esc_url($permalink); ?>" class="absolute inset-0 z-0" aria-label="<?= esc_attr(get_the_title($post)); ?>"></a>
+  <a href="<?= esc_url($permalink); ?>" class="ll-ba-card__link" aria-label="<?= esc_attr(get_the_title($post)); ?>"></a>
 
   <?php if ($termCount === 1) : ?>
 
-    <div class="absolute right-0 bottom-0 left-0 z-10 p-3">
+    <div class="ll-ba-card__pills">
       <a
         href="<?= esc_url(add_query_arg($cardTaxonomy, $visibleTerms[0]->slug, $archiveUrl)); ?>"
-        class="<?= $pillClass; ?>"
+        class="ll-ba-card__pill"
       >
         <?= $visibleTerms[0]->name; ?>
       </a>
@@ -71,22 +70,22 @@ $pillClass  = 'px-2 py-1 text-[11px] leading-tight text-black rounded-full bg-wh
 
   <?php elseif ($termCount > 1) : ?>
 
-    <div class="absolute right-0 bottom-0 left-0 z-10 p-3 transition-opacity duration-200 pointer-events-none group-hover:opacity-0">
-      <span class="<?= $pillClass; ?>">Multiple <?= esc_html($cardLabel); ?></span>
+    <div class="ll-ba-card__pills ll-ba-card__pills--default">
+      <span class="ll-ba-card__pill">Multiple <?= esc_html($cardLabel); ?></span>
     </div>
 
-    <div class="absolute right-0 bottom-0 left-0 z-10 p-3 opacity-0 transition-all duration-200 translate-y-2 pointer-events-none group-hover:x-[translate-y-0,opacity-100,pointer-events-auto]">
-      <div class="flex flex-wrap gap-1">
+    <div class="ll-ba-card__pills ll-ba-card__pills--hover">
+      <div class="ll-ba-card__pill-group">
         <?php foreach ($visibleTerms as $term) : ?>
           <a
             href="<?= esc_url(add_query_arg($cardTaxonomy, $term->slug, $archiveUrl)); ?>"
-            class="<?= $pillClass; ?>"
+            class="ll-ba-card__pill"
           >
             <?= esc_html($term->name); ?>
           </a>
         <?php endforeach; ?>
         <?php if ($overflow > 0) : ?>
-          <span class="<?= $pillClass; ?>">+<?= $overflow; ?></span>
+          <span class="ll-ba-card__pill">+<?= $overflow; ?></span>
         <?php endif; ?>
       </div>
     </div>
