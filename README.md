@@ -43,6 +43,42 @@ Build assets for production:
 npm run build
 ```
 
+## Theme Overrides
+
+Files in the plugin can be overridden from your theme by placing files at the corresponding path under `your-theme/ll-before-after/`.
+
+### Templates
+
+Copy any template from `templates/` into `your-theme/ll-before-after/` and the theme version will be used instead:
+
+```
+your-theme/
+└── ll-before-after/
+    ├── single-ll_before_after.php
+    ├── archive-ll_before_after.php
+    ├── archive-ll_before_after_category.php
+    └── archive-ll_before_after_categories.php
+```
+
+### CSS
+
+Override plugin CSS files by placing them at `your-theme/ll-before-after/css/{filename}`:
+
+```
+your-theme/
+└── ll-before-after/
+    └── css/
+        └── ba-colors.css   # Override plugin color variables
+```
+
+Overrideable CSS files:
+
+| File | Purpose |
+|------|---------|
+| `ba-colors.css` | CSS custom properties for UI colors |
+
+---
+
 ## Structure
 
 ```

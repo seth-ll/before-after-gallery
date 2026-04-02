@@ -1,0 +1,37 @@
+.ba_hdg-5 {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 119%;
+  @media (min-width: 1024px) {
+    font-size: 32px;
+  }
+}
+
+.ba_hdg-6 {
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 130%;
+}
+
+.ba_paragraph-large {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.ba_paragraph-default {
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.ba_paragraph-small {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+}

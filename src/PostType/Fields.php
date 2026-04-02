@@ -8,6 +8,7 @@ class Fields {
   }
 
   public function registerFields(): void {
+    // Category Fields
     acf_add_local_field_group([
       'key'    => 'group_ll_ba_category',
       'title'  => 'Before & After Category Settings',
@@ -31,30 +32,201 @@ class Fields {
         ],
       ],
     ]);
-
+    // Single Post Fields
     acf_add_local_field_group([
       'key'    => 'group_ll_before_after',
       'title'  => 'Before & After Details',
       'fields' => [
         [
+          'key' => 'field_ll_details_tab',
+          'label' => 'Details',
+          'type' => 'tab',
+          'placement' => 'left',
+          'endpoint' => 0,
+        ],
+        [
           'key' => 'field_ll_ba_title',
-          'label' => 'Title',
-          'name' => MetaBoxes::TITLE_KEY,
+          'label' => 'Treatment Label',
+          'name' => 'll_ba_title',
           'type' => 'text',
+          'instructions' => 'If left blank, this will default to "Treatments Used"',
         ],
         [
-          'key' => 'field_ll_ba_before_image',
-          'label' => 'Before Image',
-          'name' => MetaBoxes::BEFORE_IMAGE_KEY,
-          'type' => 'image',
-          'return_format' => 'id',
+          'key' => 'field_ll_ba_detail_sections',
+          'label' => 'Detail Sections',
+          'name' => 'll_ba_detail_sections',
+          'type' => 'repeater',
+          'layout' => 'block',
+          'button_label' => 'Add Detail Section',
+          'instructions' => 'If more than one Detail Section is used, Details will show in tabs.',
+          'max' => 3,
+          'sub_fields' => [
+            [
+              'key' => 'field_ll_ba_detail_title',
+              'label' => 'Title',
+              'name' => 'll_ba_detail_title',
+              'type' => 'text',
+            ],
+            [
+              'key' => 'field_ll_ba_detail_content',
+              'label' => 'Content',
+              'name' => 'll_ba_detail_content',
+              'type' => 'wysiwyg',
+              'wrapper' => [ 'class' => '' ],
+            ],
+          ],
         ],
         [
-          'key' => 'field_ll_ba_after_image',
-          'label' => 'After Image',
-          'name' => MetaBoxes::AFTER_IMAGE_KEY,
-          'type' => 'image',
-          'return_format' => 'id',
+          'key' => 'field_ll_images_tab',
+          'label' => 'Images',
+          'type' => 'tab',
+          'placement' => 'left',
+          'endpoint' => 0,
+        ],
+        [
+          'key' => 'field_ll_ba_images',
+          'label' => 'Images',
+          'name' => 'll_ba_images',
+          'type' => 'repeater',
+          'layout' => 'block',
+          'button_label' => 'Add Image',
+          'sub_fields' => [
+            [
+              'key' => 'field_ll_ba_image_options',
+              'label' => 'Image Options',
+              'name' => 'll_ba_image_options',
+              'type' => 'select',
+              'choices' => [
+                'one-image' => 'One Image',
+                'two-images' => 'Two Images',
+                'video' => 'Video',
+              ],
+              'default_value' => '',
+              'return_format' => 'value',
+              'wrapper' => [
+                'width' => '50%',
+              ],
+            ],
+            [
+              'key' => 'field_ll_ba_image_ratio',
+              'label' => 'Image Ratio',
+              'name' => 'll_ba_image_ratio',
+              'type' => 'select',
+              'choices' => [
+                'wide' => '16/9 (Wide)',
+                'square' => '1/1 (Square)',
+                'panorama' => '3/1 (Panorama)',
+                'vertical' => '4/5 (Vertical)',
+              ],
+              'default_value' => '',
+              'return_format' => 'value',
+              'wrapper' => [
+                'width' => '50%',
+              ],
+            ],
+            [
+              'key' => 'field_ll_ba_single_image',
+              'label' => 'Before and After Image',
+              'name' => 'll_ba_single_image',
+              'type' => 'image',
+              'return_format' => 'id',
+              'conditional_logic' => [
+                [
+                  [
+                    'field' => 'field_ll_ba_image_options',
+                    'operator' => '!=',
+                    'value' => 'two-images',
+                  ],
+                ],
+              ],
+            ],
+            [
+              'key' => 'field_ll_ba_before_image',
+              'label' => 'Before Image',
+              'name' => 'll_ba_before_image',
+              'type' => 'image',
+              'return_format' => 'id',
+              'conditional_logic' => [
+                [
+                  [
+                    'field' => 'field_ll_ba_image_options',
+                    'operator' => '==',
+                    'value' => 'two-images',
+                  ],
+                ],
+              ],
+              'wrapper' => [
+                'width' => '50%',
+              ],
+            ],
+            [
+              'key' => 'field_ll_ba_after_image',
+              'label' => 'After Image',
+              'name' => 'll_ba_after_image',
+              'type' => 'image',
+              'return_format' => 'id',
+              'conditional_logic' => [
+                [
+                  [
+                    'field' => 'field_ll_ba_image_options',
+                    'operator' => '==',
+                    'value' => 'two-images',
+                  ],
+                ],
+              ],
+              'wrapper' => [
+                'width' => '50%',
+              ],
+            ],
+            [
+              'key' => 'field_ll_ba_comparison_slider',
+              'label' => 'Use Comparison Slider?',
+              'name' => 'll_ba_comparison_slider',
+              'type' => 'true_false',
+              'instructions' => 'For best results use two images that are cropped identically with the subject in the same area of the image.',
+              'default_value' => 0,
+              'ui' => 1,
+              'conditional_logic' => [
+                [
+                  [
+                    'field' => 'field_ll_ba_image_options',
+                    'operator' => '==',
+                    'value' => 'two-images',
+                  ],
+                ],
+              ],
+            ],
+            [
+              'key' => 'field_ll_ba_video_url',
+              'label' => 'Video URL',
+              'name' => 'll_ba_video_url',
+              'type' => 'url',
+              'conditional_logic' => [
+                [
+                  [
+                    'field' => 'field_ll_ba_image_options',
+                    'operator' => '==',
+                    'value' => 'video',
+                  ],
+                ],
+              ],
+            ],
+            [
+              'key' => 'field_ll_ba_video_title',
+              'label' => 'Video Title (For Screen Readers)',
+              'name' => 'll_ba_video_title',
+              'type' => 'text',
+              'conditional_logic' => [
+                [
+                  [
+                    'field' => 'field_ll_ba_image_options',
+                    'operator' => '==',
+                    'value' => 'video',
+                  ],
+                ],
+              ],
+            ],
+          ],
         ],
       ],
       'location' => [

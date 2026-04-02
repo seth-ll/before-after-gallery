@@ -1,0 +1,18 @@
+:root {
+  --hex-codes-gunmetal: #1D2729FF;
+  --hex-codes-charcoal: #494949FF;
+  --hex-codes-light-grey: #CCCCCCFF;
+  --hex-codes-grey: #9F9D9BFF;
+  --hex-codes-white: #FFFFFFFF;
+  --hex-codes-sand: #FCF7EFFF;
+  --hex-codes-grey-sand: #FAF8F5FF;
+  --hex-codes-moss: #B8C2B0FF;
+  --hex-codes-evergreen: #073D3DFF;
+  --hex-codes-dandelion: #DDED59FF;
+  --hex-codes-teal: #5A7B78FF;
+  --hex-codes-sky: #C8DEDCFF;
+  --hex-codes-error: #D80000FF;
+  --hex-codes-80-overlay: #000000CC;
+  --hex-codes-50-overlay: #00000080;
+  --hex-codes-20-overlay: #00000033;
+}

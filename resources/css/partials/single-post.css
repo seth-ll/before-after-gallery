@@ -1,0 +1,339 @@
+/* ==========================================================================
+   Single Before & After Post
+   ========================================================================== */
+
+/* Layout
+   ========================================================================== */
+
+.ba-single {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: theme('screens.lg')) {
+  .ba-single {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Sidebar
+   ========================================================================== */
+
+.ba-single__sidebar {
+  padding: theme('spacing.16');
+  background-color: var(--background-fill);
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.ba-single__back {
+  margin-bottom: theme('spacing.8');
+}
+
+.ba-single__header {
+  margin-bottom: theme('spacing.10');
+}
+
+.ba-single__title {
+  margin-bottom: theme('spacing.3');
+  color: var(--text-heading);
+}
+
+.ba-single__categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Detail Sections
+   ========================================================================== */
+
+.ba-single__details {
+  margin-bottom: theme('spacing.10');
+}
+
+.ba-single__detail-triggers {
+  display: flex;
+}
+
+.ba-single__detail-trigger {
+  padding: theme('spacing.2') theme('spacing.4');
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-color: var(--detail-tabs-stroke);
+}
+
+.ba-single__detail-panel--tab {
+  display: none;
+}
+
+.ba-single__detail-panel--tab.ba-is-active {
+  display: block;
+}
+
+/* CTA
+   ========================================================================== */
+
+.ba-single__cta {
+  margin-bottom: theme('spacing.6');
+}
+
+/* Related Slider
+   ========================================================================== */
+
+.ba-single__related-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ba-single__related-title-wrap {
+  flex: 1;
+}
+
+.ba-single__related-arrows {
+  display: flex;
+  gap: theme('spacing.3');
+  flex-shrink: 0;
+}
+
+.ba-single__related-arrow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: theme('borderRadius.full');
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+  background-color: var(--arrow-buttons-fill);
+}
+
+.ba-single__related-arrow:hover {
+  background-color: var(--arrow-buttons-fill-hover);
+}
+
+.ba-single__related-arrow:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.ba-single__related-arrow-icon {
+  width: theme('spacing.5');
+  height: theme('spacing.5');
+  color: var(--arrow-buttons-elements);
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+}
+
+.ba-single__related-arrow:hover .ba-single__related-arrow-icon {
+  color: var(--arrow-buttons-elements-hover);
+}
+
+/* Gallery (right column)
+   ========================================================================== */
+
+.ba-single__gallery {
+  position: relative;
+  background-color: var(--cards-background);
+  padding: theme('spacing.6');
+}
+
+.ba-single__gallery-inner {
+  position: sticky;
+  top: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: theme('spacing.10');
+}
+
+/* Slides — shared
+   ========================================================================== */
+
+.ba-single__slide-inner {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.ba-single__slide-image {
+  position: relative;
+  width: 100%;
+}
+
+/* Aspect ratio modifiers
+   ========================================================================== */
+
+.ba-single__ratio--square {
+  aspect-ratio: 1 / 1;
+}
+
+.ba-single__ratio--wide {
+  aspect-ratio: 16 / 9;
+}
+
+.ba-single__ratio--panorama {
+  aspect-ratio: 3 / 1;
+}
+
+.ba-single__ratio--vertical {
+  aspect-ratio: 4 / 5;
+}
+
+/* Side-by-side (two-images, no comparison)
+   ========================================================================== */
+
+.ba-single__side-by-side {
+  display: flex;
+  gap: 1px;
+  width: 100%;
+  justify-content: center;
+}
+
+.ba-single__side-by-side--stacked {
+  flex-direction: column;
+  align-items: center;
+}
+
+.ba-single__side-by-side-image {
+  position: relative;
+  width: 100%;
+}
+
+/* Video slide
+   ========================================================================== */
+
+.ba-single__video {
+  position: relative;
+  width: 100%;
+}
+
+.ba-single__video-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ba-single__video-trigger {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: theme('borderRadius.full');
+  background-color: var(--ui-buttons-fill);
+  width: theme('spacing.11');
+  height: theme('spacing.11');
+}
+
+.ba-single__video-trigger::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.ba-single__video-trigger:hover,
+.ba-single__video-trigger:focus {
+  background-color: var(--ui-buttons-fill-hover);
+  outline: none;
+}
+
+.ba-single__video-icon {
+  width: theme('spacing.5');
+  height: theme('spacing.5');
+  color: var(--ui-buttons-elements);
+}
+
+.ba-single__video-trigger:hover .ba-single__video-icon,
+.ba-single__video-trigger:focus .ba-single__video-icon {
+  color: var(--ui-buttons-elements-hover);
+}
+
+/* Nav slider thumbnails
+   ========================================================================== */
+
+.ba-single__nav-slide {
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+
+.ba-single__nav-video {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ba-single__nav-video-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgb(0 0 0 / 0.5);
+  z-index: 10;
+}
+
+.ba-single__nav-video-icon {
+  position: relative;
+  z-index: 20;
+  fill: theme('colors.white');
+  width: theme('spacing.4');
+  height: theme('spacing.4');
+}
+
+/* Comparison slider
+   ========================================================================== */
+
+.ba-comparison-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+}
+
+.ba-comparison-slider__before {
+  position: absolute;
+  inset: 0;
+}
+
+.ba-comparison-slider__after {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 50% 0 0);
+  z-index: 1;
+}
+
+.ba-comparison-slider__divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ba-comparison-slider__line {
+  width: 1px;
+  height: 100%;
+  background-color: theme('colors.white');
+}
+
+.ba-comparison-slider__handle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: theme('borderRadius.full');
+  background-color: theme('colors.white');
+  cursor: grab;
+  flex-shrink: 0;
+  pointer-events: none;
+}

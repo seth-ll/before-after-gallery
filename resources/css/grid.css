@@ -1,0 +1,44 @@
+
+.bg_grid-cols-container {
+  grid-template-columns: 1fr minmax(0, var(--container-size)) 1fr;
+}
+
+:root {
+  --container-size: calc(100% - 64px);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --container-size: 576px;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --container-size: 704px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --container-size: 924px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --container-size: 1179px;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --container-size: 1340px;
+  }
+}
+
+@media (min-width: 1728px) {
+  :root {
+    --container-size: 1630px;
+  }
+}

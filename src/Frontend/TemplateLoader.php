@@ -8,6 +8,16 @@ use LiftedLogic\LLBag\Support\Vite;
 class TemplateLoader {
   public function register(): void {
     add_filter('template_include', [$this, 'loadTemplate']);
+    add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
+  }
+
+  public function enqueueAssets(): void {
+    if (
+      !is_singular(BeforeAfterPostType::SLUG) &&
+      !is_post_type_archive(BeforeAfterPostType::SLUG) &&
+      !(is_category()) &&
+      !(get_query_var('ll_ba_view') === 'categories')
+    ) {
     add_action('wp_enqueue_scripts', [$this, 'maybeEnqueueFrontendAssets']);
   }
 
@@ -17,6 +27,20 @@ class TemplateLoader {
     }
 
     Vite::enqueueFrontendAssets();
+    $this->enqueueCssOverrides();
+  }
+
+  private function enqueueCssOverrides(): void {
+    $files = ['ba-colors.css'];
+
+    foreach ($files as $file) {
+      $themeFile = get_stylesheet_directory() . '/ll-before-after/css/' . $file;
+      $url = file_exists($themeFile)
+        ? get_stylesheet_directory_uri() . '/ll-before-after/css/' . $file
+        : LL_BAG_URL . 'resources/css/' . $file;
+
+      wp_enqueue_style('ll-bag-' . basename($file, '.css'), $url, [], LL_BAG_VERSION);
+    }
     wp_localize_script('ll-bag-frontend', 'llBag', [
       'ajaxUrl' => admin_url('admin-ajax.php'),
       'nonce'   => wp_create_nonce(AjaxHandler::ACTION),
