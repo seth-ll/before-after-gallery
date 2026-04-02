@@ -12,20 +12,6 @@ class TemplateLoader {
   }
 
   public function enqueueAssets(): void {
-    if (
-      !is_singular(BeforeAfterPostType::SLUG) &&
-      !is_post_type_archive(BeforeAfterPostType::SLUG) &&
-      !(is_category()) &&
-      !(get_query_var('ll_ba_view') === 'categories')
-    ) {
-    add_action('wp_enqueue_scripts', [$this, 'maybeEnqueueFrontendAssets']);
-  }
-
-  public function maybeEnqueueFrontendAssets(): void {
-    if (!is_post_type_archive(BeforeAfterPostType::SLUG)) {
-      return;
-    }
-
     Vite::enqueueFrontendAssets();
     $this->enqueueCssOverrides();
   }
