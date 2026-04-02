@@ -26,13 +26,18 @@ class AdminMenu {
   }
 
   public function enqueueAssets(string $hook): void {
+    // make sure styles aren't messing up term pages
+    if (in_array($hook, ['edit-tags.php', 'term.php'], true)) {
+      return;
+    }
+
     $screen = get_current_screen();
 
     if (
       $screen?->post_type !== BeforeAfterPostType::SLUG &&
       $hook !== 'll_before_after_page_ll-bag-filters'
     ) {
-        return;
+      return;
     }
 
     Vite::enqueueAdminAssets();

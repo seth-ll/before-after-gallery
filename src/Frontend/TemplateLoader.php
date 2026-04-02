@@ -18,6 +18,11 @@ class TemplateLoader {
       !(is_category()) &&
       !(get_query_var('ll_ba_view') === 'categories')
     ) {
+    add_action('wp_enqueue_scripts', [$this, 'maybeEnqueueFrontendAssets']);
+  }
+
+  public function maybeEnqueueFrontendAssets(): void {
+    if (!is_post_type_archive(BeforeAfterPostType::SLUG)) {
       return;
     }
 
@@ -36,6 +41,11 @@ class TemplateLoader {
 
       wp_enqueue_style('ll-bag-' . basename($file, '.css'), $url, [], LL_BAG_VERSION);
     }
+    wp_localize_script('ll-bag-frontend', 'llBag', [
+      'ajaxUrl' => admin_url('admin-ajax.php'),
+      'nonce'   => wp_create_nonce(AjaxHandler::ACTION),
+      'action'  => AjaxHandler::ACTION,
+    ]);
   }
 
   public function loadTemplate(string $template): string {

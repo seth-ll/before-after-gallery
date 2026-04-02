@@ -1,3 +1,5 @@
+const plugin = require( 'tailwindcss/plugin' );
+
 /** @type {import('tailwindcss').Config} */
 const baColors = require( './resources/css/baColors.json' );
 export default {
@@ -17,5 +19,13 @@ export default {
         },
         extend: {},
     },
-    plugins: [],
+    plugins: [
+        plugin( ( {matchUtilities} ) => {
+            matchUtilities( {
+                'x': ( value ) => ( {
+                [`@apply ${value.replaceAll( ',', ' ' )}`]: {},
+                } ),
+            } );
+            } ),
+    ],
 };
