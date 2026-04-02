@@ -15,6 +15,12 @@ defined('ABSPATH') || exit;
   </div>
   <h1><?php esc_html_e('B&A Filter Settings', 'll-bag'); ?></h1>
 
+  <?php if (isset($_GET['duplicate'])) : ?>
+    <div class="notice notice-warning is-dismissible">
+      <p><?php esc_html_e('One or more filters with duplicate meta keys were removed before saving.', 'll-bag'); ?></p>
+    </div>
+  <?php endif; ?>
+
   <?php if (isset($_GET['saved'])) : ?>
     <div class="notice notice-success is-dismissible">
       <p><?php esc_html_e('Filters saved.', 'll-bag'); ?></p>

@@ -14,6 +14,33 @@ function labelToMetaKey(label) {
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  // prevent duplicate meta key detection on save
+  document.querySelector('#ll-bag-filter-list')?.closest('form')
+    ?.addEventListener('submit', (e) => {
+      const keys = [...document.querySelectorAll('.ll-bag-meta-key-input')]
+        .map(el => el.value.trim())
+        .filter(Boolean);
+
+      const seen = new Set();
+      for (const key of keys) {
+        if (seen.has(key)) {
+          e.preventDefault();
+          let notice = document.getElementById('ll-bag-duplicate-notice');
+          
+          if (!notice) {
+            notice = document.createElement('div');
+            notice.id = 'll-bag-duplicate-notice';
+            notice.className = 'notice notice-error';
+            document.getElementById('ll-bag-filter-list')?.before(notice);
+          }
+          notice.innerHTML = `<p>Duplicate filter detected: <strong>${key}</strong>. Each filter must have a unique label.</p>`;
+          notice.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          return;
+        }
+        seen.add(key);
+      }
+    });
+
   // handles the taxonomy tabs (do we want to pull in easy-toggle library for this sort of thing?)
   const taxTabs = document.querySelector('.ll-ba-tax-tabs');
   if (taxTabs) {
