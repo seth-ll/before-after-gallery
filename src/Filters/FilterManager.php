@@ -5,7 +5,8 @@ namespace LiftedLogic\LLBag\Filters;
 use Illuminate\Support\Collection;
 
 class FilterManager {
-  public const OPTION_KEY = 'll_bag_filters';
+  public const OPTION_KEY        = 'll_bag_filters';
+  public const CARD_TAXONOMY_KEY = 'll_bag_card_taxonomy';
 
   private const BUILTINS = [
     ['id' => '__builtin_category', 'label' => 'Categories', 'meta_key' => 'category',  'builtin' => true, 'display' => 'checkbox', 'enabled' => false, 'searchable' => false],
@@ -46,6 +47,14 @@ class FilterManager {
    */
   public function getEnabled(): Collection {
     return $this->all()->filter(fn(array $filter): bool => (bool) ($filter['enabled'] ?? false))->values();
+  }
+
+  public function getCardTaxonomy(): string {
+    return (string) get_option(self::CARD_TAXONOMY_KEY, '');
+  }
+
+  public function saveCardTaxonomy(string $metaKey): void {
+    update_option(self::CARD_TAXONOMY_KEY, $metaKey);
   }
 
   /**

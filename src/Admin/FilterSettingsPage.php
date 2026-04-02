@@ -8,7 +8,8 @@ class FilterSettingsPage {
   public function __construct(private readonly FilterManager $filterManager) {}
 
   public function render(): void {
-    $filters = $this->filterManager->all();
+    $filters      = $this->filterManager->all();
+    $cardTaxonomy = $this->filterManager->getCardTaxonomy();
     require LL_BAG_PATH . 'views/admin/filter-settings.php';
   }
 
@@ -59,6 +60,7 @@ class FilterSettingsPage {
     $hasDuplicates = count($unique) < count($filters);
 
     $this->filterManager->save($unique);
+    $this->filterManager->saveCardTaxonomy(sanitize_key($_POST['ll_bag_card_taxonomy'] ?? ''));
 
     wp_safe_redirect(add_query_arg(
       array_filter(['saved' => '1', 'duplicate' => $hasDuplicates ? '1' : null]),
