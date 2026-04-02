@@ -1,5 +1,6 @@
 @import './typography.css';
 @import './partials/single-post.css';
+@import './partials/archive.css';
 
 @tailwind base;
 @tailwind components;
