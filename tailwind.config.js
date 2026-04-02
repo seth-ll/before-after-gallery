@@ -1,3 +1,5 @@
+const plugin = require( 'tailwindcss/plugin' );
+
 /** @type {import('tailwindcss').Config} */
 export default {
     content: [
@@ -9,5 +11,13 @@ export default {
     theme: {
         extend: {},
     },
-    plugins: [],
+    plugins: [
+        plugin( ( {matchUtilities} ) => {
+            matchUtilities( {
+                'x': ( value ) => ( {
+                [`@apply ${value.replaceAll( ',', ' ' )}`]: {},
+                } ),
+            } );
+            } ),
+    ],
 };
