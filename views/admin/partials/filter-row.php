@@ -15,7 +15,7 @@ $isCheckbox = ($filter['display'] ?? 'checkbox') === 'checkbox';
 
 <tr class="ll-bag-filter-row" data-id="<?= esc_attr($id); ?>" draggable="true">
   <!-- Drag handle -->
-  <td class="px-2 !text-2xl cursor-grab ll-bag-drag-handle" title="Drag to reorder">⠿</td>
+  <td class="ll-bag-drag-handle" title="Drag to reorder">⠿</td>
 
   <td>
     <?php if ($isBuiltin) : ?>
@@ -24,13 +24,13 @@ $isCheckbox = ($filter['display'] ?? 'checkbox') === 'checkbox';
       <input type="hidden" name="ll_bag_filters[<?= esc_attr($id); ?>][label]"    value="<?= esc_attr($filter['label']); ?>">
       <input type="hidden" name="ll_bag_filters[<?= esc_attr($id); ?>][meta_key]" value="<?= esc_attr($filter['meta_key']); ?>">
       <input type="hidden" name="ll_bag_filters[<?= esc_attr($id); ?>][builtin]"  value="1">
-      <p class="mt-1 text-xs opacity-50"><?= esc_html($filter['meta_key']); ?></p>
+      <p class="ll-bag-meta-key-hint"><?= esc_html($filter['meta_key']); ?></p>
     <?php else : ?>
       <input
         type="text"
         name="ll_bag_filters[<?= esc_attr($id); ?>][label]"
         value="<?= esc_attr($filter['label']); ?>"
-        class="w-full ll-bag-label-input"
+        class="ll-bag-label-input"
         required
       >
       <input
@@ -39,9 +39,7 @@ $isCheckbox = ($filter['display'] ?? 'checkbox') === 'checkbox';
         value="<?= esc_attr($filter['meta_key']); ?>"
         class="ll-bag-meta-key-input"
       >
-      <p class="mt-1 text-xs opacity-50 ll-bag-meta-key-hint">
-        <?= esc_html($filter['meta_key']); ?>
-      </p>
+      <p class="ll-bag-meta-key-hint"><?= esc_html($filter['meta_key']); ?></p>
     <?php endif; ?>
   </td>
 
@@ -54,7 +52,7 @@ $isCheckbox = ($filter['display'] ?? 'checkbox') === 'checkbox';
       <option value="dropdown" <?php selected($filter['display'] ?? '', 'dropdown'); ?>>Dropdown</option>
     </select>
 
-    <label class="ll-bag-searchable-wrap flex items-center gap-0.5 mt-2 text-xs <?= !$isCheckbox ? 'hidden' : ''; ?>">
+    <label class="ll-bag-searchable-wrap <?= !$isCheckbox ? 'hidden' : ''; ?>">
       <input
         type="checkbox"
         name="ll_bag_filters[<?= esc_attr($id); ?>][searchable]"
@@ -66,7 +64,7 @@ $isCheckbox = ($filter['display'] ?? 'checkbox') === 'checkbox';
     </label>
   </td>
 
-  <td class="">
+  <td>
     <input
       type="checkbox"
       name="ll_bag_filters[<?= esc_attr($id); ?>][enabled]"
@@ -75,7 +73,7 @@ $isCheckbox = ($filter['display'] ?? 'checkbox') === 'checkbox';
     >
   </td>
 
-  <td class="text-center align-middle">
+  <td class="ll-bag-card-display-td">
     <input
       type="checkbox"
       name="ll_bag_card_taxonomy"

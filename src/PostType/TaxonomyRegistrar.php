@@ -35,26 +35,20 @@ class TaxonomyRegistrar {
 
   public function renderTaxonomyTabs(\WP_Post $post, Collection $filters): void {
     ?>
-    <div class="grid grid-cols-[150px,1fr] grid-rows-1 min-h-[200px] ll-ba-tax-tabs">
-      <ul class="-ml-3 list-none ll-ba-tax-tab-list">
+    <div class="ll-ba-tax-tabs">
+      <ul class="ll-ba-tax-tab-list">
         <?php foreach ($filters as $i => $filter) : ?>
-          <li class="m-0 border-b border-gray-200">
+          <li>
             <button
               type="button"
-              class="ll-ba-tax-tab <?= $i === 0 ? 'is-active' : ''; ?>
-              w-full text-left py-2 bg-gray-100 pl-2 pr-4 border-r-2 border-transparent duration-300
-              hover:x-[text-blue-500,bg-white]
-              [&.is-active]:x-[bg-white,text-blue-500,border-blue-500]
-              "
+              class="ll-ba-tax-tab <?= $i === 0 ? 'is-active' : ''; ?>"
               data-target="ll-ba-tax-panel-<?= esc_attr($filter['meta_key']); ?>"
-            >
-              <?= $filter['label']; ?>
-            </button>
+            ><?= esc_html($filter['label']); ?></button>
           </li>
         <?php endforeach; ?>
       </ul>
 
-      <div class="px-2 ll-ba-tax-panels">
+      <div class="ll-ba-tax-panels">
         <?php foreach ($filters as $i => $filter) :
           $slug = $filter['meta_key'];
           if (!get_taxonomy($slug)) continue;

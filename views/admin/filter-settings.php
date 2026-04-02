@@ -11,9 +11,6 @@ defined('ABSPATH') || exit;
 ?>
 
 <div class="wrap">
-  <div class="flex">
-
-  </div>
   <h1><?php esc_html_e('B&A Filter Settings', 'll-bag'); ?></h1>
 
   <?php if (isset($_GET['duplicate'])) : ?>
@@ -28,10 +25,9 @@ defined('ABSPATH') || exit;
     </div>
   <?php endif; ?>
 
-  <form class="" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-    <div class="flex gap-8 my-4">
-      <button type="button" id="ll-bag-add-filter" class="button size-fit">+ Add Filter</button>
-    
+  <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+    <div class="ll-bag-filter-actions">
+      <button type="button" id="ll-bag-add-filter" class="button">+ Add Filter</button>
       <?php submit_button('Save Filters', 'primary', 'submit', false); ?>
     </div>
 
@@ -42,12 +38,12 @@ defined('ABSPATH') || exit;
     <table class="wp-list-table widefat striped ll-bag-filter-table" id="ll-bag-filter-list">
       <thead>
         <tr>
-          <th class="w-[3%]"></th>
-          <th class="w-[35%]">Label</th>
-          <th class="w-[15%]">Display</th>
-          <th class="" title="This will enable the filter's display in the filter sidebar">Enabled in sidebar?</th>
-          <th class="" title="Show this taxonomy's terms as pills on each post card">Card display</th>
-          <th class="w-[10%]">Actions</th>
+          <th></th>
+          <th>Label</th>
+          <th>Display</th>
+          <th title="This will enable the filter's display in the filter sidebar">Enabled in sidebar?</th>
+          <th title="Show this taxonomy's terms as pills on each post card">Card display</th>
+          <th>Actions</th>
         </tr>
       </thead>
 
