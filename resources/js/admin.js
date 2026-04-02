@@ -13,13 +13,29 @@ function labelToMetaKey(label) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+
+  // handles the taxonomy tabs (do we want to pull in easy-toggle library for this sort of thing?)
+  const taxTabs = document.querySelector('.ll-ba-tax-tabs');
+  if (taxTabs) {
+    taxTabs.addEventListener('click', (e) => {
+      const tab = e.target.closest('.ll-ba-tax-tab');
+      if (!tab) return;
+
+      taxTabs.querySelectorAll('.ll-ba-tax-tab').forEach(t => t.classList.remove('is-active'));
+      taxTabs.querySelectorAll('.ll-ba-tax-panel').forEach(p => { p.hidden = true; });
+
+      tab.classList.add('is-active');
+      const panel = document.getElementById(tab.dataset.target);
+      if (panel) panel.hidden = false;
+    });
+  }
+
   const tbody  = document.getElementById('ll-bag-filter-tbody');
   const addBtn = document.getElementById('ll-bag-add-filter');
 
   if (!tbody || !addBtn) return;
 
   // ── Drag-and-drop row reordering ───────────────────────────────────────────
-
   let draggedRow = null;
 
   tbody.addEventListener('dragstart', (e) => {
