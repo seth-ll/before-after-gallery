@@ -15,7 +15,7 @@ $isCheckbox = ($filter['display'] ?? 'checkbox') === 'checkbox';
 
 <tr class="ll-bag-filter-row" data-id="<?= esc_attr($id); ?>" draggable="true">
   <!-- Drag handle -->
-  <td class="ll-bag-drag-handle" style="cursor:grab;color:#ccc;font-size:18px;padding:0 8px;line-height:1;user-select:none" title="Drag to reorder">⠿</td>
+  <td class="px-2 !text-2xl cursor-grab ll-bag-drag-handle" title="Drag to reorder">⠿</td>
 
   <td>
     <?php if ($isBuiltin) : ?>
@@ -30,7 +30,7 @@ $isCheckbox = ($filter['display'] ?? 'checkbox') === 'checkbox';
         type="text"
         name="ll_bag_filters[<?= esc_attr($id); ?>][label]"
         value="<?= esc_attr($filter['label']); ?>"
-        class="ll-bag-label-input"
+        class="w-full ll-bag-label-input"
         required
       >
       <input
@@ -66,7 +66,7 @@ $isCheckbox = ($filter['display'] ?? 'checkbox') === 'checkbox';
     </label>
   </td>
 
-  <td class="text-center align-middle">
+  <td class="">
     <input
       type="checkbox"
       name="ll_bag_filters[<?= esc_attr($id); ?>][enabled]"

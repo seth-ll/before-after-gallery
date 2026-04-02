@@ -41,9 +41,9 @@ defined('ABSPATH') || exit;
       <thead>
         <tr>
           <th class="w-[3%]"></th>
-          <th class="w-[27%]">Label</th>
-          <th class="w-[20%]">Display</th>
-          <th class="w-[8%] text-center">Enabled</th>
+          <th class="w-[35%]">Label</th>
+          <th class="w-[15%]">Display</th>
+          <th class="" title="This will enable the filter's display in the filter sidebar">Enabled in sidebar?</th>
           <th class="w-[10%]">Actions</th>
         </tr>
       </thead>
