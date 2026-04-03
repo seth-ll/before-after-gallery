@@ -92,6 +92,21 @@ class SettingsPage {
           'name' => 'll_bag_related_treatments_slider_title',
           'type' => 'text',
         ],
+        [
+          'key' => 'field_ll_bag_archive_settings_tab_2',
+          'label' => 'Archive Options',
+          'type' => 'tab',
+          'placement' => 'left',
+          'endpoint' => 0,
+        ],
+        [
+          'key'           => 'field_ll_ba_card_bg_color',
+          'label'         => 'Card Background Color',
+          'name'          => 'll_ba_card_bg_color',
+          'type'          => 'color_picker',
+          'default_value' => '#B8C2B0',
+          'instructions'  => 'Background color shown behind the Before and After post cards.',
+        ],
       ],
       'location' => [
         [

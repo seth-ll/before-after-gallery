@@ -1,6 +1,5 @@
 :root {
   --cards-radius: 0px;
-  --cards-background: var(--hex-codes-moss);
   --overlays-dark: var(--hex-codes-50-overlay);
   --overlays-elements: var(--hex-codes-white);
   --ui-tags-radius: 1000px;
