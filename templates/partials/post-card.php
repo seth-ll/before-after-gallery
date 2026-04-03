@@ -11,11 +11,8 @@
 defined('ABSPATH') || exit;
 
 use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
-use LiftedLogic\LLBag\PostType\MetaBoxes;
 use LiftedLogic\LLBag\Support\PostTerms;
 
-$beforeId  = (int) get_post_meta($post->ID, MetaBoxes::BEFORE_IMAGE_KEY, true);
-$afterId   = (int) get_post_meta($post->ID, MetaBoxes::AFTER_IMAGE_KEY,  true);
 $permalink = get_permalink($post->ID);
 
 $card         = PostTerms::forCard($post->ID);
@@ -26,35 +23,81 @@ $cardTaxonomy = $card['taxonomy'];
 $termCount    = count($card['terms']);
 
 $archiveUrl = get_post_type_archive_link(BeforeAfterPostType::SLUG);
+
+$images_field = get_field('field_ll_ba_images', $post->ID);
+$ba_gallery_image = [];
+if ( !empty($images_field) ) {
+    foreach ( $images_field as $image ) {
+        $ratio_class = 'ba-single__ratio--square';
+        if ( $image['ll_ba_image_ratio'] === 'wide' ) {
+            $ratio_class = 'ba-single__ratio--wide';
+        } elseif ( $image['ll_ba_image_ratio'] === 'panorama' ) {
+            $ratio_class = 'ba-single__ratio--panorama';
+        } elseif ( $image['ll_ba_image_ratio'] === 'vertical' ) {
+            $ratio_class = 'ba-single__ratio--vertical';
+        }
+        $ba_gallery_image[] = [
+            'option'           => $image['ll_ba_image_options'],
+            'ratio'            => $ratio_class,
+            'single_image_id'  => $image['ll_ba_single_image'],
+            'before_image_id'  => $image['ll_ba_before_image'],
+            'after_image_id'   => $image['ll_ba_after_image'],
+        ];
+    }
+}
+
+$card_image = $ba_gallery_image[0] ?? null;
+
+$is_stacked = $card_image
+    && $card_image['option'] === 'two-images'
+    && in_array( $card_image['ratio'], ['ba-single__ratio--wide', 'ba-single__ratio--panorama'] );
 ?>
 
 <div class="ll-ba-card">
-  <div class="ll-ba-card__images">
-    <?php if ($beforeId) : ?>
-      <div class="ll-ba-card__half">
-        <img
-          src="<?= esc_url(wp_get_attachment_image_url($beforeId, 'medium_large')); ?>"
-          alt="Before"
-          class="ll-ba-card__img"
-        >
+
+  <?php if ( $card_image ) : ?>
+
+    <?php if ( $card_image['option'] === 'one-image' && $card_image['single_image_id'] ) : ?>
+      <div class="ll-ba-card__image <?= $card_image['ratio'] ?>">
+        <?php bag_include_partial( 'fit-image', [
+          'image_id'       => $card_image['single_image_id'],
+          'thumbnail_size' => 'large',
+          'fit'            => 'object-cover',
+          'position'       => 'object-center',
+          'loading'        => true,
+        ] ); ?>
       </div>
+
+    <?php elseif ( $card_image['option'] === 'two-images' ) : ?>
+      <div class="<?= $is_stacked ? 'll-ba-card__stacked' : 'll-ba-card__side-by-side' ?>">
+        <?php if ( $card_image['before_image_id'] ) : ?>
+          <div class="ll-ba-card__image <?= $card_image['ratio'] ?>">
+            <?php bag_include_partial( 'fit-image', [
+              'image_id'       => $card_image['before_image_id'],
+              'thumbnail_size' => 'large',
+              'fit'            => 'object-cover',
+              'position'       => 'object-center',
+              'loading'        => true,
+            ] ); ?>
+          </div>
+        <?php endif; ?>
+        <?php if ( $card_image['after_image_id'] ) : ?>
+          <div class="ll-ba-card__image <?= $card_image['ratio'] ?>">
+            <?php bag_include_partial( 'fit-image', [
+              'image_id'       => $card_image['after_image_id'],
+              'thumbnail_size' => 'large',
+              'fit'            => 'object-cover',
+              'position'       => 'object-center',
+              'loading'        => true,
+            ] ); ?>
+          </div>
+        <?php endif; ?>
+      </div>
+
     <?php endif; ?>
 
-    <?php if ($afterId) : ?>
-      <div class="ll-ba-card__half">
-        <img
-          src="<?= esc_url(wp_get_attachment_image_url($afterId, 'medium_large')); ?>"
-          alt="After"
-          class="ll-ba-card__img"
-        >
-      </div>
-    <?php endif; ?>
-  </div>
+  <?php endif; ?>
 
-  <div class="ll-ba-card__divider"></div>
-  <div class="ll-ba-card__overlay"></div>
-
-  <!-- Card link overlay — sits beneath the pills -->
   <a href="<?= esc_url($permalink); ?>" class="ll-ba-card__link" aria-label="<?= esc_attr(get_the_title($post)); ?>"></a>
 
   <?php if ($termCount === 1) : ?>
@@ -74,7 +117,15 @@ $archiveUrl = get_post_type_archive_link(BeforeAfterPostType::SLUG);
       <span class="ll-ba-card__pill">Multiple <?= esc_html($cardLabel); ?></span>
     </div>
 
+    <div class="ll-ba-card__hover-overlay"></div>
+
     <div class="ll-ba-card__pills ll-ba-card__pills--hover">
+      
+      <p class="ll-ba-card__hover-text">
+        <?php 
+          esc_html_e('View Details', 'll-bag')
+        ?>
+      </p>
       <div class="ll-ba-card__pill-group">
         <?php foreach ($visibleTerms as $term) : ?>
           <a
@@ -91,4 +142,5 @@ $archiveUrl = get_post_type_archive_link(BeforeAfterPostType::SLUG);
     </div>
 
   <?php endif; ?>
+
 </div>

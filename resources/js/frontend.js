@@ -5,6 +5,18 @@ import '../css/theme-before-after.css';
 import Splide from '@splidejs/splide';
 import '@splidejs/splide/css';
 
+( function setHeaderHeight() {
+  const header = document.querySelector( 'header' );
+  if ( !header ) return;
+  const adminBar = document.getElementById( 'wpadminbar' );
+  const update = () => {
+    const height = header.offsetHeight + ( adminBar ? adminBar.offsetHeight : 0 );
+    document.documentElement.style.setProperty( '--ba-header-height', height + 'px' );
+  };
+  update();
+  window.addEventListener( 'resize', update );
+} )();
+
 document.querySelectorAll( '.ba-single-page-slider' ).forEach( el => {
   const navEl = el.nextElementSibling?.classList.contains( 'ba-single-page-slider-nav' ) ? el.nextElementSibling : null;
   const primary = new Splide( el, {
@@ -102,8 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const arrow   = toggle.querySelector('.ll-ba-filter-arrow');
     if (!content) return;
 
-    const isOpen = !content.classList.contains('hidden');
-    content.classList.toggle('hidden', isOpen);
+    const isOpen = !content.classList.contains('ll-ba-hidden');
+    content.classList.toggle('ll-ba-hidden', isOpen);
     toggle.setAttribute('aria-expanded', String(!isOpen));
     arrow?.classList.toggle('rotate-180', !isOpen);
   });
@@ -242,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    bar.classList.toggle('hidden', tags.children.length === 0);
+    bar.classList.toggle('ll-ba-hidden', tags.children.length === 0);
   }
 
   function updateUrl(active) {

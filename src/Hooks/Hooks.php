@@ -15,12 +15,35 @@ class Hooks {
   public static function bag_back_button_markup(): string {
     $classes = 'bag_back-text bag-inline-block';
     $text    = 'Back to Gallery';
-    $href    = get_post_type_archive_link( 'll_bag' ) ?: site_url( '/' );
+    $href    = get_post_type_archive_link( 'll_before_after' ) ?: site_url( '/' );
     $markup  = <<<HTML
       <a href="$href" class="$classes">$text</a>
     HTML;
 
     return apply_filters( 'lifted_logic/bag/bag_back_button_markup', $markup, $classes, $text, $href );
+  }
+
+  // Related slider arrows
+  public static function bag_related_slider_arrows_markup(): string {
+    $prev = <<<HTML
+      <button class="ba-single__related-arrow ba-single__related-arrow--prev splide__arrow--prev">
+        <svg class="ba-single__related-arrow-icon icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg>
+        <span class="sr-only">Previous Slide</span>
+      </button>
+    HTML;
+
+    $next = <<<HTML
+      <button class="ba-single__related-arrow ba-single__related-arrow--next splide__arrow--next">
+        <svg class="ba-single__related-arrow-icon icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg>
+        <span class="sr-only">Next Slide</span>
+      </button>
+    HTML;
+
+    $markup = <<<HTML
+      <div class="ba-single__related-arrows splide__arrows">$prev$next</div>
+    HTML;
+
+    return apply_filters( 'lifted_logic/bag/related_slider_arrows_markup', $markup, $prev, $next );
   }
 
   // CTA Link card

@@ -52,7 +52,7 @@ $isCheckbox = ($filter['display'] ?? 'checkbox') === 'checkbox';
       <option value="dropdown" <?php selected($filter['display'] ?? '', 'dropdown'); ?>>Dropdown</option>
     </select>
 
-    <label class="ll-bag-searchable-wrap <?= !$isCheckbox ? 'hidden' : ''; ?>">
+    <label class="ll-bag-searchable-wrap <?= !$isCheckbox ? 'll-ba-hidden' : ''; ?>">
       <input
         type="checkbox"
         name="ll_bag_filters[<?= esc_attr($id); ?>][searchable]"

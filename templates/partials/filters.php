@@ -19,7 +19,7 @@ if ($filters->isEmpty()) {
 <div class="ll-ba-filters" id="ll-ba-filters">
 
   <!-- Filtered by tags -->
-  <div class="hidden ll-ba-filters__active" id="ll-ba-active-bar">
+  <div class="ll-ba-hidden ll-ba-filters__active" id="ll-ba-active-bar">
     <div class="ll-ba-filters__active-inner">
       <span class="ll-ba-filters__active-label">Filtered by:</span>
       <ul class="ll-ba-filters__active-tags" id="ll-ba-active-tags">
@@ -63,7 +63,7 @@ if ($filters->isEmpty()) {
           </svg>
         </button>
 
-        <div class="hidden ll-ba-filter-content">
+        <div class="ll-ba-hidden ll-ba-filter-content">
 
           <?php if ($display === 'dropdown') : ?>
             <select class="ll-ba-dropdown-filter">
