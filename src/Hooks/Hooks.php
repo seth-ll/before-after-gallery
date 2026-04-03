@@ -15,7 +15,7 @@ class Hooks {
   public static function bag_back_button_markup(): string {
     $classes = 'bag_back-text bag-inline-block';
     $text    = 'Back to Gallery';
-    $href    = get_post_type_archive_link( 'll_bag' ) ?: site_url( '/' );
+    $href    = get_post_type_archive_link( 'll_before_after' ) ?: site_url( '/' );
     $markup  = <<<HTML
       <a href="$href" class="$classes">$text</a>
     HTML;

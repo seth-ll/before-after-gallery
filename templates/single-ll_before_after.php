@@ -100,7 +100,7 @@ if ( !empty($images_field) ) {
                 </div>
                 <div class="ba-single__detail-panels">
                     <?php foreach ( $detail_sections as $section_content ) : ?>
-                        <div id="<?= $section_content['tab_id'] ?>" class="ba-single__detail-panel wysiwyg<?= $section_content['is_tab'] ? ' ba-single__detail-panel--tab' : '' ?>">
+                        <div id="<?= $section_content['tab_id'] ?>" class="ba-single__detail-panel wysiwyg <?= $section_content['is_tab'] ? ' ba-single__detail-panel--tab' : '' ?>">
                             <?= $section_content['content'] ?>
                         </div>
                     <?php endforeach; ?>

@@ -26,6 +26,31 @@ $cardTaxonomy = $card['taxonomy'];
 $termCount    = count($card['terms']);
 
 $archiveUrl = get_post_type_archive_link(BeforeAfterPostType::SLUG);
+
+$images_field = get_field('field_ll_ba_images');
+$ba_gallery_image = [];
+if ( !empty($images_field) ) {
+    foreach ( $images_field as $image ) {
+        $ratio_class = 'ba-single__ratio--square';
+        if ( $image['ll_ba_image_ratio'] === 'wide' ) {
+            $ratio_class = 'ba-single__ratio--wide';
+        } elseif ( $image['ll_ba_image_ratio'] === 'panorama' ) {
+            $ratio_class = 'ba-single__ratio--panorama';
+        } elseif ( $image['ll_ba_image_ratio'] === 'vertical' ) {
+            $ratio_class = 'ba-single__ratio--vertical';
+        }
+        $ba_gallery_image[] = [
+            'option'           => $image['ll_ba_image_options'],
+            'ratio'            => $ratio_class,
+            'single_image_id'  => $image['ll_ba_single_image'],
+            'before_image_id'  => $image['ll_ba_before_image'],
+            'after_image_id'   => $image['ll_ba_after_image'],
+            'video_url'        => $image['ll_ba_video_url'],
+            'video_title'      => $image['ll_ba_video_title'],
+            'comparison_slider'=> $image['ll_ba_comparison_slider'],
+        ];
+    }
+}
 ?>
 
 <div class="ll-ba-card">
