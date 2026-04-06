@@ -330,6 +330,24 @@ class Fields {
             ],
           ],
         ],
+        [
+          'key'       => 'field_ll_settings_tab',
+          'label'     => 'Settings',
+          'type'      => 'tab',
+          'placement' => 'left',
+          'endpoint'  => 0,
+        ],
+        [
+          'key'           => 'field_ll_ba_is_nsfw',
+          'label'         => 'Sensitive Images',
+          'name'          => 'll_ba_is_nsfw',
+          'type'          => 'true_false',
+          'instructions'  => 'Mark this post as containing sensitive images. Visitors will see blur/hide options in the archive.',
+          'default_value' => 0,
+          'ui'            => 1,
+          'ui_on_text'    => 'Yes',
+          'ui_off_text'   => 'No',
+        ],
       ],
       'location' => [
         [
