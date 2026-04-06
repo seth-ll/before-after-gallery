@@ -14,21 +14,7 @@ $page_theme = 'theme-two';
 $treatment_title = get_field('ll_ba_title') ? get_field('ll_ba_title') : 'Treatments Used:';
 $global_cta_title = get_field('ll_ba_global_cta_title', 'options') ?? '';
 $global_cta_link = get_field('ll_ba_global_cta_link', 'options') ?? '';
-$categories = get_the_category();
 
-$related_posts = [];
-if ( !empty($categories) ) {
-    $cat_ids = wp_list_pluck( $categories, 'term_id' );
-    $related_query = new WP_Query([
-        'post_type'      => BeforeAfterPostType::SLUG,
-        'posts_per_page' => 10,
-        'post__not_in'   => [ get_the_ID() ],
-        'category__in'   => $cat_ids,
-        'no_found_rows'  => true,
-    ]);
-    $related_posts = $related_query->posts;
-    wp_reset_postdata();
-}
 
 $detail_sections_field = get_field('ll_ba_detail_sections') ?? [];
 $detail_sections = [];
@@ -133,27 +119,21 @@ if ( !empty($images_field) ) {
         <?php endif; ?>
 
         <!-- Related Slider -->
-        <?php if ( !empty($related_posts) ) : ?>
-        <div class="splide ba-single__related ba-related-slider" aria-label="Before & After Gallery Related Posts">
-            <div class="ba-single__related-header">
-                <div class="ba-single__related-title-wrap">
-                    <p class="ba-single__related-title">
-                        <?= $global_cta_title ?>
-                    </p>
+        <div class="ba-single__related">
+            <div class="splide ba-related-slider" data-post-id="<?= get_the_ID() ?>" aria-label="Before & After Gallery Related Posts">
+                <div class="ba-single__related-header">
+                    <div class="ba-single__related-title-wrap">
+                        <p class="ba-single__related-title">
+                            <?= $global_cta_title ?>
+                        </p>
+                    </div>
+                    <?= Hooks::bag_related_slider_arrows_markup() ?>
                 </div>
-                <?= Hooks::bag_related_slider_arrows_markup() ?>
-            </div>
-            <div class="splide__track">
-                <ul class="splide__list">
-                    <?php foreach ( $related_posts as $related_post ) : ?>
-                        <li class="splide__slide">
-                            <?php \LiftedLogic\LLBag\Frontend\TemplateLoader::get( 'partials/post-card.php', ['post' => $related_post] ); ?>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
+                <div class="splide__track">
+                    <ul class="splide__list"></ul>
+                </div>
             </div>
         </div>
-        <?php endif; ?>
 
     </div>
 

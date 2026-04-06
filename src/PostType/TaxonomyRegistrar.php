@@ -10,7 +10,7 @@ class TaxonomyRegistrar {
 
   public function register(): void {
     add_action('init', [$this, 'registerTaxonomies']);
-    add_action('add_meta_boxes_' . BeforeAfterPostType::SLUG, [$this, 'registerMetaBoxes']);
+    add_action('add_meta_boxes', [$this, 'registerMetaBoxes'], 5);
   }
 
   public function registerMetaBoxes(): void {

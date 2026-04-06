@@ -15,6 +15,20 @@ use LiftedLogic\LLBag\Support\PostTerms;
 
 $permalink = get_permalink($post->ID);
 
+// Resolve card images from the first row of the ACF images repeater
+$firstRow = (get_field('ll_ba_images', $post->ID) ?: [])[0] ?? [];
+$option   = $firstRow['ll_ba_image_options'] ?? '';
+$beforeId = null;
+$afterId  = null;
+
+if ($option === 'two-images') {
+  $beforeId = $firstRow['ll_ba_before_image'] ?? null;
+  $afterId  = $firstRow['ll_ba_after_image']  ?? null;
+} else {
+  // one-image and video both store the display image in ll_ba_single_image
+  $beforeId = $firstRow['ll_ba_single_image'] ?? null;
+}
+
 $card         = PostTerms::forCard($post->ID);
 $visibleTerms = $card['visible'];
 $overflow     = $card['overflow'];

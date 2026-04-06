@@ -9,6 +9,16 @@ class TemplateLoader {
   public function register(): void {
     add_filter('template_include', [$this, 'loadTemplate']);
     add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
+    add_action('pre_get_posts', [$this, 'setArchivePaged']);
+  }
+
+  public function setArchivePaged(\WP_Query $query): void {
+    if (!$query->is_main_query() || !$query->is_post_type_archive(BeforeAfterPostType::SLUG)) {
+      return;
+    }
+    if (isset($_GET['paged']) && is_numeric($_GET['paged'])) {
+      $query->set('paged', max(1, (int) $_GET['paged']));
+    }
   }
 
   public function enqueueAssets(): void {
@@ -31,9 +41,11 @@ class TemplateLoader {
     wp_add_inline_style('ll-bag-ba-colors', ':root { --ll-ba-card-bg: ' . sanitize_hex_color($cardBgColor) . '; }');
 
     wp_localize_script('ll-bag-frontend', 'llBag', [
-      'ajaxUrl' => admin_url('admin-ajax.php'),
-      'nonce'   => wp_create_nonce(AjaxHandler::ACTION),
-      'action'  => AjaxHandler::ACTION,
+      'ajaxUrl'       => admin_url('admin-ajax.php'),
+      'nonce'         => wp_create_nonce(AjaxHandler::ACTION),
+      'action'        => AjaxHandler::ACTION,
+      'relatedAction' => AjaxHandler::RELATED_ACTION,
+      'relatedNonce'  => wp_create_nonce(AjaxHandler::RELATED_ACTION),
     ]);
   }
 

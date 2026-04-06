@@ -2,12 +2,114 @@
 
 namespace LiftedLogic\LLBag\PostType;
 
+use LiftedLogic\LLBag\Filters\FilterManager;
+
 class Fields {
   public function register(): void {
-    add_action('acf/init', [$this, 'registerFields']);
+    add_action('acf/init',           [$this, 'registerFields']);
+    add_action('add_meta_boxes',     [$this, 'addRelatedMetaBox']);
+    add_action('save_post_' . BeforeAfterPostType::SLUG, [$this, 'saveRelatedTerms']);
+  }
+
+  public function addRelatedMetaBox(): void {
+    add_meta_box(
+      'll-ba-related-terms',
+      'Related Posts',
+      [$this, 'renderRelatedMetaBox'],
+      BeforeAfterPostType::SLUG,
+      'normal',
+      'low'
+    );
+  }
+
+  public function renderRelatedMetaBox(\WP_Post $post): void {
+    $filters = (new FilterManager())->getEnabled()
+      ->filter(fn($f) => empty($f['builtin']) && !empty($f['meta_key']))
+      ->values();
+
+    if ($filters->isEmpty()) {
+      echo '<p class="ll-ba-rmb-none">No custom taxonomies are configured as filters.</p>';
+      return;
+    }
+
+    $saved = (array) (get_post_meta($post->ID, 'll_ba_related_terms', true) ?: []);
+    wp_nonce_field('ll_ba_related_terms_save', 'll_ba_related_terms_nonce');
+    ?>
+    <p class="description" style="margin-bottom:8px">Select specific terms to use when finding related posts. Defaults to the current post's Card Display terms if left empty.</p>
+    <div class="ll-ba-tax-tabs">
+      <ul class="ll-ba-tax-tab-list">
+        <?php foreach ($filters as $i => $f) : ?>
+          <li>
+            <button
+              type="button"
+              class="ll-ba-tax-tab <?= $i === 0 ? 'is-active' : ''; ?>"
+              data-target="ll-ba-related-panel-<?= esc_attr($f['meta_key']); ?>"
+            ><?= esc_html($f['label']); ?></button>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+
+      <div class="ll-ba-tax-panels">
+        <?php foreach ($filters as $i => $f) :
+          $taxonomy = $f['meta_key'];
+          $terms    = get_terms(['taxonomy' => $taxonomy, 'hide_empty' => false]);
+        ?>
+          <div
+            id="ll-ba-related-panel-<?= esc_attr($taxonomy); ?>"
+            class="ll-ba-tax-panel"
+            <?= $i !== 0 ? 'hidden' : ''; ?>
+          >
+            <?php if (is_wp_error($terms) || empty($terms)) : ?>
+              <p class="description">No terms found.</p>
+            <?php else : ?>
+              <ul class="ll-ba-related-checklist">
+                <?php foreach ($terms as $term) :
+                  $value = $taxonomy . ':' . $term->slug;
+                ?>
+                  <li>
+                    <label>
+                      <input type="checkbox" name="ll_ba_related_terms[]" value="<?= esc_attr($value); ?>" <?= checked(in_array($value, $saved, true), true, false); ?>>
+                      <?= esc_html($term->name); ?>
+                    </label>
+                  </li>
+                <?php endforeach; ?>
+              </ul>
+            <?php endif; ?>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+    <?php
+  }
+
+  public function saveRelatedTerms(int $postId): void {
+    if (
+      !isset($_POST['ll_ba_related_terms_nonce']) ||
+      !wp_verify_nonce($_POST['ll_ba_related_terms_nonce'], 'll_ba_related_terms_save')
+    ) {
+      return;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (!current_user_can('edit_post', $postId)) return;
+
+    $raw   = isset($_POST['ll_ba_related_terms']) && is_array($_POST['ll_ba_related_terms'])
+             ? $_POST['ll_ba_related_terms']
+             : [];
+    $valid = array_values(array_filter(
+      array_map('sanitize_text_field', $raw),
+      fn($v) => (bool) preg_match('/^[a-z0-9_-]+:[a-z0-9_-]+$/', $v)
+    ));
+
+    if (empty($valid)) {
+      delete_post_meta($postId, 'll_ba_related_terms');
+    } else {
+      update_post_meta($postId, 'll_ba_related_terms', $valid);
+    }
   }
 
   public function registerFields(): void {
+
     // Category Fields
     acf_add_local_field_group([
       'key'    => 'group_ll_ba_category',
@@ -239,5 +341,6 @@ class Fields {
         ],
       ],
     ]);
+
   }
 }
