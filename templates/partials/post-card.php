@@ -66,14 +66,12 @@ $is_stacked = $card_image
     && $card_image['option'] === 'two-images'
     && in_array( $card_image['ratio'], ['ba-single__ratio--wide', 'ba-single__ratio--panorama'] );
 
-$is_nsfw = (bool) get_field('ll_ba_is_nsfw', $post->ID);
+$is_nsfw = get_field('ll_ba_is_nsfw', $post->ID);
 ?>
 
 <div class="ll-ba-card<?= $is_nsfw ? ' ll-ba-card--sensitive' : ''; ?>">
-
   <div class="ll-ba-card__visual">
     <?php if ( $card_image ) : ?>
-
       <?php if ( $card_image['option'] === 'one-image' && $card_image['single_image_id'] ) : ?>
         <div class="ll-ba-card__image <?= $card_image['ratio'] ?>">
           <?php bag_include_partial( 'fit-image', [
@@ -110,9 +108,7 @@ $is_nsfw = (bool) get_field('ll_ba_is_nsfw', $post->ID);
             </div>
           <?php endif; ?>
         </div>
-
       <?php endif; ?>
-
     <?php endif; ?>
   </div>
 
@@ -130,7 +126,6 @@ $is_nsfw = (bool) get_field('ll_ba_is_nsfw', $post->ID);
   <a href="<?= esc_url($permalink); ?>" class="ll-ba-card__link" aria-label="<?= esc_attr(get_the_title($post)); ?>"></a>
 
   <?php if ($termCount === 1) : ?>
-
     <div class="ll-ba-card__pills">
       <a
         href="<?= esc_url(add_query_arg($cardTaxonomy, $visibleTerms[0]->slug, $archiveUrl)); ?>"
@@ -139,7 +134,6 @@ $is_nsfw = (bool) get_field('ll_ba_is_nsfw', $post->ID);
         <?= $visibleTerms[0]->name; ?>
       </a>
     </div>
-
   <?php elseif ($termCount > 1) : ?>
 
     <div class="ll-ba-card__pills ll-ba-card__pills--default">
@@ -149,12 +143,8 @@ $is_nsfw = (bool) get_field('ll_ba_is_nsfw', $post->ID);
     <div class="ll-ba-card__hover-overlay"></div>
 
     <div class="ll-ba-card__pills ll-ba-card__pills--hover">
-      
-      <p class="ll-ba-card__hover-text">
-        <?php 
-          esc_html_e('View Details', 'll-bag')
-        ?>
-      </p>
+      <p class="ll-ba-card__hover-text">View Details</p>
+
       <div class="ll-ba-card__pill-group">
         <?php foreach ($visibleTerms as $term) : ?>
           <a
@@ -169,7 +159,5 @@ $is_nsfw = (bool) get_field('ll_ba_is_nsfw', $post->ID);
         <?php endif; ?>
       </div>
     </div>
-
   <?php endif; ?>
-
 </div>
