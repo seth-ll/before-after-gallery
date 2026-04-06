@@ -35,6 +35,12 @@ get_header();
       <?php else : ?>
         <p class="ll-ba-no-posts">No before &amp; after posts found.</p>
       <?php endif; ?>
+
+      <div
+        id="ll-ba-pagination"
+        data-total-pages="<?= (int) $GLOBALS['wp_query']->max_num_pages; ?>"
+        data-current-page="<?= max(1, (int) (get_query_var('paged') ?: ($_GET['paged'] ?? 1))); ?>"
+      ></div>
     </div>
   </div>
 </div>
