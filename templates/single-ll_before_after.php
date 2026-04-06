@@ -116,7 +116,7 @@ if ( !empty($images_field) ) {
         <?php endif; ?>
 
         <!-- Related Slider -->
-        <div class="splide ba-single__related ba-related-slider" aria-label="Before & After Gallery Related Posts">
+        <div class="splide ba-single__related ba-related-slider" aria-label="Before & After Gallery Related Posts" data-post-id="<?= get_the_ID(); ?>">
             <div class="ba-single__related-header">
                 <div class="ba-single__related-title-wrap">
                     <p class="ba-single__related-title">
