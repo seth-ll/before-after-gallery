@@ -1,6 +1,5 @@
 {
   "cards-radius": "0px",
-  "cards-background": "var(--cards-background)",
   "overlays-dark": "var(--overlays-dark)",
   "overlays-elements": "var(--overlays-elements)",
   "ui-tags-radius": "1000px",

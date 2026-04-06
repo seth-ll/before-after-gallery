@@ -37,6 +37,9 @@ class TemplateLoader {
 
       wp_enqueue_style('ll-bag-' . basename($file, '.css'), $url, [], LL_BAG_VERSION);
     }
+    $cardBgColor = get_field('ll_ba_card_bg_color', 'option') ?: '#000000';
+    wp_add_inline_style('ll-bag-ba-colors', ':root { --ll-ba-card-bg: ' . sanitize_hex_color($cardBgColor) . '; }');
+
     wp_localize_script('ll-bag-frontend', 'llBag', [
       'ajaxUrl'       => admin_url('admin-ajax.php'),
       'nonce'         => wp_create_nonce(AjaxHandler::ACTION),
