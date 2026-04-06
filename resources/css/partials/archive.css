@@ -197,6 +197,24 @@
   color: theme('colors.gray');
 }
 
+.ll-ba-tag-remove {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: theme('colors.gray');
+  background-color: #f3f4f6;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+
+  &:hover {
+    color: theme('colors.black');
+  }
+}
+
 .ll-ba-filter-group {
   border-bottom: 1px solid theme('colors.gray');
 }

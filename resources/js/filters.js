@@ -163,12 +163,12 @@ export function initFilters() {
 
         const tag = document.createElement('li');
         tag.className = 'll-ba-tag';
-        tag.innerHTML = `<button type="button" class="flex gap-1 items-center px-2 py-1 text-[11px] text-gray-700 bg-gray-100 rounded-full ll-ba-tag-remove hover:text-black" data-meta-key="${escAttr(key)}" data-value="${escAttr(v)}" aria-label="Remove filter">${escHtml(label)}: ${escHtml(displayName)} &times;</button>`;
+        tag.innerHTML = `<button type="button" class="ll-ba-tag-remove" data-meta-key="${escAttr(key)}" data-value="${escAttr(v)}" aria-label="Remove filter">${escHtml(label)}: ${escHtml(displayName)} &times;</button>`;
         tags.appendChild(tag);
       });
     }
 
-    bar.classList.toggle('hidden', tags.children.length === 0);
+    bar.classList.toggle('ll-ba-hidden', tags.children.length === 0);
   }
 
   function updateUrl(active) {
