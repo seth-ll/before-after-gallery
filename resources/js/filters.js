@@ -65,14 +65,9 @@ export function initFilters() {
     const group = filterGroupsEl.querySelector(`[data-meta-key="${metaKey}"]`);
     if (!group) return;
 
-    if (group.dataset.display === 'checkbox') {
-      const checkbox = [...group.querySelectorAll('.ll-ba-checkbox-filter')]
-        .find(el => el.value === value);
-      if (checkbox) checkbox.checked = false;
-    } else {
-      const dropdown = group.querySelector('.ll-ba-dropdown-filter');
-      if (dropdown) dropdown.value = '';
-    }
+    const checkbox = [...group.querySelectorAll('.ll-ba-checkbox-filter')]
+      .find(el => el.value === value);
+    if (checkbox) checkbox.checked = false;
 
     currentPage = 1;
     applyFilters();
@@ -93,17 +88,11 @@ export function initFilters() {
     const active = {};
 
     filtersEl.querySelectorAll('.ll-ba-filter-group').forEach(group => {
-      const key     = group.dataset.metaKey;
-      const display = group.dataset.display;
+      const key = group.dataset.metaKey;
 
-      if (display === 'checkbox') {
-        const checked = [...group.querySelectorAll('.ll-ba-checkbox-filter:checked')]
-          .map(el => el.value);
-        if (checked.length) active[key] = checked;
-      } else {
-        const dropdownValue = group.querySelector('.ll-ba-dropdown-filter')?.value ?? '';
-        if (dropdownValue) active[key] = dropdownValue;
-      }
+      const checked = [...group.querySelectorAll('.ll-ba-checkbox-filter:checked')]
+        .map(el => el.value);
+      if (checked.length) active[key] = checked;
     });
 
     return active;

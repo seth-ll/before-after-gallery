@@ -8,9 +8,8 @@
 
 defined('ABSPATH') || exit;
 
-$id         = $filter['id'];
-$isBuiltin  = !empty($filter['builtin']);
-$isCheckbox = ($filter['display'] ?? 'checkbox') === 'checkbox';
+$id        = $filter['id'];
+$isBuiltin = !empty($filter['builtin']);
 ?>
 
 <tr class="ll-bag-filter-row" data-id="<?= esc_attr($id); ?>" draggable="true">
@@ -44,15 +43,9 @@ $isCheckbox = ($filter['display'] ?? 'checkbox') === 'checkbox';
   </td>
 
   <td>
-    <select
-      name="ll_bag_filters[<?= esc_attr($id); ?>][display]"
-      class="ll-bag-display-select"
-    >
-      <option value="checkbox" <?php selected($filter['display'] ?? '', 'checkbox'); ?>>Checkbox</option>
-      <option value="dropdown" <?php selected($filter['display'] ?? '', 'dropdown'); ?>>Dropdown</option>
-    </select>
+    <input type="hidden" name="ll_bag_filters[<?= esc_attr($id); ?>][display]" value="checkbox">
 
-    <label class="ll-bag-searchable-wrap <?= !$isCheckbox ? 'll-ba-hidden' : ''; ?>">
+    <label class="ll-bag-searchable-wrap">
       <input
         type="checkbox"
         name="ll_bag_filters[<?= esc_attr($id); ?>][searchable]"
