@@ -2,12 +2,38 @@
 
 namespace LiftedLogic\LLBag\PostType;
 
+use LiftedLogic\LLBag\Filters\FilterManager;
+
 class Fields {
   public function register(): void {
     add_action('acf/init', [$this, 'registerFields']);
+    add_filter('acf/load_field/name=ll_ba_related_terms', [$this, 'loadRelatedTermChoices']);
+  }
+
+  /**
+   * Populate the related terms checkbox choices at render time, after all
+   * taxonomies are guaranteed to be registered (avoids acf/init timing issue).
+   */
+  public function loadRelatedTermChoices(array $field): array {
+    $field['choices'] = [];
+
+    (new FilterManager())->getEnabled()
+      ->filter(fn($f) => empty($f['builtin']) && !empty($f['meta_key']))
+      ->each(function ($f) use (&$field) {
+        $taxonomy = $f['meta_key'];
+        $terms    = get_terms(['taxonomy' => $taxonomy, 'hide_empty' => false]);
+        if (is_wp_error($terms) || empty($terms)) return;
+        $field['choices'][$f['label']] = array_column(
+          array_map(fn($t) => ["{$taxonomy}:{$t->slug}", $t->name], $terms),
+          1, 0
+        );
+      });
+
+    return $field;
   }
 
   public function registerFields(): void {
+
     // Category Fields
     acf_add_local_field_group([
       'key'    => 'group_ll_ba_category',
@@ -235,6 +261,34 @@ class Fields {
             'param' => 'post_type',
             'operator' => '==',
             'value' => BeforeAfterPostType::SLUG,
+          ],
+        ],
+      ],
+    ]);
+
+    // Related Posts meta box — displayed below Attributes in the sidebar
+    acf_add_local_field_group([
+      'key'        => 'group_ll_ba_related',
+      'title'      => 'Related Posts',
+      'fields'     => [
+        [
+          'key'          => 'field_ll_ba_related_terms',
+          'label'        => 'Match Related Posts By',
+          'name'         => 'll_ba_related_terms',
+          'type'         => 'checkbox',
+          'instructions' => 'Select specific terms to use when finding related posts. Defaults to the current post\'s Card Display terms if left empty.',
+          'choices'      => [], // populated at render time via acf/load_field
+          'return_format'=> 'value',
+        ],
+      ],
+      'position'   => 'normal',
+      'menu_order' => 100,
+      'location'   => [
+        [
+          [
+            'param'    => 'post_type',
+            'operator' => '==',
+            'value'    => BeforeAfterPostType::SLUG,
           ],
         ],
       ],
