@@ -141,7 +141,7 @@ class AjaxHandler {
     // ── Pass 2: "Match Related Posts By" override field ─────────────────────
     $remaining = 6 - count($posts);
     if ($remaining > 0 && $excludeId) {
-      $selectedRaw = (array) (get_field('ll_ba_related_terms', $excludeId) ?: []);
+      $selectedRaw = (array) (get_post_meta($excludeId, 'll_ba_related_terms', true) ?: []);
       if (!empty($selectedRaw)) {
         $grouped = [];
         foreach ($selectedRaw as $pair) {

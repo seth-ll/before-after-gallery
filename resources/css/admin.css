@@ -95,3 +95,23 @@
   padding: 0 8px;
   min-width: 0;
 }
+
+.ll-ba-related-checklist {
+  margin: 0;
+  padding: 8px 0;
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+
+  li {
+    padding: 3px 0;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+}
