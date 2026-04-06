@@ -21,8 +21,8 @@ export function initFilters() {
     const arrow   = toggle.querySelector('.ll-ba-filter-arrow');
     if (!content) return;
 
-    const isOpen = !content.classList.contains('hidden');
-    content.classList.toggle('hidden', isOpen);
+    const isOpen = !content.classList.contains('ll-ba-hidden');
+    content.classList.toggle('ll-ba-hidden', isOpen);
     toggle.setAttribute('aria-expanded', String(!isOpen));
     arrow?.classList.toggle('rotate-180', !isOpen);
   });
