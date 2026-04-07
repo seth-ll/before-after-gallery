@@ -31,9 +31,9 @@ class FilterSettingsPage {
       $id      = sanitize_key((string) $id);
       $label   = sanitize_text_field($data['label'] ?? '');
       $metaKey = sanitize_key($data['meta_key'] ?? '');
-      $display = in_array($data['display'] ?? '', ['checkbox', 'dropdown'], true) ? $data['display'] : 'checkbox';
+      $display    = 'checkbox';
       $enabled    = !empty($data['enabled']);
-      $searchable = !empty($data['searchable']) && $display === 'checkbox';
+      $searchable = !empty($data['searchable']);
 
       $builtin = !empty($data['builtin']);
 

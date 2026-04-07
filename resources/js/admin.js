@@ -91,24 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tbody.insertBefore(draggedRow, e.clientY < rect.top + rect.height / 2 ? target : target.nextSibling);
   });
 
-  // ── Toggle searchable option visibility based on display type
-  tbody.addEventListener('change', (e) => {
-    const select = e.target.closest('.ll-bag-display-select');
-    if (!select) return;
-
-    const row = select.closest('.ll-bag-filter-row');
-    const searchableWrap = row?.querySelector('.ll-bag-searchable-wrap');
-
-    if (searchableWrap) {
-      searchableWrap.style.display = select.value === 'checkbox' ? 'flex' : 'none';
-    }
-    // Uncheck searchable when switching away from checkbox
-    if (select.value !== 'checkbox') {
-      const searchableInput = row?.querySelector('.ll-bag-searchable-input');
-      if (searchableInput) searchableInput.checked = false;
-    }
-  });
-
   // REMOVE FILTER ROW
   tbody.addEventListener('click', (e) => {
     const btn = e.target.closest('.ll-bag-remove-filter');
