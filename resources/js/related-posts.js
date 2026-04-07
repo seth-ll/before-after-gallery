@@ -25,12 +25,30 @@ export function initRelatedSlider() {
         relatedEl.querySelector('.splide__list').innerHTML = data.data.html;
       }
 
+      const list = relatedEl.querySelector('.splide__list');
+      const mode = localStorage.getItem('ll-ba-sensitive-mode') || 'blur';
+
+      if (mode === 'blur') {
+        list.querySelectorAll('.ll-ba-card--sensitive').forEach(c => c.classList.add('is-blurred'));
+      } else if (mode === 'hide') {
+        list.querySelectorAll('.splide__slide').forEach(slide => {
+          if (slide.querySelector('.ll-ba-card--sensitive')) slide.remove();
+        });
+      }
+
+      const visibleCount = list.querySelectorAll('.splide__slide').length;
+
+      if (visibleCount < 2) {
+        relatedEl.closest('.ba-single__related')?.style.setProperty('display', 'none');
+        return;
+      }
+
       new Splide(relatedEl, {
         type:       'slide',
         perPage:    2,
         gap:        '32px',
         pagination: false,
-        arrows:     count >= 3,
+        arrows:     visibleCount >= 3,
       }).mount();
     })
     .catch(() => {});

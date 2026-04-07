@@ -8,7 +8,8 @@ export function initFilters() {
 
   if (!filtersEl || !grid) return;
 
-  let currentPage = 1;
+  let currentPage          = 1;
+  let currentSensitiveMode = localStorage.getItem('ll-ba-sensitive-mode') || 'blur';
 
   // ── Accordion toggles ────────────────────────────────────────────────────────
 
@@ -78,6 +79,21 @@ export function initFilters() {
     applyFilters();
   });
 
+  // ── Sensitive images mode ────────────────────────────────────────────────────
+
+  document.getElementById('ll-ba-sensitive-bar')?.addEventListener('click', (e) => {
+    const btn = e.target.closest('.ll-ba-sensitive-btn');
+    if (!btn) return;
+
+    currentSensitiveMode = btn.dataset.mode;
+    localStorage.setItem('ll-ba-sensitive-mode', currentSensitiveMode);
+    applySensitiveMode(currentSensitiveMode);
+
+    document.querySelectorAll('.ll-ba-sensitive-btn').forEach(b =>
+      b.classList.toggle('is-active', b === btn)
+    );
+  });
+
   // ── Clear all ────────────────────────────────────────────────────────────────
 
   document.getElementById('ll-ba-clear-all')?.addEventListener('click', () => {
@@ -136,6 +152,8 @@ export function initFilters() {
       if (data.success) {
         grid.innerHTML = data.data.html || `<p class="col-span-full py-12 text-sm text-center text-gray-500">${llBag.noResults ?? 'No results found.'}</p>`;
         renderPagination(paginationEl, data.data.total_pages, data.data.current_page, applyFilters);
+        updateSensitiveBar();
+        applySensitiveMode(currentSensitiveMode);
       }
     } finally {
       grid.classList.remove('is-filtering');
@@ -219,6 +237,26 @@ export function initFilters() {
     applyFilters(currentPage);
   }
 
+  // ── Sensitive images helpers ─────────────────────────────────────────────────
+
+  function updateSensitiveBar() {
+    const bar = document.getElementById('ll-ba-sensitive-bar');
+    if (!bar) return;
+    const hasSensitive = grid.querySelectorAll('.ll-ba-card--sensitive').length > 0;
+    bar.classList.toggle('ll-ba-hidden', !hasSensitive);
+  }
+
+  function applySensitiveMode(mode) {
+    grid.querySelectorAll('.ll-ba-card').forEach(card => {
+      card.classList.remove('is-blurred', 'is-hidden');
+    });
+    if (mode === 'blur') {
+      grid.querySelectorAll('.ll-ba-card--sensitive').forEach(c => c.classList.add('is-blurred'));
+    } else if (mode === 'hide') {
+      grid.querySelectorAll('.ll-ba-card--sensitive').forEach(c => c.classList.add('is-hidden'));
+    }
+  }
+
   // ── Helpers ──────────────────────────────────────────────────────────────────
 
   function escHtml(str) {
@@ -253,4 +291,12 @@ export function initFilters() {
       renderPagination(paginationEl, totalPages, currentPage, applyFilters);
     }
   }
+
+  // ── Sensitive images init ─────────────────────────────────────────────────────
+
+  document.querySelectorAll('.ll-ba-sensitive-btn').forEach(btn =>
+    btn.classList.toggle('is-active', btn.dataset.mode === currentSensitiveMode)
+  );
+  updateSensitiveBar();
+  applySensitiveMode(currentSensitiveMode);
 }

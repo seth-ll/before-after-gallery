@@ -35,6 +35,18 @@ if ($filters->isEmpty()) {
     </div>
   </div>
 
+  <!-- Sensitive images bar (shown/hidden by JS based on whether sensitive cards are in the grid) -->
+  <div class="ll-ba-sensitive-bar ll-ba-hidden" id="ll-ba-sensitive-bar">
+    <span class="ll-ba-sensitive-bar__label">Sensitive Images</span>
+    <div class="ll-ba-sensitive-bar__options" role="group" aria-label="Sensitive image display mode">
+      <button type="button" class="ll-ba-sensitive-btn" data-mode="blur">
+        <span class="ll-ba-sensitive-btn__check" aria-hidden="true">✓</span> Blur
+      </button>
+      <button type="button" class="ll-ba-sensitive-btn" data-mode="unblur">Unblur</button>
+      <button type="button" class="ll-ba-sensitive-btn" data-mode="hide">Hide</button>
+    </div>
+  </div>
+
   <!-- Filter groups -->
   <ul id="ll-ba-filter-groups">
     <?php foreach ($filters as $filter) :

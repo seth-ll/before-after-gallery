@@ -311,6 +311,103 @@
   border-radius: theme('borderRadius.DEFAULT');
 }
 
+/* Sensitive images bar
+   ========================================================================== */
+
+.ll-ba-sensitive-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: theme('spacing.3');
+  padding: theme('spacing.3') 0;
+  border-bottom: 1px solid theme('colors.gray');
+}
+
+.ll-ba-sensitive-bar__label {
+  font-size: theme('fontSize.sm');
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.ll-ba-sensitive-bar__options {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.ll-ba-sensitive-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  font-size: 12px;
+  border: 1px solid theme('colors.gray');
+  border-radius: 9999px;
+  background: transparent;
+  cursor: pointer;
+  color: theme('colors.gray');
+  line-height: 1.5;
+
+  &:hover {
+    color: theme('colors.black');
+    border-color: theme('colors.black');
+  }
+
+  &.is-active {
+    background: theme('colors.black');
+    color: theme('colors.white');
+    border-color: theme('colors.black');
+  }
+}
+
+.ll-ba-sensitive-btn__check {
+  display: none;
+}
+
+.ll-ba-sensitive-btn.is-active .ll-ba-sensitive-btn__check {
+  display: inline;
+}
+
+/* Sensitive card states
+   ========================================================================== */
+
+.ll-ba-card__visual {
+  width: 100%;
+}
+
+.ll-ba-card--sensitive.is-blurred .ll-ba-card__visual {
+  filter: blur(16px);
+}
+
+.ll-ba-card.is-hidden {
+  display: none;
+}
+
+.ll-ba-card__sensitive-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.ll-ba-card--sensitive.is-blurred .ll-ba-card__sensitive-overlay {
+  display: flex;
+}
+
+.ll-ba-card__sensitive-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 9999px;
+  color: theme('colors.black');
+}
+
 /* State utilities (managed by JS)
    ========================================================================== */
 

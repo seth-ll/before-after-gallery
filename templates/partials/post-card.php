@@ -65,57 +65,67 @@ $card_image = $ba_gallery_image[0] ?? null;
 $is_stacked = $card_image
     && $card_image['option'] === 'two-images'
     && in_array( $card_image['ratio'], ['ba-single__ratio--wide', 'ba-single__ratio--panorama'] );
+
+$is_nsfw = get_field('ll_ba_is_nsfw', $post->ID);
 ?>
 
-<div class="ll-ba-card">
+<div class="ll-ba-card<?= $is_nsfw ? ' ll-ba-card--sensitive' : ''; ?>">
+  <div class="ll-ba-card__visual">
+    <?php if ( $card_image ) : ?>
+      <?php if ( $card_image['option'] === 'one-image' && $card_image['single_image_id'] ) : ?>
+        <div class="ll-ba-card__image <?= $card_image['ratio'] ?>">
+          <?php bag_include_partial( 'fit-image', [
+            'image_id'       => $card_image['single_image_id'],
+            'thumbnail_size' => 'large',
+            'fit'            => 'object-cover',
+            'position'       => 'object-center',
+            'loading'        => true,
+          ] ); ?>
+        </div>
 
-  <?php if ( $card_image ) : ?>
-
-    <?php if ( $card_image['option'] === 'one-image' && $card_image['single_image_id'] ) : ?>
-      <div class="ll-ba-card__image <?= $card_image['ratio'] ?>">
-        <?php bag_include_partial( 'fit-image', [
-          'image_id'       => $card_image['single_image_id'],
-          'thumbnail_size' => 'large',
-          'fit'            => 'object-cover',
-          'position'       => 'object-center',
-          'loading'        => true,
-        ] ); ?>
-      </div>
-
-    <?php elseif ( $card_image['option'] === 'two-images' ) : ?>
-      <div class="<?= $is_stacked ? 'll-ba-card__stacked' : 'll-ba-card__side-by-side' ?>">
-        <?php if ( $card_image['before_image_id'] ) : ?>
-          <div class="ll-ba-card__image <?= $card_image['ratio'] ?>">
-            <?php bag_include_partial( 'fit-image', [
-              'image_id'       => $card_image['before_image_id'],
-              'thumbnail_size' => 'large',
-              'fit'            => 'object-cover',
-              'position'       => 'object-center',
-              'loading'        => true,
-            ] ); ?>
-          </div>
-        <?php endif; ?>
-        <?php if ( $card_image['after_image_id'] ) : ?>
-          <div class="ll-ba-card__image <?= $card_image['ratio'] ?>">
-            <?php bag_include_partial( 'fit-image', [
-              'image_id'       => $card_image['after_image_id'],
-              'thumbnail_size' => 'large',
-              'fit'            => 'object-cover',
-              'position'       => 'object-center',
-              'loading'        => true,
-            ] ); ?>
-          </div>
-        <?php endif; ?>
-      </div>
-
+      <?php elseif ( $card_image['option'] === 'two-images' ) : ?>
+        <div class="<?= $is_stacked ? 'll-ba-card__stacked' : 'll-ba-card__side-by-side' ?>">
+          <?php if ( $card_image['before_image_id'] ) : ?>
+            <div class="ll-ba-card__image <?= $card_image['ratio'] ?>">
+              <?php bag_include_partial( 'fit-image', [
+                'image_id'       => $card_image['before_image_id'],
+                'thumbnail_size' => 'large',
+                'fit'            => 'object-cover',
+                'position'       => 'object-center',
+                'loading'        => true,
+              ] ); ?>
+            </div>
+          <?php endif; ?>
+          <?php if ( $card_image['after_image_id'] ) : ?>
+            <div class="ll-ba-card__image <?= $card_image['ratio'] ?>">
+              <?php bag_include_partial( 'fit-image', [
+                'image_id'       => $card_image['after_image_id'],
+                'thumbnail_size' => 'large',
+                'fit'            => 'object-cover',
+                'position'       => 'object-center',
+                'loading'        => true,
+              ] ); ?>
+            </div>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
     <?php endif; ?>
+  </div>
 
+  <?php if ( $is_nsfw ) : ?>
+    <div class="ll-ba-card__sensitive-overlay" aria-hidden="true">
+      <span class="ll-ba-card__sensitive-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd"/>
+        </svg>
+        Sensitive Image
+      </span>
+    </div>
   <?php endif; ?>
 
   <a href="<?= esc_url($permalink); ?>" class="ll-ba-card__link" aria-label="<?= esc_attr(get_the_title($post)); ?>"></a>
 
   <?php if ($termCount === 1) : ?>
-
     <div class="ll-ba-card__pills">
       <a
         href="<?= esc_url(add_query_arg($cardTaxonomy, $visibleTerms[0]->slug, $archiveUrl)); ?>"
@@ -124,7 +134,6 @@ $is_stacked = $card_image
         <?= $visibleTerms[0]->name; ?>
       </a>
     </div>
-
   <?php elseif ($termCount > 1) : ?>
 
     <div class="ll-ba-card__pills ll-ba-card__pills--default">
@@ -134,12 +143,8 @@ $is_stacked = $card_image
     <div class="ll-ba-card__hover-overlay"></div>
 
     <div class="ll-ba-card__pills ll-ba-card__pills--hover">
-      
-      <p class="ll-ba-card__hover-text">
-        <?php 
-          esc_html_e('View Details', 'll-bag')
-        ?>
-      </p>
+      <p class="ll-ba-card__hover-text">View Details</p>
+
       <div class="ll-ba-card__pill-group">
         <?php foreach ($visibleTerms as $term) : ?>
           <a
@@ -154,7 +159,5 @@ $is_stacked = $card_image
         <?php endif; ?>
       </div>
     </div>
-
   <?php endif; ?>
-
 </div>
