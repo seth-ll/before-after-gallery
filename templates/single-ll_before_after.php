@@ -10,7 +10,7 @@ defined('ABSPATH') || exit;
 use LiftedLogic\LLBag\Hooks\Hooks;
 use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
 
-$page_theme = 'theme-two';
+
 $treatment_title = get_field('ll_ba_title') ? get_field('ll_ba_title') : 'Treatments Used:';
 $global_cta_title = get_field('ll_ba_global_cta_title', 'options') ?? '';
 $global_cta_link = get_field('ll_ba_global_cta_link', 'options') ?? '';
@@ -25,6 +25,8 @@ if ( !empty($detail_sections_field) ) {
             'tab_id'  => 'ba-detail-tab-' . uniqid(),
             'title'   => $section['ll_ba_detail_title'] ?? '',
             'content' => $section['ll_ba_detail_content'] ?? '',
+            'read_more_content' => $section['ll_ba_detail_read_more_content'] ?? '',
+            'read_more_id' => 'ba-detail-read-more-' . uniqid(),
             'tag'     => $is_tabs ? 'button' : 'div',
             'is_tab'  => $is_tabs,
         ];
@@ -58,7 +60,7 @@ if ( !empty($images_field) ) {
 }
 ?>
 
-<main class="ba-single <?= $page_theme ?>">
+<main class="ba-single">
 
     <div class="ba-single__sidebar">
 
@@ -67,7 +69,7 @@ if ( !empty($images_field) ) {
         </div>
 
         <div class="ba-single__header">
-            <h4 class="ba-single__title ba_hdg-5">
+            <h4 class="ba-single__title ba_hdg-medium">
                 <?= $treatment_title ?>
             </h4>
             <?php if ( !empty($categories) ) : ?>
@@ -105,6 +107,17 @@ if ( !empty($images_field) ) {
                     <?php foreach ( $detail_sections as $section_content ) : ?>
                         <div id="<?= $section_content['tab_id'] ?>" class="ba-single__detail-panel wysiwyg <?= $section_content['is_tab'] ? ' ba-single__detail-panel--tab' : '' ?>">
                             <?= $section_content['content'] ?>
+                            <?php if ( !empty($section_content['read_more_content']) ) : ?>
+                                <div class="ba-single__detail-read-more">
+                                    <button class="ba-single__detail-read-more-trigger" aria-expanded="false" data-toggle-target="#<?= $section_content['read_more_id'] ?>" data-toggle-class="is-open">
+                                        Read More
+                                        <svg class="ba-single__detail-read-more-icon icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg>
+                                    </button>
+                                    <div class="hidden ba-single__detail-read-more-content" id="<?= $section_content['read_more_id'] ?>">
+                                        <?= $section_content['read_more_content'] ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -123,8 +136,8 @@ if ( !empty($images_field) ) {
             <div class="splide ba-related-slider" data-post-id="<?= get_the_ID() ?>" aria-label="Before & After Gallery Related Posts">
                 <div class="ba-single__related-header">
                     <div class="ba-single__related-title-wrap">
-                        <p class="ba-single__related-title">
-                            <?= $global_cta_title ?>
+                        <p class="ba-single__related-title ba_hdg-medium">
+                            More Like This
                         </p>
                     </div>
                     <?= Hooks::bag_related_slider_arrows_markup() ?>

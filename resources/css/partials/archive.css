@@ -147,17 +147,25 @@
 }
 
 .ll-ba-card__pill {
-  display: inline-block;
+  width: fit-content;
   padding: 0.25rem 0.5rem;
   font-size: 11px;
-  line-height: 1.25;
-  color: #000;
-  border-radius: 9999px;
-  background-color: #fff;
-  max-width: 10rem;
+  font-style: normal;
+  font-weight: 400;
+  border-radius: var(--ui-tags-radius);
+  background-color: var(--ui-tags-fill);
+  color: var(--ui-tags-elements);
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  icon.icon-multiple {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+  }
 }
 
 /* Filters Sidebar

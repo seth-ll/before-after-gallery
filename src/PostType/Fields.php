@@ -174,7 +174,12 @@ class Fields {
               'label' => 'Content',
               'name' => 'll_ba_detail_content',
               'type' => 'wysiwyg',
-              'wrapper' => [ 'class' => '' ],
+            ],
+            [
+              'key' => 'field_ll_ba_detail_read_more_content',
+              'label' => 'Read More Content',
+              'name' => 'll_ba_detail_read_more_content',
+              'type' => 'wysiwyg',
             ],
           ],
         ],

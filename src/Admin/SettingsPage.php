@@ -94,7 +94,7 @@ class SettingsPage {
         ],
         [
           'key' => 'field_ll_bag_archive_settings_tab_2',
-          'label' => 'Archive Options',
+          'label' => 'Card Background Color',
           'type' => 'tab',
           'placement' => 'left',
           'endpoint' => 0,

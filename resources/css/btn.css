@@ -1,0 +1,17 @@
+.ba_btn-primary {
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 0.75em 1.5em;
+  font-size: 1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  border-radius: var(--cta-card-radius);
+}
+
+.ba_btn-primary:hover {
+  background-color: black;
+  color: white;
+}

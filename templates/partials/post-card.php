@@ -131,13 +131,21 @@ $is_nsfw = get_field('ll_ba_is_nsfw', $post->ID);
         href="<?= esc_url(add_query_arg($cardTaxonomy, $visibleTerms[0]->slug, $archiveUrl)); ?>"
         class="ll-ba-card__pill"
       >
-        <?= $visibleTerms[0]->name; ?>
+      <svg class='icon icon-multiple' aria-hidden='true'><use xlink:href='#icon-multiple'></use></svg>
+        <span>
+          <?= $visibleTerms[0]->name; ?>
+        </span>
       </a>
     </div>
   <?php elseif ($termCount > 1) : ?>
 
     <div class="ll-ba-card__pills ll-ba-card__pills--default">
-      <span class="ll-ba-card__pill">Multiple <?= esc_html($cardLabel); ?></span>
+      <span class="ll-ba-card__pill">
+        <svg class='icon icon-multiple' aria-hidden='true'><use xlink:href='#icon-multiple'></use></svg>
+        <span>
+          Multiple <?= esc_html($cardLabel); ?>
+        </span>
+      </span>
     </div>
 
     <div class="ll-ba-card__hover-overlay"></div>
