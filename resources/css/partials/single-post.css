@@ -10,7 +10,7 @@
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
-@media (min-width: 1024px) {
+@media (min-width: theme('screens.lg')) {
   .ba-single {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -20,21 +20,21 @@
    ========================================================================== */
 
 .ba-single__sidebar {
-  padding: 4rem;
+  padding: theme('spacing.16');
   background-color: var(--background-fill);
   min-height: calc(100vh - var(--ba-header-height, 0px));
 }
 
 .ba-single__back {
-  margin-bottom: 2rem;
+  margin-bottom: theme('spacing.8');
 }
 
 .ba-single__header {
-  margin-bottom: 2.5rem;
+  margin-bottom: theme('spacing.10');
 }
 
 .ba-single__title {
-  margin-bottom: 0.75rem;
+  margin-bottom: theme('spacing.3');
   color: var(--text-heading);
 }
 
@@ -46,12 +46,12 @@
 
 .ba-single__category-pill {
   display: inline-block;
-  padding: 0.25rem 0.5rem;
+  padding: theme('spacing.1') theme('spacing.2');
   font-size: 11px;
   line-height: 1.25;
-  color: #000;
-  border-radius: 9999px;
-  background-color: #fff;
+  color: theme('colors.black');
+  border-radius: theme('borderRadius.full');
+  background-color: theme('colors.white');
   max-width: 10rem;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -67,7 +67,7 @@
    ========================================================================== */
 
 .ba-single__details {
-  margin-bottom: 2.5rem;
+  margin-bottom: theme('spacing.10');
 }
 
 .ba-single__detail-triggers {
@@ -76,7 +76,7 @@
 }
 
 .ba-single__detail-trigger {
-  padding: 0.5rem 1rem;
+  padding: theme('spacing.2') theme('spacing.4');
   border-bottom-width: 1px;
   border-bottom-style: solid;
   border-color: var(--detail-tabs-stroke);
@@ -94,7 +94,7 @@
    ========================================================================== */
 
 .ba-single__cta {
-  margin-bottom: 1.5rem;
+  margin-bottom: theme('spacing.6');
 }
 
 /* Related Slider
@@ -113,7 +113,7 @@
 
 .ba-single__related-arrows {
   display: flex;
-  gap: 0.75rem;
+  gap: theme('spacing.3');
   flex-shrink: 0;
 }
 
@@ -125,7 +125,7 @@
   flex-shrink: 0;
   width: 44px;
   height: 44px;
-  border-radius: 9999px;
+  border-radius: theme('borderRadius.full');
   transition-duration: 300ms;
   transition-timing-function: ease-in-out;
   background-color: var(--arrow-buttons-fill);
@@ -149,8 +149,8 @@
 }
 
 .ba-single__related-arrow-icon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: theme('spacing.5');
+  height: theme('spacing.5');
   color: var(--arrow-buttons-elements);
   transition-duration: 300ms;
   transition-timing-function: ease-in-out;
@@ -166,7 +166,7 @@
 .ba-single__gallery {
   position: relative;
   background-color: var(--ll-ba-card-bg);
-  padding: 1.5rem;
+  padding: theme('spacing.6');
 }
 
 .ba-single__gallery-inner {
@@ -174,7 +174,7 @@
   top: calc(var(--ba-header-height, 0px) + 24px);
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
+  gap: theme('spacing.10');
 }
 
 /* Slides — shared
@@ -252,10 +252,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9999px;
+  border-radius: theme('borderRadius.full');
   background-color: var(--ui-buttons-fill);
-  width: 2.75rem;
-  height: 2.75rem;
+  width: theme('spacing.11');
+  height: theme('spacing.11');
 }
 
 .ba-single__video-trigger::after {
@@ -271,8 +271,8 @@
 }
 
 .ba-single__video-icon {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: theme('spacing.5');
+  height: theme('spacing.5');
   color: var(--ui-buttons-elements);
 }
 
@@ -307,9 +307,9 @@
 .ba-single__nav-video-icon {
   position: relative;
   z-index: 20;
-  fill: #fff;
-  width: 1rem;
-  height: 1rem;
+  fill: theme('colors.white');
+  width: theme('spacing.4');
+  height: theme('spacing.4');
 }
 
 /* Comparison slider
@@ -350,7 +350,7 @@
 .ba-comparison-slider__line {
   width: 1px;
   height: 100%;
-  background-color: #fff;
+  background-color: theme('colors.white');
 }
 
 .ba-comparison-slider__handle {
@@ -359,8 +359,8 @@
   transform: translateY(-50%);
   width: 44px;
   height: 44px;
-  border-radius: 9999px;
-  background-color: #fff;
+  border-radius: theme('borderRadius.full');
+  background-color: theme('colors.white');
   cursor: grab;
   flex-shrink: 0;
   pointer-events: none;

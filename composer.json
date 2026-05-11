@@ -1,6 +1,6 @@
 {
-    "name": "liftedlogic/ll-bag",
-    "description": "LL Before & After WordPress Plugin",
+    "name": "liftedlogic/ll-bag-starter",
+    "description": "LL Before & After WordPress Plugin Starter",
     "type": "wordpress-plugin",
     "license": "proprietary",
     "require": {

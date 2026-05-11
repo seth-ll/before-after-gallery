@@ -1,6 +1,6 @@
-# LL Before & After
+# LL Before & After Starter
 
-WordPress plugin for the LL Before & After plugin.
+WordPress plugin starter for the LL Before & After plugin.
 
 ## Requirements
 
@@ -20,12 +20,12 @@ npm install
 **2. Symlink into your local WordPress install plugin folder**
 
 ```bash
-ln -s "/path/to/ll-bag" "/path/to/wordpress/wp-content/plugins/ll-bag"
+ln -s "/path/to/ll-bag-starter" "/path/to/wordpress/wp-content/plugins/ll-bag-starter"
 ```
 
 **3. Activate the plugin**
 
-Go to WP Admin → Plugins and activate **LL Before & After**.
+Go to WP Admin → Plugins and activate **LL Before & After Starter**.
 
 ## Development
 
@@ -156,7 +156,7 @@ add_filter( 'lifted_logic/bag/link_card_markup', function( $markup, $title, $lin
 ## Structure
 
 ```
-ll-bag/
+ll-bag-starter/
 ├── src/
 │   ├── Plugin.php                    # Boots container, registers hooks
 │   ├── PostType/

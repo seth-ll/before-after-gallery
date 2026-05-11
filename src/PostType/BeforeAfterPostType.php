@@ -71,7 +71,7 @@ class BeforeAfterPostType {
         'search_items'       => __('Search Before & After', 'll-bag'),
         'not_found'          => __('No before & after posts found', 'll-bag'),
         'not_found_in_trash' => __('No before & after posts found in trash', 'll-bag'),
-        'menu_name'          => __('Before & Afters', 'll-bag'),
+        'menu_name'          => __('B&A Posts', 'll-bag'),
       ],
       'public'          => true,
       'show_ui'         => true,
