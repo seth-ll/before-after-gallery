@@ -1,7 +1,9 @@
 @import './typography.css';
 @import './btn.css';
+@import './grid.css';
 @import './partials/single-post.css';
 @import './partials/archive.css';
+@import './partials/hero-banner.css';
 
 .fit-image {
   position: absolute;

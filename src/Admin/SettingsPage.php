@@ -2,6 +2,7 @@
 
 namespace LiftedLogic\LLBag\Admin;
 
+use LiftedLogic\LLBag\Frontend\TemplateLoader;
 use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
 
 class SettingsPage {
@@ -34,90 +35,132 @@ class SettingsPage {
   }
 
   public function registerFields(): void {
-    acf_add_local_field_group([
-      'key'    => 'group_ll_ba_settings',
-      'title'  => 'Before & After Settings',
-      'fields' => [
-        [
-          'key' => 'field_ll_bag_archive_settings_tab',
-          'label' => 'Archive Settings',
-          'type' => 'tab',
-          'placement' => 'left',
-          'endpoint' => 0,
-        ],
-        [
-          'key'           => 'field_ll_bag_posts_page',
-          'label'         => 'All Posts Archive Page',
-          'name'          => self::FIELD_POSTS_PAGE,
-          'type'          => 'post_object',
-          'post_type'     => ['page'],
-          'return_format' => 'id',
-          'allow_null'    => 1,
-          'instructions'  => 'The page used for the "View All Before & Afters" link on the category archive.',
-        ],
-        [
-          'key' => 'field_ll_bag_global_options_tab',
-          'label' => 'Global Single Page Options',
-          'type' => 'tab',
-          'placement' => 'left',
-          'endpoint' => 0,
-        ],
-        [
-          'key' => 'field_ll_bag_cta_message',
-          'type' => 'message',
-          'message' => 'Leave CTA fields blank to omit CTA on single pages', 
-        ],
-        [
-          'key' => 'field_ll_ba_global_cta_title',
-          'label' => 'CTA Title',
-          'name' => 'll_ba_global_cta_title',
-          'type' => 'text',
-          'wrapper' => [
-            'width' => '50%',
-          ],
-        ],
-        [
-          'key' => 'field_ll_ba_global_cta_link',
-          'label' => 'CTA Link',
-          'name' => 'll_ba_global_cta_link',
-          'type' => 'link',
-          'return_format' => 'array',
-          'wrapper' => [
-            'width' => '50%',
-          ],
-        ],
-        [
-          'key' => 'field_ll_bag_related_treatments_slider_title',
-          'label' => 'Related Treatments Slider Title',
-          'name' => 'll_bag_related_treatments_slider_title',
-          'type' => 'text',
-        ],
-        [
-          'key' => 'field_ll_bag_archive_settings_tab_2',
-          'label' => 'Card Background Color',
-          'type' => 'tab',
-          'placement' => 'left',
-          'endpoint' => 0,
-        ],
-        [
-          'key'           => 'field_ll_ba_card_bg_color',
-          'label'         => 'Card Background Color',
-          'name'          => 'll_ba_card_bg_color',
-          'type'          => 'color_picker',
-          'default_value' => '#B8C2B0',
-          'instructions'  => 'Background color shown behind the Before and After post cards.',
-        ],
+    $heroBannerOverridden    = TemplateLoader::resolve( 'partials/before-after-hero-banner.php' )
+      !== LL_BAG_PATH . 'templates/partials/before-after-hero-banner.php';
+    $heroBannerFieldsEnabled = apply_filters( 'll_bag/hero_banner_fields_enabled', !$heroBannerOverridden );
+
+    $fields = [
+      [
+        'key'       => 'field_ll_bag_archive_settings_tab',
+        'label'     => 'Archive Settings',
+        'type'      => 'tab',
+        'placement' => 'left',
+        'endpoint'  => 0,
       ],
+      [
+        'key'           => 'field_ll_bag_posts_page',
+        'label'         => 'All Posts Archive Page',
+        'name'          => self::FIELD_POSTS_PAGE,
+        'type'          => 'post_object',
+        'post_type'     => ['page'],
+        'return_format' => 'id',
+        'allow_null'    => 1,
+        'instructions'  => 'The page used for the "View All Before & Afters" link on the category archive.',
+      ],
+    ];
+
+    // Themes can inject additional fields into the Archive Settings tab via this filter.
+    // Fields are inserted after the plugin's own archive fields and before the next tab.
+    $fields = apply_filters( 'll_bag/settings_archive_fields', $fields );
+
+    if ( $heroBannerFieldsEnabled ) {
+      $fields[] = [
+        'key'        => 'field_ll_ba_hero_banner',
+        'label'      => 'Hero Banner',
+        'name'       => 'll_ba_hero_banner',
+        'type'       => 'group',
+        'layout'     => 'block',
+        'sub_fields' => [
+          [
+            'key'     => 'field_ll_ba_hero_banner_content',
+            'label'   => 'Content',
+            'name'    => 'content',
+            'type'    => 'wysiwyg',
+            'wrapper' => [ 'class' => 'll-ba-hero-banner-preview' ],
+          ],
+          [
+            'key'           => 'field_ll_ba_hero_banner_link',
+            'label'         => 'Link',
+            'name'          => 'link',
+            'type'          => 'link',
+            'return_format' => 'array',
+          ],
+          [
+            'key'           => 'field_ll_ba_hero_banner_image',
+            'label'         => 'Image',
+            'name'          => 'image',
+            'type'          => 'image',
+            'return_format' => 'id',
+          ],
+        ],
+      ];
+    }
+
+    $fields = array_merge( $fields, [
+      [
+        'key'       => 'field_ll_bag_global_options_tab',
+        'label'     => 'Global Single Page Options',
+        'type'      => 'tab',
+        'placement' => 'left',
+        'endpoint'  => 0,
+      ],
+      [
+        'key'     => 'field_ll_bag_cta_message',
+        'type'    => 'message',
+        'message' => 'Leave CTA fields blank to omit CTA on single pages',
+      ],
+      [
+        'key'     => 'field_ll_ba_global_cta_title',
+        'label'   => 'CTA Title',
+        'name'    => 'll_ba_global_cta_title',
+        'type'    => 'text',
+        'wrapper' => [ 'width' => '50%' ],
+      ],
+      [
+        'key'           => 'field_ll_ba_global_cta_link',
+        'label'         => 'CTA Link',
+        'name'          => 'll_ba_global_cta_link',
+        'type'          => 'link',
+        'return_format' => 'array',
+        'wrapper'       => [ 'width' => '50%' ],
+      ],
+      [
+        'key'   => 'field_ll_bag_related_treatments_slider_title',
+        'label' => 'Related Treatments Slider Title',
+        'name'  => 'll_bag_related_treatments_slider_title',
+        'type'  => 'text',
+      ],
+      [
+        'key'       => 'field_ll_bag_archive_settings_tab_2',
+        'label'     => 'Card Background Color',
+        'type'      => 'tab',
+        'placement' => 'left',
+        'endpoint'  => 0,
+      ],
+      [
+        'key'           => 'field_ll_ba_card_bg_color',
+        'label'         => 'Card Background Color',
+        'name'          => 'll_ba_card_bg_color',
+        'type'          => 'color_picker',
+        'default_value' => '#B8C2B0',
+        'instructions'  => 'Background color shown behind the Before and After post cards.',
+      ],
+    ] );
+
+    acf_add_local_field_group( [
+      'key'      => 'group_ll_ba_settings',
+      'title'    => 'Before & After Settings',
+      'fields'   => $fields,
       'location' => [
         [
           [
-              'param'    => 'options_page',
-              'operator' => '==',
-              'value'    => 'll-bag-settings',
+            'param'    => 'options_page',
+            'operator' => '==',
+            'value'    => 'll-bag-settings',
           ],
         ],
       ],
-    ]);
+    ] );
   }
 
   /**

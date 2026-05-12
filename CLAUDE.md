@@ -59,7 +59,7 @@ The images repeater field (`ll_ba_images`) is the core data structure for the si
 - `ll_ba_comparison_slider` — bool (two-images only)
 - `ll_ba_video_url` / `ll_ba_video_title` — video fields
 
-Templates map `ll_ba_image_ratio` values to CSS modifier classes (`ba-single__ratio--wide`, etc.).
+Templates map `ll_ba_image_ratio` values to CSS modifier classes (`ll-ba-single__ratio--wide`, etc.). These classes are defined at the top of `single-post.css` outside any nesting block so they work globally (archive cards and the single page gallery both use them).
 
 ### Filter System
 
@@ -77,11 +77,14 @@ CSS is split into:
 - `resources/css/frontend.css` — entry point; imports partials
 - `resources/css/partials/single-post.css` — BEM styles for the single post page
 - `resources/css/partials/archive.css` — BEM styles for the archive, post card, and filter sidebar
+- `resources/css/partials/hero-banner.css` — BEM styles for the archive hero banner component
 - `resources/css/ba-colors.css` — CSS custom properties for UI colors (overrideable from theme)
+
+When adding a new component partial, create a matching CSS file in `resources/css/partials/` and import it in `frontend.css`.
 
 Colors come from CSS custom properties defined in `ba-colors.css` (e.g. `var(--background-fill)`, `var(--text-heading)`). Use `var(--property-name)` directly — there is no token abstraction layer.
 
-**Do not nest CSS** in the partials files. Write flat selectors only. (Nesting is acceptable in `admin.css` since it only targets WordPress admin.)
+CSS nesting is acceptable. Use it for component-scoped child selectors (e.g. `.ll-ba-card { .ll-ba-card__image { ... } }`). Avoid deep nesting — keep selectors readable.
 
 State toggling classes (`ll-ba-hidden`, `rotate-180`, `is-filtering`) are defined in `archive.css` and toggled by JavaScript. Use `ll-ba-hidden` (not `hidden`) for any show/hide state in plugin-owned elements to avoid polluting the global namespace.
 
@@ -92,8 +95,25 @@ State toggling classes (`ll-ba-hidden`, `rotate-180`, `is-filtering`) are define
 - Primary + nav Splide sliders (synced)
 - Related posts Splide slider
 - Comparison slider drag interaction
+- Magnific Popup for the single post "Read More" modal
 
-Other JS modules are imported from separate files (`card.js`, `filters.js`, `pagination.js`, `related-posts.js`). The `llBag` global (set via `wp_localize_script`) provides `ajaxUrl`, `nonce`, `action`, `relatedAction`, `relatedNonce`.
+Other JS modules are imported from separate files:
+
+| File | Purpose |
+|---|---|
+| `card.js` | Card link `ba_ref` tracking |
+| `filters.js` | Archive filter sidebar, AJAX filtering, active tags, pagination |
+| `pagination.js` | Pagination rendering helper |
+| `related-posts.js` | AJAX-loaded related posts slider on single page |
+| `sensitive.js` | Shared sensitive image helpers — `getSensitiveMode()`, `setSensitiveMode()`, `applySensitiveMode(container, mode)`, `updateSensitiveBar(bar, container)` |
+| `cookieUtil.js` | `CookieUtil.getCookie(name)` / `setCookie(name, value, days)` — used by `sensitive.js` |
+| `vendor/easy-toggle-state.js` | Declarative toggle library; activated via `data-toggle-*` attributes |
+
+The `llBag` global (set via `wp_localize_script`) provides `ajaxUrl`, `nonce`, `action`, `relatedAction`, `relatedNonce`.
+
+**jQuery plugins** are enqueued via WordPress (`wp_enqueue_script` with `['jquery']` dependency), not bundled through Vite. This avoids CJS/ESM interop issues with jQuery. Current plugins: Magnific Popup (`ll-bag-magnific-popup`, loaded in `TemplateLoader::enqueueMagnificPopup()`). Do not import jQuery-dependent libraries directly in `frontend.js`.
+
+**Sensitive image preference** is stored in the `ll-ba-sensitive-mode` cookie (default: `'blur'`). Always use `getSensitiveMode()` / `setSensitiveMode()` from `sensitive.js` — never read or write `localStorage` or a cookie directly for this value.
 
 ### Dynamic CSS Variables
 

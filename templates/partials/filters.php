@@ -83,6 +83,9 @@ if ($filters->isEmpty()) {
                   value="<?= esc_attr($term->slug); ?>"
                   data-term-name="<?= esc_attr($term->name); ?>"
                 >
+                <span class="ll-ba-checkbox-ui" aria-hidden="true">
+                  <svg class="icon icon-check"><use xlink:href="#icon-check"></use></svg>
+                </span>
                 <?= esc_html($term->name); ?>
               </label>
             <?php endforeach; ?>

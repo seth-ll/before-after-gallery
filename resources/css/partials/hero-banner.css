@@ -1,0 +1,59 @@
+/* ==========================================================================
+   Before & After Hero Banner
+   ========================================================================== */
+
+.ll-ba-hero-banner {
+   position: relative;
+   padding: 108px 0 80px;
+   min-height: 300px;
+}
+
+.ll-ba-hero-banner__overlay {
+   position: absolute;
+   inset: 0;
+   background-color: var(--overlays-dark);
+}
+
+.ll-ba-hero-banner__container {
+  position: relative;
+  z-index: 10;
+}
+
+.ll-ba-hero-banner__row {
+   grid-column: 2/3;
+   display: flex;
+   flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .ll-ba-hero-banner__row {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+  }
+}
+
+.ll-ba-hero-banner__content {
+   width: 100%;
+   margin-bottom: 2rem;
+   color: var(--overlays-elements);
+}
+
+@media (min-width: 1024px) {
+  .ll-ba-hero-banner__content {
+      width: 700px;
+      margin-bottom: 0;
+  }
+}
+
+.ll-ba-hero-banner__link-wrap {
+   width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .ll-ba-hero-banner__link-wrap {
+      display: flex;
+      justify-content: flex-end;
+      width: auto;
+  }
+}

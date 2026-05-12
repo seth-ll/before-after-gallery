@@ -45,7 +45,7 @@ npm run build
 
 ## Theme Overrides
 
-Files in the plugin can be overridden from your theme by placing files at the corresponding path under `your-theme/ll-before-after/`.
+Files in the plugin can be overridden from your theme by placing files at the corresponding path under `your-theme/ll-before-after/`. The plugin checks the theme location first and falls back to the plugin file — no configuration required.
 
 ### Templates
 
@@ -58,6 +58,70 @@ your-theme/
     ├── archive-ll_before_after.php
     ├── archive-ll_before_after_category.php
     └── archive-ll_before_after_categories.php
+```
+
+### Partials
+
+Any partial included via `TemplateLoader::get()` can also be overridden. Place the file at `your-theme/ll-before-after/partials/{filename}`:
+
+```
+your-theme/
+└── ll-before-after/
+    └── partials/
+        ├── before-after-hero-banner.php   # Archive hero banner
+        ├── post-card.php                  # Grid card for archive and related slider
+        └── filters.php                    # Filter sidebar
+```
+
+> **Note:** Partials included via `bag_include_partial()` (e.g. `fit-image`) are hardcoded to the plugin directory and cannot be overridden from the theme.
+
+#### Hero Banner ACF fields
+
+The plugin registers ACF fields for `before-after-hero-banner.php` in **B&A Posts → Settings → Archive Settings**. When a theme overrides that partial, those fields are automatically removed from the admin — the plugin detects the override at registration time and skips them.
+
+**When you override the partial, register your own field group on the same settings page:**
+
+```php
+// In your theme's functions.php
+add_action( 'acf/init', function () {
+    acf_add_local_field_group( [
+        'key'    => 'group_my_theme_hero_banner',
+        'title'  => 'Hero Banner',
+        'fields' => [
+            [
+                'key'   => 'field_my_theme_hero_heading',
+                'label' => 'Hero Heading',
+                'name'  => 'my_theme_hero_heading',
+                'type'  => 'text',
+            ],
+            [
+                'key'           => 'field_my_theme_hero_link',
+                'label'         => 'Hero Link',
+                'name'          => 'my_theme_hero_link',
+                'type'          => 'link',
+                'return_format' => 'array',
+            ],
+            // add more fields as needed
+        ],
+        'location' => [
+            [
+                [
+                    'param'    => 'options_page',
+                    'operator' => '==',
+                    'value'    => 'll-bag-settings',
+                ],
+            ],
+        ],
+    ] );
+} );
+```
+
+Your field group appears as a separate section on the **B&A Posts → Settings** page. Read values in your template with `get_field( 'my_theme_hero_heading', 'option' )`.
+
+To force the plugin's default hero banner fields to register even when your override file is present:
+
+```php
+add_filter( 'll_bag/hero_banner_fields_enabled', '__return_true' );
 ```
 
 ### CSS
@@ -76,6 +140,22 @@ Overrideable CSS files:
 | File | Purpose |
 |------|---------|
 | `ba-colors.css` | CSS custom properties for UI colors |
+
+### Header & Footer
+
+By default the archive templates call `get_header()` and `get_footer()`. Use these filters to swap the template name or skip them entirely:
+
+```php
+// Load a named variant — calls get_header('minimal') which loads header-minimal.php
+add_filter( 'll_bag/header_template', fn() => 'minimal' );
+add_filter( 'll_bag/footer_template', fn() => 'minimal' );
+
+// Skip header and/or footer completely
+add_filter( 'll_bag/header_template', fn() => false );
+add_filter( 'll_bag/footer_template', fn() => false );
+```
+
+Returning `''` (the default) calls `get_header()`/`get_footer()` with no argument — standard theme behavior.
 
 ---
 

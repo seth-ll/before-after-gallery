@@ -1,5 +1,6 @@
 
-.bg_grid-cols-container {
+.ba_grid-cols-container {
+  display: grid;
   grid-template-columns: 1fr minmax(0, var(--container-size)) 1fr;
 }
 
