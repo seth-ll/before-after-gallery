@@ -1,5 +1,6 @@
 import '../css/frontend.css';
 import '../css/theme-before-after.css';
+import './vendor/easy-toggle-state.js';
 
 // Splide — import only if not already provided by the theme
 import Splide from '@splidejs/splide';
@@ -23,8 +24,8 @@ import { initFilters }      from './filters.js';
 
 // ── Splide: single post gallery + thumbnails ───────────────────────────────────
 
-document.querySelectorAll( '.ba-single-page-slider' ).forEach( el => {
-  const navEl = el.nextElementSibling?.classList.contains( 'ba-single-page-slider-nav' ) ? el.nextElementSibling : null;
+document.querySelectorAll( '.ll-ba-single-page-slider' ).forEach( el => {
+  const navEl = el.nextElementSibling?.classList.contains( 'll-ba-single-page-slider-nav' ) ? el.nextElementSibling : null;
   const primary = new Splide( el, {
     type: 'loop',
     perPage: 1,
@@ -40,7 +41,8 @@ document.querySelectorAll( '.ba-single-page-slider' ).forEach( el => {
       isNavigation: true,
       gap: '6px',
       pagination: false,
-      arrows: false,
+      arrows: true,
+      arrowPath: 'M0.221889 0.203398C0.517741 -0.0677994 0.997411 -0.0677994 1.29326 0.203398L11.4448 9.50895C11.7406 9.78015 11.7406 10.2198 11.4448 10.491L1.29326 19.7966C0.997411 20.0678 0.517741 20.0678 0.221889 19.7966C-0.073963 19.5254 -0.073963 19.0857 0.221889 18.8145L9.83772 10L0.221889 1.18549C-0.073963 0.914293 -0.073963 0.474596 0.221889 0.203398Z',
       fixedWidth: '80px',
       focus: 'center',
     } );
@@ -54,7 +56,7 @@ document.querySelectorAll( '.ba-single-page-slider' ).forEach( el => {
 
 // ── Splide: static related sliders (dynamic ones are mounted in related-posts.js) ──
 
-document.querySelectorAll( '.ba-related-slider' ).forEach( el => {
+document.querySelectorAll( '.ll-ba-related-slider' ).forEach( el => {
   if ( el.dataset.postId ) return;
 
   new Splide( el, {
@@ -67,9 +69,9 @@ document.querySelectorAll( '.ba-related-slider' ).forEach( el => {
 
 // ── Splide: comparison slider ──────────────────────────────────────────────────
 
-document.querySelectorAll( '.ba-comparison-slider' ).forEach( el => {
-  const after   = el.querySelector( '.ba-comparison-slider__after' );
-  const divider = el.querySelector( '.ba-comparison-slider__divider' );
+document.querySelectorAll( '.ll-ba-comparison-slider' ).forEach( el => {
+  const after   = el.querySelector( '.ll-ba-comparison-slider__after' );
+  const divider = el.querySelector( '.ll-ba-comparison-slider__divider' );
   let dragging  = false;
 
   const setPosition = ( pct ) => {
@@ -102,5 +104,16 @@ initCardLinks();
 initRelatedSlider();
 
 document.addEventListener('DOMContentLoaded', () => {
+  const $ = window.jQuery;
+  if ( $ && $.fn.magnificPopup ) {
+    $( document ).on( 'click', '.ll-ba-single__detail-read-more-trigger', function ( e ) {
+      e.preventDefault();
+      $.magnificPopup.open( {
+        items: { src: $( this ).data( 'mfp-src' ), type: 'inline' },
+        closeBtnInside: true,
+      } );
+    } );
+  }
+
   initFilters();
 });

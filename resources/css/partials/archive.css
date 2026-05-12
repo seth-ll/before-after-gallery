@@ -53,118 +53,129 @@
   display: flex;
   align-items: center;
   height: 100%;
-}
+  
+  .ll-ba-card__side-by-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    width: 100%;
+  }
+  
+  .ll-ba-card__stacked {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    flex: none;
+    width: 100%;
+  }
+  
+  .ll-ba-card__image {
+    position: relative;
+    width: 100%;
+    flex-shrink: 0;
+  }
+  
+  .ll-ba-card__side-by-side .ll-ba-card__image {
+    width: 50%;
+  }
+  
+  .ll-ba-card__link {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  
+  .ll-ba-card__pills {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    padding: 0.75rem;
+    pointer-events: none;
+  }
+  
+  .ll-ba-card__pills--default {
+    transition: opacity 200ms;
+  }
+  
+  &:hover .ll-ba-card__pills--default {
+    opacity: 0;
+  }
+  
+  .ll-ba-card__pills--hover {
+    opacity: 0;
+    transform: translateY(0.5rem);
+    transition: opacity 200ms, transform 200ms;
+  }
+  
+  &:hover .ll-ba-card__pills--hover {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  
+  .ll-ba-card__hover-overlay {
+    position: absolute;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    opacity: 0;
+    transition: opacity 200ms;
+    pointer-events: none;
+  }
+  
+  &:hover .ll-ba-card__hover-overlay {
+    opacity: 0.5;
+  }
+  
+  .ll-ba-card__hover-text {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: var(--overlays-elements);
+  }
 
-.ll-ba-card__side-by-side {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1px;
-  width: 100%;
-}
-
-.ll-ba-card__stacked {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  flex: none;
-  width: 100%;
-}
-
-.ll-ba-card__image {
-  position: relative;
-  width: 100%;
-  flex-shrink: 0;
-}
-
-.ll-ba-card__side-by-side .ll-ba-card__image {
-  width: 50%;
-}
-
-.ll-ba-card__link {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.ll-ba-card__pills {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 10;
-  padding: 0.75rem;
-  pointer-events: none;
-}
-
-.ll-ba-card__pills--default {
-  transition: opacity 200ms;
-}
-
-.ll-ba-card:hover .ll-ba-card__pills--default {
-  opacity: 0;
-}
-
-.ll-ba-card__pills--hover {
-  opacity: 0;
-  transform: translateY(0.5rem);
-  transition: opacity 200ms, transform 200ms;
-}
-
-.ll-ba-card:hover .ll-ba-card__pills--hover {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.ll-ba-card__hover-overlay {
-  position: absolute;
-  z-index: 1;
-  height: 100%;
-  width: 100%;
-  background-color: black;
-  opacity: 0;
-  transition: opacity 200ms;
-  pointer-events: none;
-}
-
-.ll-ba-card:hover .ll-ba-card__hover-overlay {
-  opacity: 0.5;
-}
-
-.ll-ba-card__hover-text {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-  --text-body: white;
-}
-
-.ll-ba-card__pill-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-}
-
-.ll-ba-card__pill {
-  width: fit-content;
-  padding: 0.25rem 0.5rem;
-  font-size: 11px;
-  font-style: normal;
-  font-weight: 400;
-  border-radius: var(--ui-tags-radius);
-  background-color: var(--ui-tags-fill);
-  color: var(--ui-tags-elements);
-  overflow: hidden;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-
-  icon.icon-multiple {
+  .ll-ba-card__hover-text .icon {
     width: 12px;
     height: 12px;
     flex-shrink: 0;
+    color: var(--overlays-elements);
+  }
+  
+  .ll-ba-card__pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  
+  .ll-ba-card__pill {
+    width: fit-content;
+    padding: 0.25rem 0.5rem;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    border-radius: var(--ui-tags-radius);
+    background-color: var(--ui-tags-fill);
+    color: var(--ui-tags-elements);
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  
+    icon.icon-multiple {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+    }
   }
 }
 

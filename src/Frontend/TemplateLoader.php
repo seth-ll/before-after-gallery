@@ -24,6 +24,23 @@ class TemplateLoader {
   public function enqueueAssets(): void {
     Vite::enqueueFrontendAssets();
     $this->enqueueCssOverrides();
+    $this->enqueueMagnificPopup();
+  }
+
+  private function enqueueMagnificPopup(): void {
+    wp_enqueue_style(
+      'll-bag-magnific-popup',
+      LL_BAG_URL . 'node_modules/magnific-popup/dist/magnific-popup.css',
+      [],
+      '1.1.0'
+    );
+    wp_enqueue_script(
+      'll-bag-magnific-popup',
+      LL_BAG_URL . 'node_modules/magnific-popup/dist/jquery.magnific-popup.min.js',
+      ['jquery'],
+      '1.1.0',
+      true
+    );
   }
 
   private function enqueueCssOverrides(): void {

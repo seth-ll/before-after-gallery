@@ -42,13 +42,13 @@ $images_field = get_field('field_ll_ba_images', $post->ID);
 $ba_gallery_image = [];
 if ( !empty($images_field) ) {
     foreach ( $images_field as $image ) {
-        $ratio_class = 'ba-single__ratio--square';
+        $ratio_class = 'll-ba-single__ratio--square';
         if ( $image['ll_ba_image_ratio'] === 'wide' ) {
-            $ratio_class = 'ba-single__ratio--wide';
+            $ratio_class = 'll-ba-single__ratio--wide';
         } elseif ( $image['ll_ba_image_ratio'] === 'panorama' ) {
-            $ratio_class = 'ba-single__ratio--panorama';
+            $ratio_class = 'll-ba-single__ratio--panorama';
         } elseif ( $image['ll_ba_image_ratio'] === 'vertical' ) {
-            $ratio_class = 'ba-single__ratio--vertical';
+            $ratio_class = 'll-ba-single__ratio--vertical';
         }
         $ba_gallery_image[] = [
             'option'           => $image['ll_ba_image_options'],
@@ -64,7 +64,7 @@ $card_image = $ba_gallery_image[0] ?? null;
 
 $is_stacked = $card_image
     && $card_image['option'] === 'two-images'
-    && in_array( $card_image['ratio'], ['ba-single__ratio--wide', 'ba-single__ratio--panorama'] );
+    && in_array( $card_image['ratio'], ['ll-ba-single__ratio--wide', 'll-ba-single__ratio--panorama'] );
 
 $is_nsfw = get_field('ll_ba_is_nsfw', $post->ID);
 ?>
@@ -151,7 +151,10 @@ $is_nsfw = get_field('ll_ba_is_nsfw', $post->ID);
     <div class="ll-ba-card__hover-overlay"></div>
 
     <div class="ll-ba-card__pills ll-ba-card__pills--hover">
-      <p class="ll-ba-card__hover-text">View Details</p>
+      <p class="ll-ba-card__hover-text">
+        View Details
+        <svg class='icon icon-arrow-right' aria-hidden='true'><use xlink:href='#icon-arrow-right'></use></svg>
+      </p>
 
       <div class="ll-ba-card__pill-group">
         <?php foreach ($visibleTerms as $term) : ?>

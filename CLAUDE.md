@@ -109,4 +109,9 @@ Other JS modules are imported from separate files (`card.js`, `filters.js`, `pag
 
 **Adding a new partial:** Create the file in `templates/partials/`. Include it via `TemplateLoader::get('partials/my-partial.php', $data)` (theme-overridable) or `bag_include_partial('my-partial', $data)` (plugin-only, no theme override). Add the override path to the header docblock.
 
-**BEM class naming in CSS:** Plugin BEM classes use the `ll-ba-` prefix (`ll-ba-card`, `ll-ba-card__image`, `ll-ba-grid`). Single-post-specific classes use `ba-single__` prefix. Do not use bare utility class names (like `hidden`) that could conflict with theme styles.
+**BEM class naming in CSS:** All plugin BEM classes use the `ll-ba-` prefix — no exceptions. Examples: `ll-ba-card`, `ll-ba-single`, `ll-ba-single__gallery`, `ll-ba-comparison-slider`. Do not use the bare `ba-` prefix for plugin classes. Do not use bare utility class names (like `hidden`) that could conflict with theme styles — use `ll-ba-hidden` instead.
+
+**What does NOT get the `ll-ba-` prefix:**
+- Theme typography/button classes (`ba_hdg-medium`, `ba_btn-primary`) — these use `ba_` with an underscore and belong to the theme, not the plugin
+- Splide library classes (`splide__arrow--prev`, `splide__arrows`, etc.)
+- Third-party or WordPress classes (`wysiwyg`, `sr-only`, `js-init-video`)

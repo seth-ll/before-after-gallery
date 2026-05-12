@@ -36,7 +36,7 @@ class Vite {
     $base = rtrim((string) file_get_contents(self::$hotFile), "\n");
 
     wp_enqueue_script($handle . '-vite', $base . '/@vite/client', [], null, false);
-    wp_enqueue_script($handle, $base . '/' . $entry, [$handle . '-vite'], null, true);
+    wp_enqueue_script($handle, $base . '/' . $entry, [$handle . '-vite', 'jquery'], null, true);
 
     add_filter('script_loader_tag', static function (string $tag, string $tagHandle) use ($handle): string {
       if ($tagHandle === $handle . '-vite' || $tagHandle === $handle) {
@@ -63,7 +63,7 @@ class Vite {
     wp_enqueue_script(
       $handle,
       self::$buildUrl . '/' . $data['file'],
-      [],
+      ['jquery'],
       LL_BAG_VERSION,
       true
     );

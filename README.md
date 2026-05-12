@@ -89,7 +89,7 @@ The plugin exposes WordPress filters so themes can override specific pieces of m
 
 Filter: `lifted_logic/bag/bag_back_button_markup`
 
-Overrides the back-to-gallery link at the top of the single post sidebar. The `$href` defaults to the post type archive URL, falling back to `site_url('/')` if no archive is configured.
+Overrides the back-to-gallery link at the top of the single post sidebar. The `$href` defaults to the post type archive URL, falling back to `site_url('/')` if no archive is configured. If a `ba_ref` query param is present it is used instead (preserves filtered archive state).
 
 **Default markup:**
 
@@ -105,9 +105,11 @@ Overrides the back-to-gallery link at the top of the single post sidebar. The `$
 | 3 | `$text` | `string` | Link text |
 | 4 | `$href` | `string` | Link URL |
 
+The example below reproduces the plugin default exactly — copy, paste into your theme, then modify:
+
 ```php
 add_filter( 'lifted_logic/bag/bag_back_button_markup', function( $markup, $classes, $text, $href ) {
-    return '<a href="' . esc_url( $href ) . '" class="my-back-link">' . esc_html( $text ) . '</a>';
+    return '<a href="' . $href . '" class="' . $classes . '">' . $text . '</a>';
 }, 10, 4 );
 ```
 
@@ -124,17 +126,13 @@ The filter receives `$prev` and `$next` as separate strings so you can replace o
 **Default markup:**
 
 ```html
-<div class="ba-single__related-arrows splide__arrows">
-  <button class="ba-single__related-arrow ba-single__related-arrow--prev splide__arrow--prev">
-    <svg class="ba-single__related-arrow-icon icon icon-arrow-right" aria-hidden="true">
-      <use xlink:href="#icon-arrow-right"></use>
-    </svg>
+<div class="ll-ba-single__related-arrows splide__arrows">
+  <button class="ll-ba-single__related-arrow ll-ba-single__related-arrow--prev splide__arrow--prev">
+    <svg class="ll-ba-single__related-arrow-icon icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg>
     <span class="sr-only">Previous Slide</span>
   </button>
-  <button class="ba-single__related-arrow ba-single__related-arrow--next splide__arrow--next">
-    <svg class="ba-single__related-arrow-icon icon icon-arrow-right" aria-hidden="true">
-      <use xlink:href="#icon-arrow-right"></use>
-    </svg>
+  <button class="ll-ba-single__related-arrow ll-ba-single__related-arrow--next splide__arrow--next">
+    <svg class="ll-ba-single__related-arrow-icon icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg>
     <span class="sr-only">Next Slide</span>
   </button>
 </div>
@@ -147,13 +145,21 @@ The filter receives `$prev` and `$next` as separate strings so you can replace o
 | 2 | `$prev` | `string` | Previous button HTML only |
 | 3 | `$next` | `string` | Next button HTML only |
 
+The example below reproduces the plugin default exactly — copy, paste into your theme, then modify:
+
 ```php
 add_filter( 'lifted_logic/bag/related_slider_arrows_markup', function( $markup, $prev, $next ) {
     return '
-        <div class="my-arrows splide__arrows">
-            <button class="my-arrow splide__arrow--prev" aria-label="Previous">←</button>
-            <button class="my-arrow splide__arrow--next" aria-label="Next">→</button>
-        </div>
+      <div class="ll-ba-single__related-arrows splide__arrows">
+        <button class="ll-ba-single__related-arrow ll-ba-single__related-arrow--prev splide__arrow--prev">
+          <svg class="ll-ba-single__related-arrow-icon icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg>
+          <span class="sr-only">Previous Slide</span>
+        </button>
+        <button class="ll-ba-single__related-arrow ll-ba-single__related-arrow--next splide__arrow--next">
+          <svg class="ll-ba-single__related-arrow-icon icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg>
+          <span class="sr-only">Next Slide</span>
+        </button>
+      </div>
     ';
 }, 10, 3 );
 ```
@@ -171,9 +177,9 @@ Overrides the CTA link card in the single post sidebar. The card only renders wh
 **Default markup:**
 
 ```html
-<div class="ba-single__cta-card">
-  <p class="ba-single__cta-title">{title}</p>
-  <a class="ba-single__cta-button btn-primary" href="{url}">{link title}</a>
+<div class="ll-ba-single__cta-card">
+  <p class="ll-ba-single__cta-title ba_hdg-small">{title}</p>
+  <a class="ll-ba-single__cta-button ba_btn-primary" href="{url}">{link title}</a>
 </div>
 ```
 
@@ -184,17 +190,20 @@ Overrides the CTA link card in the single post sidebar. The card only renders wh
 | 2 | `$title` | `string` | Card heading text (from options page) |
 | 3 | `$link` | `array` | ACF link array — keys: `url`, `title`, `target` |
 
+The example below reproduces the plugin default exactly — copy, paste into your theme, then modify:
+
 ```php
 add_filter( 'lifted_logic/bag/link_card_markup', function( $markup, $title, $link ) {
-    $target = $link['target'] ? 'target="' . esc_attr( $link['target'] ) . '"' : '';
+    $href      = $link['url'] ?? '';
+    $link_text = $link['title'] ?? '';
+    $target    = $link['target'] ? 'target="' . $link['target'] . '"' : '';
+    $sr_text   = $link['target'] === '_blank' ? '<span class="sr-only"> (opens in new tab)</span>' : '';
 
     return '
-        <div class="my-cta-card">
-            <p class="my-cta-card__title">' . esc_html( $title ) . '</p>
-            <a class="my-cta-card__link" href="' . esc_url( $link['url'] ) . '" ' . $target . '>'
-                . esc_html( $link['title'] ) .
-            '</a>
-        </div>
+      <div class="ll-ba-single__cta-card">
+        <p class="ll-ba-single__cta-title ba_hdg-small">' . $title . '</p>
+        <a class="ll-ba-single__cta-button ba_btn-primary" href="' . $href . '" ' . $target . '>' . $link_text . ' ' . $sr_text . '</a>
+      </div>
     ';
 }, 10, 3 );
 ```

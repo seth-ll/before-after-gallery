@@ -36,21 +36,21 @@ class Hooks {
   // Related slider arrows
   public static function bag_related_slider_arrows_markup(): string {
     $prev = <<<HTML
-      <button class="ba-single__related-arrow ba-single__related-arrow--prev splide__arrow--prev">
-        <svg class="ba-single__related-arrow-icon icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg>
+      <button class="ll-ba-single__related-arrow ll-ba-single__related-arrow--prev splide__arrow--prev">
+        <svg class="ll-ba-single__related-arrow-icon icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg>
         <span class="sr-only">Previous Slide</span>
       </button>
     HTML;
 
     $next = <<<HTML
-      <button class="ba-single__related-arrow ba-single__related-arrow--next splide__arrow--next">
-        <svg class="ba-single__related-arrow-icon icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg>
+      <button class="ll-ba-single__related-arrow ll-ba-single__related-arrow--next splide__arrow--next">
+        <svg class="ll-ba-single__related-arrow-icon icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg>
         <span class="sr-only">Next Slide</span>
       </button>
     HTML;
 
     $markup = <<<HTML
-      <div class="ba-single__related-arrows splide__arrows">$prev$next</div>
+      <div class="ll-ba-single__related-arrows splide__arrows">$prev$next</div>
     HTML;
 
     return apply_filters( 'lifted_logic/bag/related_slider_arrows_markup', $markup, $prev, $next );
@@ -65,9 +65,9 @@ class Hooks {
     $target     = $link['target'] ? 'target="' . $link['target'] . '"' : '';
     $sr_text    = $link['target'] === '_blank' ? '<span class="sr-only"> (opens in new tab)</span>' : '';
     $markup     = <<<HTML
-      <div class="ba-single__cta-card">
-        <p class="ba-single__cta-title">$title</p>
-        <a class="ba-single__cta-button ba_btn-primary" href="$href" $target>$link_text $sr_text</a>
+      <div class="ll-ba-single__cta-card">
+        <p class="ll-ba-single__cta-title ba_hdg-small">$title</p>
+        <a class="ll-ba-single__cta-button ba_btn-primary" href="$href" $target>$link_text $sr_text</a>
       </div>
     HTML;
 

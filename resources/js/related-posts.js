@@ -1,7 +1,7 @@
 import Splide from '@splidejs/splide';
 
 export function initRelatedSlider() {
-  const relatedEl = document.querySelector('.ba-related-slider[data-post-id]');
+  const relatedEl = document.querySelector('.ll-ba-related-slider[data-post-id]');
   if (!relatedEl || typeof llBag === 'undefined') return;
 
   const formData = new FormData();
@@ -17,7 +17,7 @@ export function initRelatedSlider() {
       const count = data.data.count ?? 0;
 
       if (count < 2) {
-        relatedEl.closest('.ba-single__related')?.style.setProperty('display', 'none');
+        relatedEl.closest('.ll-ba-single__related')?.style.setProperty('display', 'none');
         return;
       }
 
@@ -39,7 +39,7 @@ export function initRelatedSlider() {
       const visibleCount = list.querySelectorAll('.splide__slide').length;
 
       if (visibleCount < 2) {
-        relatedEl.closest('.ba-single__related')?.style.setProperty('display', 'none');
+        relatedEl.closest('.ll-ba-single__related')?.style.setProperty('display', 'none');
         return;
       }
 
