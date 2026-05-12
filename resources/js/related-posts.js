@@ -1,4 +1,5 @@
 import Splide from '@splidejs/splide';
+import { getSensitiveMode, applySensitiveMode } from './sensitive.js';
 
 export function initRelatedSlider() {
   const relatedEl = document.querySelector('.ll-ba-related-slider[data-post-id]');
@@ -26,11 +27,11 @@ export function initRelatedSlider() {
       }
 
       const list = relatedEl.querySelector('.splide__list');
-      const mode = localStorage.getItem('ll-ba-sensitive-mode') || 'blur';
+      const mode = getSensitiveMode();
 
-      if (mode === 'blur') {
-        list.querySelectorAll('.ll-ba-card--sensitive').forEach(c => c.classList.add('is-blurred'));
-      } else if (mode === 'hide') {
+      applySensitiveMode( list, mode );
+
+      if (mode === 'hide') {
         list.querySelectorAll('.splide__slide').forEach(slide => {
           if (slide.querySelector('.ll-ba-card--sensitive')) slide.remove();
         });

@@ -18,6 +18,24 @@ $filters = (new FilterManager())->getEnabled();
 
 <div class="ll-ba-archive">
   <div class="ll-ba-archive__inner">
+    <!-- Sensitive images bar (shown/hidden by JS based on whether sensitive cards are in the grid) -->
+    <div class="ll-ba-sensitive-bar ll-ba-hidden" id="ll-ba-sensitive-bar">
+      <span class="ll-ba-sensitive-bar__label">Sensitive Images</span>
+      <div class="ll-ba-sensitive-bar__options" role="group" aria-label="Sensitive image display mode">
+        <button type="button" class="ll-ba-sensitive-btn" data-mode="blur">
+          <svg class='icon icon-check-mark' aria-hidden='true'><use xlink:href='#icon-check-mark'></use></svg>
+          Blur
+        </button>
+        <button type="button" class="ll-ba-sensitive-btn" data-mode="unblur">
+          <svg class='icon icon-check-mark' aria-hidden='true'><use xlink:href='#icon-check-mark'></use></svg>
+          Unblur
+        </button>
+        <button type="button" class="ll-ba-sensitive-btn" data-mode="hide">
+          <svg class='icon icon-check-mark' aria-hidden='true'><use xlink:href='#icon-check-mark'></use></svg>
+          Hide
+        </button>
+      </div>
+    </div>
     <?php if ($filters->isNotEmpty()) : ?>
       <aside class="ll-ba-sidebar">
         <?php TemplateLoader::get('partials/filters.php', ['filters' => $filters]); ?>

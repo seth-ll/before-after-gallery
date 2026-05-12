@@ -1,4 +1,5 @@
 import { renderPagination, initPagination } from './pagination.js';
+import { getSensitiveMode, setSensitiveMode, applySensitiveMode, updateSensitiveBar } from './sensitive.js';
 
 export function initFilters() {
   const filtersEl      = document.getElementById('ll-ba-filters');
@@ -9,7 +10,7 @@ export function initFilters() {
   if (!filtersEl || !grid) return;
 
   let currentPage          = 1;
-  let currentSensitiveMode = localStorage.getItem('ll-ba-sensitive-mode') || 'blur';
+  let currentSensitiveMode = getSensitiveMode();
 
   // ── Accordion toggles ────────────────────────────────────────────────────────
 
@@ -81,8 +82,8 @@ export function initFilters() {
     if (!btn) return;
 
     currentSensitiveMode = btn.dataset.mode;
-    localStorage.setItem('ll-ba-sensitive-mode', currentSensitiveMode);
-    applySensitiveMode(currentSensitiveMode);
+    setSensitiveMode( currentSensitiveMode );
+    applySensitiveMode( grid, currentSensitiveMode );
 
     document.querySelectorAll('.ll-ba-sensitive-btn').forEach(b =>
       b.classList.toggle('is-active', b === btn)
@@ -141,8 +142,8 @@ export function initFilters() {
       if (data.success) {
         grid.innerHTML = data.data.html || `<p class="col-span-full py-12 text-sm text-center text-gray-500">${llBag.noResults ?? 'No results found.'}</p>`;
         renderPagination(paginationEl, data.data.total_pages, data.data.current_page, applyFilters);
-        updateSensitiveBar();
-        applySensitiveMode(currentSensitiveMode);
+        updateSensitiveBar( document.getElementById( 'll-ba-sensitive-bar' ), grid );
+        applySensitiveMode( grid, currentSensitiveMode );
       }
     } finally {
       grid.classList.remove('is-filtering');
@@ -170,7 +171,7 @@ export function initFilters() {
 
         const tag = document.createElement('li');
         tag.className = 'll-ba-tag';
-        tag.innerHTML = `<button type="button" class="ll-ba-tag-remove" data-meta-key="${escAttr(key)}" data-value="${escAttr(v)}" aria-label="Remove filter">${escHtml(label)}: ${escHtml(displayName)} &times;</button>`;
+        tag.innerHTML = `<button type="button" class="ll-ba-tag-remove" data-meta-key="${escAttr(key)}" data-value="${escAttr(v)}" aria-label="Remove filter">${escHtml(displayName)}<svg class='icon icon-exit' aria-hidden='true'><use xlink:href='#icon-exit'></use></svg></button>`;
         tags.appendChild(tag);
       });
     }
@@ -226,26 +227,6 @@ export function initFilters() {
     applyFilters(currentPage);
   }
 
-  // ── Sensitive images helpers ─────────────────────────────────────────────────
-
-  function updateSensitiveBar() {
-    const bar = document.getElementById('ll-ba-sensitive-bar');
-    if (!bar) return;
-    const hasSensitive = grid.querySelectorAll('.ll-ba-card--sensitive').length > 0;
-    bar.classList.toggle('ll-ba-hidden', !hasSensitive);
-  }
-
-  function applySensitiveMode(mode) {
-    grid.querySelectorAll('.ll-ba-card').forEach(card => {
-      card.classList.remove('is-blurred', 'is-hidden');
-    });
-    if (mode === 'blur') {
-      grid.querySelectorAll('.ll-ba-card--sensitive').forEach(c => c.classList.add('is-blurred'));
-    } else if (mode === 'hide') {
-      grid.querySelectorAll('.ll-ba-card--sensitive').forEach(c => c.classList.add('is-hidden'));
-    }
-  }
-
   // ── Helpers ──────────────────────────────────────────────────────────────────
 
   function escHtml(str) {
@@ -286,6 +267,6 @@ export function initFilters() {
   document.querySelectorAll('.ll-ba-sensitive-btn').forEach(btn =>
     btn.classList.toggle('is-active', btn.dataset.mode === currentSensitiveMode)
   );
-  updateSensitiveBar();
-  applySensitiveMode(currentSensitiveMode);
+  updateSensitiveBar( document.getElementById( 'll-ba-sensitive-bar' ), grid );
+  applySensitiveMode( grid, currentSensitiveMode );
 }

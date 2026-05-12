@@ -22,9 +22,6 @@ if ($filters->isEmpty()) {
   <div class="ll-ba-hidden ll-ba-filters__active" id="ll-ba-active-bar">
     <div class="ll-ba-filters__active-inner">
       <span class="ll-ba-filters__active-label">Filtered by:</span>
-      <ul class="ll-ba-filters__active-tags" id="ll-ba-active-tags">
-        <!-- Tags are managed by updateActiveTags() in frontend.js -->
-      </ul>
       <button
         type="button"
         id="ll-ba-clear-all"
@@ -33,18 +30,9 @@ if ($filters->isEmpty()) {
         Clear All
       </button>
     </div>
-  </div>
-
-  <!-- Sensitive images bar (shown/hidden by JS based on whether sensitive cards are in the grid) -->
-  <div class="ll-ba-sensitive-bar ll-ba-hidden" id="ll-ba-sensitive-bar">
-    <span class="ll-ba-sensitive-bar__label">Sensitive Images</span>
-    <div class="ll-ba-sensitive-bar__options" role="group" aria-label="Sensitive image display mode">
-      <button type="button" class="ll-ba-sensitive-btn" data-mode="blur">
-        <span class="ll-ba-sensitive-btn__check" aria-hidden="true">✓</span> Blur
-      </button>
-      <button type="button" class="ll-ba-sensitive-btn" data-mode="unblur">Unblur</button>
-      <button type="button" class="ll-ba-sensitive-btn" data-mode="hide">Hide</button>
-    </div>
+    <ul class="ll-ba-filters__active-tags" id="ll-ba-active-tags">
+      <!-- Tags are managed by updateActiveTags() in frontend.js -->
+    </ul>
   </div>
 
   <!-- Filter groups -->
@@ -70,9 +58,7 @@ if ($filters->isEmpty()) {
         >
           <span><?= $label; ?></span>
 
-          <svg class="ll-ba-filter-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
-          </svg>
+          <svg class='icon icon-chevron-down' aria-hidden='true'><use xlink:href='#icon-chevron-down'></use></svg>
         </button>
 
         <div class="ll-ba-hidden ll-ba-filter-content">
@@ -84,9 +70,7 @@ if ($filters->isEmpty()) {
                 class="ll-ba-option-search"
                 placeholder="<?= 'Search ' . $filter['label'];?>"
               >
-              <svg class="ll-ba-option-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd"/>
-              </svg>
+              <svg class='icon icon-search' aria-hidden='true'><use xlink:href='#icon-search'></use></svg>
             </div>
           <?php endif; ?>
 
