@@ -9,6 +9,8 @@
   display: grid;
   grid-template-columns: 275px 1fr;
   gap: 2rem;
+  background-color: var(--general-background);
+  padding: 40px 50px 80px 50px;
 }
 
 .ll-ba-content {

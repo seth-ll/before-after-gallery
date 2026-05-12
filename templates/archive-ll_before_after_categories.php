@@ -21,15 +21,14 @@ if (is_wp_error($categories)) {
     $categories = [];
 }
 
-get_header();
 ?>
 
 <div class="ll-ba-archive-categories">
 
-    <div class="flex justify-between items-center px-4 py-4 md:px-0">
+    <div class="flex items-center justify-between px-4 py-4 md:px-0">
       <?php $allPostsUrl = SettingsPage::getPostsPageUrl(); ?>
       <?php if ($allPostsUrl) : ?>
-      <a href="<?php echo esc_url($allPostsUrl); ?>" class="flex gap-1 items-center text-sm">
+      <a href="<?php echo esc_url($allPostsUrl); ?>" class="flex items-center gap-1 text-sm">
           View All Before &amp; Afters <span aria-hidden="true">→</span>
       </a>
       <?php endif; ?>
@@ -46,5 +45,3 @@ get_header();
     <?php endif; ?>
 
 </div>
-
-<?php get_footer();

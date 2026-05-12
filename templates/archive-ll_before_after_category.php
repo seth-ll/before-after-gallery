@@ -14,12 +14,11 @@ use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
 
 $currentCategory = get_queried_object();
 
-get_header();
 ?>
 
 <div class="ll-ba-archive-posts">
 
-    <div class="flex justify-between items-center px-4 py-4 md:px-0">
+    <div class="flex items-center justify-between px-4 py-4 md:px-0">
         <div>
             <?php if ($currentCategory instanceof WP_Term) : ?>
             <h1 class="text-2xl font-semibold"><?php echo esc_html($currentCategory->name); ?></h1>
@@ -28,7 +27,7 @@ get_header();
             <?php endif; ?>
             <?php endif; ?>
         </div>
-        <a href="<?php echo esc_url(BeforeAfterPostType::getCategoriesArchiveUrl()); ?>" class="flex gap-1 items-center text-sm">
+        <a href="<?php echo esc_url(BeforeAfterPostType::getCategoriesArchiveUrl()); ?>" class="flex items-center gap-1 text-sm">
             <span aria-hidden="true">←</span> All Categories
         </a>
     </div>
@@ -45,4 +44,3 @@ get_header();
 
 </div>
 
-<?php get_footer();

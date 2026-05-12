@@ -14,7 +14,6 @@ use LiftedLogic\LLBag\Frontend\TemplateLoader;
 
 $filters = (new FilterManager())->getEnabled();
 
-get_header();
 ?>
 
 <div class="ll-ba-archive">
@@ -44,5 +43,3 @@ get_header();
     </div>
   </div>
 </div>
-
-<?php get_footer();

@@ -46,6 +46,18 @@
 
   .ll-ba-single__back {
     margin-bottom: 2rem;
+    display: flex;
+
+    svg.icon-arrow-right {
+      margin-right: 8px;
+      height: 12px;
+      width: 12px;
+      color: var(--general-heading);
+      transform: rotate(180deg);
+    }
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   .ll-ba-single__header {

@@ -25,9 +25,9 @@ class Hooks {
     $classes = 'bag_back-text bag-inline-block';
     $text    = 'Back to Gallery';
     $refUrl  = isset($_GET['ba_ref']) ? wp_validate_redirect(wp_unslash($_GET['ba_ref']), '') : '';
-    $href    = esc_url($refUrl ?: get_post_type_archive_link('ll_bag') ?: site_url('/'));
+    $href    = esc_url($refUrl ?: get_post_type_archive_link('ll_before_after') ?: site_url('/'));
     $markup  = <<<HTML
-      <a href="$href" class="$classes">$text</a>
+      <a href="$href" class="$classes"><svg class='icon icon-arrow-right' aria-hidden='true'><use xlink:href='#icon-arrow-right'></use></svg>$text</a>
     HTML;
 
     return apply_filters( 'lifted_logic/bag/bag_back_button_markup', $markup, $classes, $text, $href );
