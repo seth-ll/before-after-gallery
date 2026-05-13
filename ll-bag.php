@@ -22,6 +22,9 @@ define('LL_BAG_URL',     plugin_dir_url(__FILE__));
 require_once LL_BAG_PATH . 'vendor/autoload.php';
 require_once LL_BAG_PATH . 'src/Hooks/functions.php';
 
+// Component field groups
+require_once LL_BAG_PATH . 'components/RelatedBeforeAndAfters/RelatedBeforeAndAftersFieldGroup.php';
+
 use LiftedLogic\LLBag\Plugin;
 
 (new Plugin())->boot();

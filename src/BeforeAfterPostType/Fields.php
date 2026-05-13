@@ -134,6 +134,38 @@ class Fields {
         ],
       ],
     ]);
+    // Provider Fields
+    acf_add_local_field_group([
+      'key'    => 'group_ll_ba_provider',
+      'title'  => 'Before & After Provider Settings',
+      'fields' => [
+        [
+          'key'           => 'field_ll_ba_provider_link',
+          'label'         => 'Link',
+          'name'          => 'll_ba_provider_link',
+          'type'          => 'link',
+          'return_format' => 'array',
+          'instructions'  => 'Shows on single treatment pages where this provider has been selected',
+        ],
+        [
+          'key'           => 'field_ll_ba_provider_image',
+          'label'         => 'Image',
+          'name'          => 'll_ba_provider_image',
+          'type'          => 'image',
+          'return_format' => 'id',
+        ],
+      ],
+      'location' => [
+        [
+          [
+            'param'    => 'taxonomy',
+            'operator' => '==',
+            'value'    => 'll_ba_provider',
+          ],
+        ],
+      ],
+    ]);
+
     // Single Post Fields
     acf_add_local_field_group([
       'key'    => 'group_ll_before_after',
@@ -152,6 +184,12 @@ class Fields {
           'name' => 'll_ba_title',
           'type' => 'text',
           'instructions' => 'If left blank, this will default to "Treatments Used"',
+        ],
+        [
+          'label' => '',
+          'name' => '',
+          'type' => 'message',
+          'message' => 'The first image or set of images will show in the card for this post',
         ],
         [
           'key' => 'field_ll_ba_detail_sections',

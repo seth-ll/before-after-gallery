@@ -67,6 +67,11 @@ $is_stacked = $card_image
     && in_array( $card_image['ratio'], ['ll-ba-single__ratio--wide', 'll-ba-single__ratio--panorama'] );
 
 $is_nsfw = get_field('ll_ba_is_nsfw', $post->ID);
+
+$provider_terms  = wp_get_post_terms( $post->ID, 'll_ba_provider' );
+$provider_term   = ( !is_wp_error( $provider_terms ) && !empty( $provider_terms ) ) ? $provider_terms[0] : null;
+$provider_image  = $provider_term ? get_field( 'll_ba_provider_image', 'term_' . $provider_term->term_id ) : null;
+$provider_link   = $provider_term ? get_field( 'll_ba_provider_link',  'term_' . $provider_term->term_id ) : null;
 ?>
 
 <div class="ll-ba-card<?= $is_nsfw ? ' ll-ba-card--sensitive' : ''; ?>">
@@ -123,17 +128,39 @@ $is_nsfw = get_field('ll_ba_is_nsfw', $post->ID);
 
   <a href="<?= esc_url($permalink); ?>" class="ll-ba-card__link" aria-label="<?= esc_attr(get_the_title($post)); ?>"></a>
 
-  <?php if ($termCount === 1) : ?>
-    <div class="ll-ba-card__pills">
-      <a
-        href="<?= esc_url(add_query_arg($cardTaxonomy, $visibleTerms[0]->slug, $archiveUrl)); ?>"
-        class="ll-ba-card__pill"
-      >
-      <svg class='icon icon-multiple' aria-hidden='true'><use xlink:href='#icon-multiple'></use></svg>
-        <span>
-          <?= $visibleTerms[0]->name; ?>
-        </span>
-      </a>
+  <?php if ( $provider_term && $provider_image ) : ?>
+    <?php $provider_img = wp_get_attachment_image( $provider_image, 'thumbnail', false, [
+      'class' => 'll-ba-card__provider-image',
+      'alt'   => esc_attr( $provider_term->name ),
+    ] ); ?>
+    <?php if ( !empty( $provider_link['url'] ) ) : ?>
+      <a class="ll-ba-card__provider" href="<?= esc_url( $provider_link['url'] ) ?>" <?= !empty( $provider_link['target'] ) ? 'target="' . esc_attr( $provider_link['target'] ) . '"' : '' ?> aria-label="<?= esc_attr( $provider_term->name ) ?>"><?= $provider_img ?></a>
+    <?php else : ?>
+      <span class="ll-ba-card__provider"><?= $provider_img ?></span>
+    <?php endif; ?>
+  <?php endif; ?>
+
+  <?php if ($termCount < 2) : ?>
+
+
+    <div class="ll-ba-card__hover-overlay"></div>
+
+    <div class="ll-ba-card__pills ll-ba-card__pills--hover">
+      <p class="ll-ba-card__hover-text">
+        View Details
+        <svg class='icon icon-arrow-right' aria-hidden='true'><use xlink:href='#icon-arrow-right'></use></svg>
+      </p>
+
+      <div class="ll-ba-card__pill-group">
+        <?php foreach ($visibleTerms as $term) : ?>
+          <div class="ll-ba-card__pill">
+            <?= esc_html($term->name); ?>
+          </div>
+        <?php endforeach; ?>
+        <?php if ($overflow > 0) : ?>
+          <span class="ll-ba-card__pill">+<?= $overflow; ?></span>
+        <?php endif; ?>
+      </div>
     </div>
   <?php elseif ($termCount > 1) : ?>
 

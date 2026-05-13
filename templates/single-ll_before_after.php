@@ -19,6 +19,11 @@ $global_cta_link = get_field('ll_ba_global_cta_link', 'options') ?? '';
 $card_terms  = PostTerms::forCard( get_the_ID() );
 $archive_url = get_post_type_archive_link( BeforeAfterPostType::SLUG );
 
+$provider_terms = wp_get_post_terms( get_the_ID(), 'll_ba_provider' );
+$provider_term  = ( !is_wp_error( $provider_terms ) && !empty( $provider_terms ) ) ? $provider_terms[0] : null;
+$provider_image = $provider_term ? get_field( 'll_ba_provider_image', 'term_' . $provider_term->term_id ) : null;
+$provider_link  = $provider_term ? get_field( 'll_ba_provider_link',  'term_' . $provider_term->term_id ) : null;
+
 
 $detail_sections_field = get_field('ll_ba_detail_sections') ?? [];
 $detail_sections = [];
@@ -86,6 +91,25 @@ if ( !empty($images_field) ) {
                         </li>
                     <?php endforeach; ?>
                 </ul>
+            <?php endif; ?>
+            <?php if ( $provider_term && ( $provider_image || $provider_link ) ) : ?>
+                <div class="ll-ba-single__provider">
+                    <?php if ( $provider_image ) : ?>
+                        <?php $img = wp_get_attachment_image( $provider_image, 'thumbnail', false, [
+                            'class' => 'll-ba-single__provider-image',
+                            'alt'   => esc_attr( $provider_term->name ),
+                        ] ); ?>
+                        <span class="ll-ba-single__provider-image-wrap">
+                            <?= $img ?>
+                        </span>
+                    <?php endif; ?>
+                    <?php if ( !empty( $provider_link['url'] ) ) : ?>
+                        <a class="ll-ba-single__provider-link" href="<?= esc_url( $provider_link['url'] ) ?>" <?= !empty( $provider_link['target'] ) ? 'target="' . esc_attr( $provider_link['target'] ) . '"' : '' ?>>
+                            <?= esc_html( $provider_link['title'] ?: $provider_term->name ) ?>
+                            <svg class="icon icon-arrow-right" aria-hidden="true"><use xlink:href="#icon-arrow-right"></use></svg>
+                        </a>
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
         </div>
 

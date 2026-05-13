@@ -2,6 +2,10 @@ import '../css/frontend.css';
 import '../css/theme-before-after.css';
 import './vendor/easy-toggle-state.js';
 
+// Components
+import '../../components/RelatedBeforeAndAfters/related-before-and-afters.css';
+import '../../components/RelatedBeforeAndAfters/related-before-and-afters.js';
+
 // Splide — import only if not already provided by the theme
 import Splide from '@splidejs/splide';
 import '@splidejs/splide/css';

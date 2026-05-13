@@ -24,6 +24,19 @@ export function initFilters() {
     if (!content) return;
 
     const isOpen = !content.classList.contains('ll-ba-hidden');
+
+    // Close all other open groups before opening this one
+    if ( !isOpen ) {
+      filtersEl.querySelectorAll( '.ll-ba-filter-content' ).forEach( other => {
+        if ( other === content || other.classList.contains( 'll-ba-hidden' ) ) return;
+        other.classList.add( 'll-ba-hidden' );
+        const otherGroup  = other.closest( '.ll-ba-filter-group' );
+        const otherToggle = otherGroup?.querySelector( '.ll-ba-filter-toggle' );
+        otherToggle?.setAttribute( 'aria-expanded', 'false' );
+        otherToggle?.querySelector( '.ll-ba-filter-arrow' )?.classList.remove( 'rotate-180' );
+      } );
+    }
+
     content.classList.toggle('ll-ba-hidden', isOpen);
     toggle.setAttribute('aria-expanded', String(!isOpen));
     arrow?.classList.toggle('rotate-180', !isOpen);

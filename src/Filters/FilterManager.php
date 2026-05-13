@@ -9,8 +9,9 @@ class FilterManager {
   public const CARD_TAXONOMY_KEY = 'll_bag_card_taxonomy';
 
   private const BUILTINS = [
-    ['id' => '__builtin_category', 'label' => 'Categories', 'meta_key' => 'category',  'builtin' => true, 'display' => 'checkbox', 'enabled' => false, 'searchable' => false],
-    ['id' => '__builtin_post_tag', 'label' => 'Tags',       'meta_key' => 'post_tag',  'builtin' => true, 'display' => 'checkbox', 'enabled' => false, 'searchable' => false],
+    ['id' => '__builtin_category', 'label' => 'Categories', 'meta_key' => 'category',       'builtin' => true, 'display' => 'checkbox', 'enabled' => false, 'searchable' => false],
+    ['id' => '__builtin_post_tag', 'label' => 'Tags',       'meta_key' => 'post_tag',       'builtin' => true, 'display' => 'checkbox', 'enabled' => false, 'searchable' => false],
+    ['id' => '__builtin_provider', 'label' => 'Providers',  'meta_key' => 'll_ba_provider', 'builtin' => true, 'display' => 'checkbox', 'enabled' => false, 'searchable' => false],
   ];
 
   /**

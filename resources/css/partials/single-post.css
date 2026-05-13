@@ -97,6 +97,45 @@
     color: var(--treatment-tags-text-hover);
   }
 
+  .ll-ba-single__provider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .ll-ba-single__provider-image-wrap {
+    display: block;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 9999px;
+    border: 2px solid white;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+  }
+
+  .ll-ba-single__provider-image {
+    object-fit: cover;
+  }
+
+  .ll-ba-single__provider-link {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--general-heading);
+
+    svg {
+      height: 12px;
+      width: 12px;
+      color: var(--general-heading);
+    }
+  }
+
   /* Detail Sections
      ========================================================================== */
 
