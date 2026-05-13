@@ -12,6 +12,7 @@
 defined('ABSPATH') || exit;
 
 $content = $component_data['content'] ?? '';
+$link    = $component_data['link']    ?? [];
 
 ?>
 
@@ -20,5 +21,13 @@ $content = $component_data['content'] ?? '';
     <div class="wysiwyg">
       <?= $content ?>
     </div>
+  <?php endif; ?>
+  <?php if ( $link ) : ?>
+    <a class="btn-primary" href="<?= $link['url']; ?>" <?= $link['target'] ? 'target="' . $link['target'] . '"' : '' ?>>
+      <?= $link['title']; ?>
+      <?php if($link['target'] === '_blank') : ?>
+        <span class="sr-only"> (opens in new tab)</span>
+      <?php endif; ?>
+    </a>
   <?php endif; ?>
 </div>

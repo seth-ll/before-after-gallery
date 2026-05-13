@@ -18,6 +18,8 @@ class ThemeComponentInjector {
     // Map our content field. When ACF properly identifies it the key is
     // 'll_ba_related_bna_content'; when not (empty-string fallback), use $data[''].
     $new_data['content'] = $data['ll_ba_related_bna_content'] ?? $data[''] ?? '';
+    $new_data['link']    = $data['ll_ba_related_bna_link']    ?? null;
+    $new_data['theme']   = $data['ll_ba_related_bna_theme'] ?? 'theme-one';
     return $new_data;
   }
 
@@ -52,24 +54,60 @@ class ThemeComponentInjector {
   }
 
   private function relatedBeforeAndAftersLayout(): array {
-    return [
-      'key'     => 'layout_ll_ba_related_bna',
-      'name'    => 'll_ba_related_bna',
-      '_name'   => 'll_ba_related_bna',
-      'label'   => 'Related Before & Afters',
-      'display' => 'block',
-      'layout'  => 'block',
-      'min'     => '',
-      'max'     => '',
-      'sub_fields' => [
-        [
-          'key'   => 'field_ll_ba_rba_content',
-          'label' => 'Content',
-          'name'  => 'll_ba_related_bna_content',
-          '_name' => 'll_ba_related_bna_content',
-          'type'  => 'wysiwyg',
-        ],
+    $sub_fields = [
+      [
+        'key'   => 'field_ll_ba_rba_content',
+        'label' => 'Content',
+        'name'  => 'll_ba_related_bna_content',
+        '_name' => 'll_ba_related_bna_content',
+        'type'  => 'wysiwyg',
       ],
+      [
+        'key'           => 'field_ll_ba_rba_link',
+        'label'         => 'Link',
+        'name'          => 'll_ba_related_bna_link',
+        '_name'         => 'll_ba_related_bna_link',
+        'type'          => 'link',
+        'return_format' => 'array',
+      ],
+    ];
+
+    if ( class_exists( 'LiftedLogic\\Components\\UtilityComponents\\ComponentThemePickerFieldGroup' ) ) {
+      $picker_class = 'LiftedLogic\\Components\\UtilityComponents\\ComponentThemePickerFieldGroup';
+
+      // Ensure the field group is registered in ACF's local store.
+      // ComponentProvider may not have called boot() yet at this point.
+      $picker_field = acf_get_local_field( 'field_5f592y688ra43' );
+      if ( !$picker_field ) {
+        ( new $picker_class() )->boot();
+        $picker_field = acf_get_local_field( 'field_5f592y688ra43' );
+      }
+
+      $choices = $picker_field['choices'] ?? [ 'theme-one' => 'Theme One' ];
+
+      $sub_fields[] = [
+        'key'           => 'field_ll_ba_rba_theme',
+        'label'         => 'Theme',
+        'name'          => 'll_ba_related_bna_theme',
+        '_name'         => 'll_ba_related_bna_theme',
+        'type'          => 'button_group',
+        'choices'       => $choices,
+        'default_value' => array_key_first( $choices ),
+        'layout'        => 'horizontal',
+        'return_format' => 'value',
+      ];
+    }
+
+    return [
+      'key'        => 'layout_ll_ba_related_bna',
+      'name'       => 'll_ba_related_bna',
+      '_name'      => 'll_ba_related_bna',
+      'label'      => 'Related Before & Afters',
+      'display'    => 'block',
+      'layout'     => 'block',
+      'min'        => '',
+      'max'        => '',
+      'sub_fields' => $sub_fields,
     ];
   }
 }
