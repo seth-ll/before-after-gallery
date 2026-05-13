@@ -3,7 +3,7 @@
 namespace LiftedLogic\LLBag\Admin;
 
 use LiftedLogic\LLBag\Frontend\TemplateLoader;
-use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
+use LiftedLogic\LLBag\BeforeAfterPostType\BeforeAfterPostType;
 
 class SettingsPage {
   public const FIELD_POSTS_PAGE = 'll_bag_posts_page';

@@ -1,6 +1,6 @@
 <?php
 
-namespace LiftedLogic\LLBag\PostType;
+namespace LiftedLogic\LLBag\BeforeAfterPostType;
 
 class MetaBoxes {
   public const TITLE_KEY = 'll_ba_title';

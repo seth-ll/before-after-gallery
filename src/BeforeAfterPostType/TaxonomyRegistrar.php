@@ -1,6 +1,6 @@
 <?php
 
-namespace LiftedLogic\LLBag\PostType;
+namespace LiftedLogic\LLBag\BeforeAfterPostType;
 
 use Illuminate\Support\Collection;
 use LiftedLogic\LLBag\Filters\FilterManager;

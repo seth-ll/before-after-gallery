@@ -10,10 +10,10 @@ use LiftedLogic\LLBag\Filters\FilterManager;
 use LiftedLogic\LLBag\Frontend\AjaxHandler;
 use LiftedLogic\LLBag\Frontend\Shortcodes;
 use LiftedLogic\LLBag\Frontend\TemplateLoader;
-use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
+use LiftedLogic\LLBag\BeforeAfterPostType\BeforeAfterPostType;
 use LiftedLogic\LLBag\Hooks\Hooks;
-use LiftedLogic\LLBag\PostType\Fields;
-use LiftedLogic\LLBag\PostType\TaxonomyRegistrar;
+use LiftedLogic\LLBag\BeforeAfterPostType\Fields;
+use LiftedLogic\LLBag\BeforeAfterPostType\TaxonomyRegistrar;
 
 class Plugin {
   private Container $container;

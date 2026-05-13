@@ -1,6 +1,6 @@
 <?php
 
-namespace LiftedLogic\LLBag\PostType;
+namespace LiftedLogic\LLBag\BeforeAfterPostType;
 
 use LiftedLogic\LLBag\Filters\FilterManager;
 
@@ -14,7 +14,7 @@ class Fields {
   public function addRelatedMetaBox(): void {
     add_meta_box(
       'll-ba-related-terms',
-      'Related Posts',
+      'Related Before & After Posts',
       [$this, 'renderRelatedMetaBox'],
       BeforeAfterPostType::SLUG,
       'normal',

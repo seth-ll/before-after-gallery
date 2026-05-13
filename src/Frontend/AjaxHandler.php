@@ -3,7 +3,7 @@
 namespace LiftedLogic\LLBag\Frontend;
 
 use LiftedLogic\LLBag\Filters\FilterManager;
-use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
+use LiftedLogic\LLBag\BeforeAfterPostType\BeforeAfterPostType;
 
 class AjaxHandler {
   public const ACTION         = 'll_bag_filter';

@@ -2,7 +2,7 @@
 
 namespace LiftedLogic\LLBag\Admin;
 
-use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
+use LiftedLogic\LLBag\BeforeAfterPostType\BeforeAfterPostType;
 use LiftedLogic\LLBag\Support\Vite;
 
 class AdminMenu {

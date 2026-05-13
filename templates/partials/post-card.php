@@ -10,7 +10,7 @@
 
 defined('ABSPATH') || exit;
 
-use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
+use LiftedLogic\LLBag\BeforeAfterPostType\BeforeAfterPostType;
 use LiftedLogic\LLBag\Support\PostTerms;
 
 $permalink = get_permalink($post->ID);
@@ -156,12 +156,9 @@ $is_nsfw = get_field('ll_ba_is_nsfw', $post->ID);
 
       <div class="ll-ba-card__pill-group">
         <?php foreach ($visibleTerms as $term) : ?>
-          <a
-            href="<?= esc_url(add_query_arg($cardTaxonomy, $term->slug, $archiveUrl)); ?>"
-            class="ll-ba-card__pill"
-          >
+          <div class="ll-ba-card__pill">
             <?= esc_html($term->name); ?>
-          </a>
+          </div>
         <?php endforeach; ?>
         <?php if ($overflow > 0) : ?>
           <span class="ll-ba-card__pill">+<?= $overflow; ?></span>

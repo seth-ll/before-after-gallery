@@ -1,6 +1,6 @@
 <?php
 
-namespace LiftedLogic\LLBag\PostType;
+namespace LiftedLogic\LLBag\BeforeAfterPostType;
 
 use LiftedLogic\LLBag\Admin\SettingsPage;
 

@@ -117,7 +117,11 @@
   &:hover .ll-ba-card__pills--hover {
     opacity: 1;
     transform: translateY(0);
-    pointer-events: auto;
+    pointer-events: none;
+  }
+
+  &:hover .ll-ba-card__sensitive-overlay {
+    opacity: 0;
   }
   
   .ll-ba-card__hover-overlay {
@@ -145,6 +149,7 @@
     gap: 8px;
     margin-bottom: 12px;
     color: var(--overlays-elements);
+    pointer-events: none;
   }
 
   .ll-ba-card__hover-text .icon {
@@ -158,6 +163,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem;
+    pointer-events: none;
   }
   
   .ll-ba-card__pill {

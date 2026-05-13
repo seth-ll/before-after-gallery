@@ -10,7 +10,7 @@
 defined('ABSPATH') || exit;
 
 use LiftedLogic\LLBag\Frontend\TemplateLoader;
-use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
+use LiftedLogic\LLBag\BeforeAfterPostType\BeforeAfterPostType;
 
 $currentCategory = get_queried_object();
 

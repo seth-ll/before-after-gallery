@@ -8,7 +8,7 @@
 defined('ABSPATH') || exit;
 
 use LiftedLogic\LLBag\Hooks\Hooks;
-use LiftedLogic\LLBag\PostType\BeforeAfterPostType;
+use LiftedLogic\LLBag\BeforeAfterPostType\BeforeAfterPostType;
 use LiftedLogic\LLBag\Support\PostTerms;
 
 
