@@ -14,6 +14,7 @@ use LiftedLogic\LLBag\BeforeAfterPostType\BeforeAfterPostType;
 use LiftedLogic\LLBag\Hooks\Hooks;
 use LiftedLogic\LLBag\BeforeAfterPostType\Fields;
 use LiftedLogic\LLBag\BeforeAfterPostType\TaxonomyRegistrar;
+use LiftedLogic\LLBag\Integration\ThemeComponentInjector;
 
 class Plugin {
   private Container $container;
@@ -33,6 +34,7 @@ class Plugin {
     $this->container->singleton(TemplateLoader::class);
     // $this->container->singleton(Shortcodes::class);
     $this->container->singleton(AjaxHandler::class);
+    $this->container->singleton(ThemeComponentInjector::class);
 
     $this->container->singleton(FilterSettingsPage::class, function () {
       return new FilterSettingsPage($this->container->make(FilterManager::class));
@@ -52,6 +54,7 @@ class Plugin {
     $this->container->make(TemplateLoader::class)->register();
     // $this->container->make(Shortcodes::class)->register();
     $this->container->make(AjaxHandler::class)->register();
+    $this->container->make(ThemeComponentInjector::class)->register();
 
     if (is_admin()) {
       $this->container->make(AdminMenu::class)->register();

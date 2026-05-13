@@ -2,15 +2,23 @@
 /**
  * Component: Related Before & Afters
  *
- * Available variables:
- *   (none yet — add as the component is built out)
+ * $component_data is provided by the theme's ll_format_component_data(),
+ * which strips the layout name prefix from field names. Sub-fields must be
+ * named '{layout_name}_{field_name}' so they arrive here as $component_data['{field_name}'].
  *
  * Override: place this file at {theme}/ll-before-after/components/RelatedBeforeAndAfters/related-before-and-afters.php
  */
 
 defined('ABSPATH') || exit;
+
+$content = $component_data['content'] ?? '';
+
 ?>
 
 <div class="ll-ba-related-bna">
-
+  <?php if ( $content ) : ?>
+    <div class="wysiwyg">
+      <?= $content ?>
+    </div>
+  <?php endif; ?>
 </div>

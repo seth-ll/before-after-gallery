@@ -115,6 +115,36 @@ The `llBag` global (set via `wp_localize_script`) provides `ajaxUrl`, `nonce`, `
 
 **Sensitive image preference** is stored in the `ll-ba-sensitive-mode` cookie (default: `'blur'`). Always use `getSensitiveMode()` / `setSensitiveMode()` from `sensitive.js` — never read or write `localStorage` or a cookie directly for this value.
 
+### Theme Component Injection (`src/Integration/ThemeComponentInjector.php`)
+
+Plugin components can be injected into the LL theme's flexible content field so they appear in the "Add Component" dropdown alongside native theme components. This works on both newer sites (PHP `ComponentProvider`) and older sites (JSON/DB-based ACF) because both use the same FC field key.
+
+**How it works — three hooks per component:**
+
+1. **`acf/load_field`** (`injectLayouts`) — intercepts when ACF loads the FC field (`field_5d0d37adc1475`) and appends the plugin's layout to `$field['layouts']`. This makes the layout appear in the admin dropdown.
+
+2. **`{component-slug}_files`** (`injectRelatedBnaTemplate`) — intercepts the theme's `ll_include_component()` file search. Computes a relative path from the theme directory to the plugin's template using `..` traversal (PHP `file_exists()` resolves `..` at the OS level), so `locate_template()` finds the plugin file without needing theme changes.
+
+3. **`lifted_logic/component/format_data/{layout_name}`** (`formatRelatedBnaData`) — the theme's `ll_format_component_data()` only passes through sub-fields whose key starts with `{layout_name}_`. This filter receives the raw `$data` array and manually maps field values to `$new_data`. Without this, `$component_data` arrives empty in the template.
+
+**Critical layout definition rules** (older ACF Pro versions are strict):
+- Every layout must include `'_name'`, `'display'`, `'layout'`, `'min'`, `'max'`
+- Every sub_field must include both `'name'` and `'_name'` (set to the same value)
+- Sub-field names must follow `{layout_name}_{field_name}` convention so `ll_format_component_data` strips the prefix and delivers them as `$component_data['{field_name}']`
+- ACF's `ll_format_component_data` is NOT used for field delivery — the `format_data` filter handles this directly
+
+**Adding a new plugin component:**
+
+1. Create `components/{ComponentName}/` with `.php`, `.css`, `.js` files
+2. Import CSS and JS in `frontend.js` under `// Components`
+3. Add a `private function {name}Layout(): array` to `ThemeComponentInjector` with all required keys
+4. Call it in `injectLayouts()` alongside the existing layout
+5. Add a `{component-slug}_files` filter + inject method for the template
+6. Add a `lifted_logic/component/format_data/{layout_name}` filter + format method for data mapping
+7. In the template, read fields via `$component_data['{field_name}']` — NOT `get_sub_field()`
+
+**Why not `get_sub_field()`:** The theme uses `foreach (get_field('components'))`, not `have_rows()`. There is no ACF row context active when the template is included. All data arrives through `$component_data`.
+
 ### Dynamic CSS Variables
 
 `TemplateLoader::enqueueCssOverrides()` enqueues `ba-colors.css` (checking theme override first), then outputs per-site values as inline CSS via `wp_add_inline_style`. When adding a new ACF color/style option from the settings page, register the field in `SettingsPage.php`, read it in `enqueueCssOverrides()`, and output it as a CSS variable on `:root`. Consume it in CSS via `var(--variable-name)`.

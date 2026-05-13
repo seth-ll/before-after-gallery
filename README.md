@@ -290,6 +290,76 @@ add_filter( 'lifted_logic/bag/link_card_markup', function( $markup, $title, $lin
 
 ---
 
+## Plugin Components
+
+Plugin components appear in the LL theme's "Add Component" flexible content dropdown alongside native theme components. They work on both newer PHP-`ComponentProvider` sites and older JSON/DB-based sites — both share the same FC field key.
+
+### File structure
+
+Each component lives under `components/{ComponentName}/`:
+
+```
+components/RelatedBeforeAndAfters/
+├── related-before-and-afters.php    # Template (rendered by the theme's component system)
+├── related-before-and-afters.css    # Scoped styles (imported in frontend.js)
+├── related-before-and-afters.js     # Behavior (imported in frontend.js)
+└── RelatedBeforeAndAftersFieldGroup.php  # ACF field reference (not loaded at boot)
+```
+
+CSS and JS are imported in `resources/js/frontend.js` under `// Components`. The PHP template is served to the theme via a computed relative path — no files need to be copied into the theme.
+
+### Reading field data in the template
+
+The theme uses `foreach (get_field('components'))`, **not** `have_rows()`. There is no ACF row context, so `get_sub_field()` always returns null. All field data arrives through `$component_data`:
+
+```php
+// In your component template:
+$content = $component_data['content'] ?? '';
+$link    = $component_data['link']    ?? [];
+```
+
+### Field naming convention
+
+Sub-fields must be named `{layout_name}_{field_name}` so the theme's `ll_format_component_data()` strips the prefix and delivers them as `$component_data['{field_name}']`:
+
+- Layout name: `ll_ba_related_bna`
+- Sub-field name: `ll_ba_related_bna_content` → arrives as `$component_data['content']`
+
+### Adding a new plugin component
+
+All injection logic lives in `src/Integration/ThemeComponentInjector.php`. For each new component, add:
+
+1. A `private function {name}Layout(): array` with the layout definition
+2. A call to it inside `injectLayouts()`
+3. A `{component-slug}_files` filter + inject method (serves the template file)
+4. A `lifted_logic/component/format_data/{layout_name}` filter + format method (maps field data to `$component_data`)
+
+**Required keys on every layout definition** (older ACF Pro versions are strict):
+
+```php
+[
+    'key'        => 'layout_my_component',
+    'name'       => 'my_component',
+    '_name'      => 'my_component',      // required by older ACF Pro
+    'label'      => 'My Component',
+    'display'    => 'block',             // required by older ACF Pro
+    'layout'     => 'block',
+    'min'        => '',                  // required by older ACF Pro
+    'max'        => '',                  // required by older ACF Pro
+    'sub_fields' => [
+        [
+            'key'   => 'field_my_component_content',
+            'label' => 'Content',
+            'name'  => 'my_component_content',
+            '_name' => 'my_component_content',   // required by older ACF Pro
+            'type'  => 'wysiwyg',
+        ],
+    ],
+]
+```
+
+---
+
 ## Structure
 
 ```
