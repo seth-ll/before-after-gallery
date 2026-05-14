@@ -24,6 +24,8 @@ class ThemeComponentInjector {
     add_filter( 'lifted_logic/component/format_data/ll_ba_related_bna',        [$this, 'formatRelatedBnaData'], 10, 3 );
     add_filter( 'll-ba-grid_files',                                            [$this, 'injectBeforeAndAftersGridTemplate'] );
     add_filter( 'lifted_logic/component/format_data/ll_ba_grid',               [$this, 'formatBeforeAndAftersGridData'], 10, 3 );
+    add_filter( 'll-ba-slider_files',                                          [$this, 'injectBeforeAndAfterSliderTemplate'] );
+    add_filter( 'lifted_logic/component/format_data/ll_ba_slider',             [$this, 'formatBeforeAndAfterSliderData'], 10, 3 );
   }
 
   public function registerLocalFields(): void {
@@ -62,6 +64,21 @@ class ThemeComponentInjector {
       'max'           => '',
       'parent'        => 'layout_ll_ba_grid',
     ] );
+
+    acf_add_local_field( [
+      'key'           => 'field_ll_ba_slider_posts',
+      'label'         => 'Before & After Posts',
+      'name'          => 'll_ba_slider_posts',
+      '_name'         => 'll_ba_slider_posts',
+      'type'          => 'relationship',
+      'post_type'     => [ 'll_before_after' ],
+      'filters'       => [ 'search' ],
+      'elements'      => [],
+      'return_format' => 'object',
+      'min'           => '',
+      'max'           => '',
+      'parent'        => 'layout_ll_ba_slider',
+    ] );
   }
 
   public function formatRelatedBnaData( array $new_data, string $component_name, array $data ): array {
@@ -99,6 +116,7 @@ class ThemeComponentInjector {
 
     $field['layouts']['layout_ll_ba_related_bna'] = $this->relatedBeforeAndAftersLayout();
     $field['layouts']['layout_ll_ba_grid']        = $this->beforeAndAftersGridLayout();
+    $field['layouts']['layout_ll_ba_slider']      = $this->beforeAndAfterSliderLayout();
 
     usort( $field['layouts'], fn( $a, $b ) => strcmp( $a['label'], $b['label'] ) );
 
@@ -186,6 +204,93 @@ class ThemeComponentInjector {
   public function formatBeforeAndAftersGridData( array $new_data, string $component_name, array $data ): array {
     $new_data['posts'] = $data['ll_ba_grid_posts'] ?? [];
     return $new_data;
+  }
+
+  public function injectBeforeAndAfterSliderTemplate( array $files ): array {
+    $plugin_file = LL_BAG_PATH . 'components/BeforeAndAfterSlider/before-and-after-slider.php';
+    array_unshift( $files, $this->relativePathFromTheme( $plugin_file ) );
+    return $files;
+  }
+
+  public function formatBeforeAndAfterSliderData( array $new_data, string $component_name, array $data ): array {
+    $new_data['color_theme'] = $data['ll_ba_slider_color_theme'] ?? 'theme-one';
+    $new_data['content']     = $data['ll_ba_slider_content']     ?? '';
+    $new_data['posts']       = $data['ll_ba_slider_posts']       ?? [];
+    return $new_data;
+  }
+
+  private function beforeAndAfterSliderLayout(): array {
+    $sub_fields = [];
+
+    if ( class_exists( 'LiftedLogic\\Components\\UtilityComponents\\ComponentThemePickerFieldGroup' ) ) {
+      $picker_class = 'LiftedLogic\\Components\\UtilityComponents\\ComponentThemePickerFieldGroup';
+      $picker_field = acf_get_local_field( 'field_5f592y688ra43' );
+      if ( !$picker_field ) {
+        ( new $picker_class() )->boot();
+        $picker_field = acf_get_local_field( 'field_5f592y688ra43' );
+      }
+      $choices = $picker_field['choices'] ?? [ 'theme-one' => 'Theme One' ];
+      $sub_fields[] = [
+        'key'           => 'field_ll_ba_slider_theme',
+        'label'         => 'Theme',
+        'name'          => 'll_ba_slider_color_theme',
+        '_name'         => 'll_ba_slider_color_theme',
+        'type'          => 'button_group',
+        'choices'       => $choices,
+        'default_value' => array_key_first( $choices ),
+        'layout'        => 'horizontal',
+        'return_format' => 'value',
+      ];
+    }
+
+    $sub_fields[] = [
+      'key' => 'field_ll_ba_slider_layout',
+      'label' => 'Layout',
+      'name' => 'll_ba_slider_layout',
+      '_name' => 'll_ba_slider_layout',
+      'type' => 'button_group',
+      'choices' => [
+        'image-content' => '<i class="far fa-image"></i> <i class="fas fa-align-left"></i>',
+        'content-image' => '<i class="fas fa-align-left"></i> <i class="far fa-image"></i>',
+      ],
+      'return_format' => 'value',
+      'allow_null' => 0,
+      'layout' => 'horizontal',
+    ];
+
+    $sub_fields[] = [
+      'key'   => 'field_ll_ba_slider_content',
+      'label' => 'Content',
+      'name'  => 'll_ba_slider_content',
+      '_name' => 'll_ba_slider_content',
+      'type'  => 'wysiwyg',
+    ];
+
+    $sub_fields[] = [
+      'key'           => 'field_ll_ba_slider_posts',
+      'label'         => 'Before & After Posts',
+      'name'          => 'll_ba_slider_posts',
+      '_name'         => 'll_ba_slider_posts',
+      'type'          => 'relationship',
+      'post_type'     => [ 'll_before_after' ],
+      'filters'       => [ 'search' ],
+      'elements'      => [],
+      'return_format' => 'object',
+      'min'           => '',
+      'max'           => '',
+    ];
+
+    return [
+      'key'        => 'layout_ll_ba_slider',
+      'name'       => 'll_ba_slider',
+      '_name'      => 'll_ba_slider',
+      'label'      => 'Before & After Slider',
+      'display'    => 'block',
+      'layout'     => 'block',
+      'min'        => '',
+      'max'        => '',
+      'sub_fields' => $sub_fields,
+    ];
   }
 
   private function beforeAndAftersGridLayout(): array {

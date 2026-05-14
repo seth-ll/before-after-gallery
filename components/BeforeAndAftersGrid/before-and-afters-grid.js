@@ -6,18 +6,15 @@ const PAGE_SIZE = 12;
 
 document.addEventListener( 'DOMContentLoaded', () => {
   const components = document.querySelectorAll( '.ll-ba-bag-grid' );
-  console.log( '[BAG Grid] DOMContentLoaded fired, found components:', components.length );
 
   components.forEach( component => {
     const grid         = component.querySelector( '.ll-ba-bag-grid__card-grid' );
     const bar          = component.querySelector( '.ll-ba-bag-grid__sensitive-bar' );
     const paginationEl = component.querySelector( '.ll-ba-bag-grid__pagination' );
-    console.log( '[BAG Grid] grid:', grid, '| paginationEl:', paginationEl );
     if ( !grid ) return;
 
     const cards      = [ ...grid.querySelectorAll( '.ll-ba-card' ) ];
     const totalPages = Math.ceil( cards.length / PAGE_SIZE );
-    console.log( '[BAG Grid] cards found:', cards.length, '| totalPages:', totalPages );
 
     // ── Sensitive mode ────────────────────────────────────────────────────────
 
@@ -44,7 +41,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
     // ── Pagination ────────────────────────────────────────────────────────────
 
     if ( totalPages <= 1 || !paginationEl ) {
-      console.log( '[BAG Grid] Skipping pagination — totalPages:', totalPages, '| paginationEl:', paginationEl );
       return;
     }
 

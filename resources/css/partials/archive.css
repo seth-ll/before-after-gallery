@@ -553,9 +553,9 @@ input[type="search"]::-webkit-search-decoration {
   line-height: 135%;
   background-color: var(--ui-tags-fill);
   border-radius: var(--ui-tags-radius);
-  color: var(--ui-tags-elements)
+  color: var(--ui-tags-elements);
 
-  svg {
+  svg.icon {
     width: 12px;
     height: 12px;
     flex-shrink: 0;

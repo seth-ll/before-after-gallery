@@ -7,6 +7,8 @@ import '../../components/RelatedBeforeAndAfters/related-before-and-afters.css';
 import '../../components/RelatedBeforeAndAfters/related-before-and-afters.js';
 import '../../components/BeforeAndAftersGrid/before-and-afters-grid.css';
 import '../../components/BeforeAndAftersGrid/before-and-afters-grid.js';
+import '../../components/BeforeAndAfterSlider/before-and-after-slider.css';
+import '../../components/BeforeAndAfterSlider/before-and-after-slider.js';
 
 // Splide — import only if not already provided by the theme
 import Splide from '@splidejs/splide';
