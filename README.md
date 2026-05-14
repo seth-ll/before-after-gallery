@@ -294,6 +294,14 @@ add_filter( 'lifted_logic/bag/link_card_markup', function( $markup, $title, $lin
 
 Plugin components appear in the LL theme's "Add Component" flexible content dropdown alongside native theme components. They work on both newer PHP-`ComponentProvider` sites and older JSON/DB-based sites — both share the same FC field key.
 
+### Current components
+
+| Component | Label in admin | Layout name | Folder |
+|---|---|---|---|
+| Related Before & Afters | Related Before & Afters | `ll_ba_related_bna` | `components/RelatedBeforeAndAfters/` |
+| Before & Afters Grid | Before & Afters Grid | `ll_ba_grid` | `components/BeforeAndAftersGrid/` |
+| Before & After Slider | Before & After Slider | `ll_ba_slider` | `components/BeforeAndAfterSlider/` |
+
 ### File structure
 
 Each component lives under `components/{ComponentName}/`:
@@ -302,11 +310,38 @@ Each component lives under `components/{ComponentName}/`:
 components/RelatedBeforeAndAfters/
 ├── related-before-and-afters.php    # Template (rendered by the theme's component system)
 ├── related-before-and-afters.css    # Scoped styles (imported in frontend.js)
-├── related-before-and-afters.js     # Behavior (imported in frontend.js)
-└── RelatedBeforeAndAftersFieldGroup.php  # ACF field reference (not loaded at boot)
+└── related-before-and-afters.js     # Behavior (imported in frontend.js)
 ```
 
 CSS and JS are imported in `resources/js/frontend.js` under `// Components`. The PHP template is served to the theme via a computed relative path — no files need to be copied into the theme.
+
+### Client-side pagination
+
+The Before & Afters Grid uses client-side pagination via `renderPagination()` from `pagination.js`. Add a `.{component}__pagination` container div to the template, then in the component JS:
+
+```js
+import { renderPagination } from '../../resources/js/pagination.js';
+
+const PAGE_SIZE = 12;
+const cards      = [...grid.querySelectorAll('.ll-ba-card')];
+const totalPages = Math.ceil(cards.length / PAGE_SIZE);
+
+const showPage = (page) => {
+    const start = (page - 1) * PAGE_SIZE;
+    cards.forEach((card, i) => {
+        card.style.display = (i >= start && i < start + PAGE_SIZE) ? '' : 'none';
+    });
+    renderPagination(paginationEl, totalPages, page, showPage);
+};
+
+if (totalPages > 1 && paginationEl) showPage(1);
+```
+
+`renderPagination` is reused from the archive — same UI, different callback. The archive uses an AJAX callback; components use the client-side `showPage` function.
+
+### `ba_grid-cols-container` gotcha
+
+The LL theme's `ba_grid-cols-container` class creates a 3-column CSS grid (left bleed / content / right bleed). Every direct child that should appear in the visible content area must have `grid-column: 2 / 3` in its CSS. Without it, the element is auto-placed into a bleed column and becomes invisible — even though the HTML is correct and the JS runs. This affects pagination containers, sensitive image bars, and any other sibling elements of the main content area.
 
 ### Reading field data in the template
 
@@ -360,13 +395,28 @@ All injection logic lives in `src/Integration/ThemeComponentInjector.php`. For e
 
 ### Disabling plugin components on a specific theme
 
-All component injection is gated by the `ll_bag/register_components` filter. To prevent the plugin from injecting any components into the theme's flexible content field, add this to the theme's `functions.php`:
+Components can be disabled individually or all at once. All filters must be in `functions.php` — they are evaluated on `after_setup_theme`, which fires after `functions.php` is included.
+
+**Disable a single component:**
+
+```php
+// Disable only the Before & After Slider
+add_filter( 'll_bag/register_component/ll_ba_slider', '__return_false' );
+
+// Disable only the Before & Afters Grid
+add_filter( 'll_bag/register_component/ll_ba_grid', '__return_false' );
+
+// Disable only Related Before & Afters
+add_filter( 'll_bag/register_component/ll_ba_related_bna', '__return_false' );
+```
+
+**Disable all components at once (master switch):**
 
 ```php
 add_filter( 'll_bag/register_components', '__return_false' );
 ```
 
-This must be in `functions.php` (not a later hook) so it runs before `after_setup_theme` fires, which is when the plugin checks the filter.
+When a component is disabled, its layout is removed from the ACF "Add Component" dropdown, its template file filter is not registered, and its relationship field AJAX handler is not registered.
 
 ---
 

@@ -19,13 +19,22 @@ class ThemeComponentInjector {
 
     $this->registerLocalFields();
 
-    add_filter( 'acf/load_field',                                              [$this, 'injectLayouts'] );
-    add_filter( 'll-ba-related-bna_files',                                     [$this, 'injectRelatedBnaTemplate'] );
-    add_filter( 'lifted_logic/component/format_data/ll_ba_related_bna',        [$this, 'formatRelatedBnaData'], 10, 3 );
-    add_filter( 'll-ba-grid_files',                                            [$this, 'injectBeforeAndAftersGridTemplate'] );
-    add_filter( 'lifted_logic/component/format_data/ll_ba_grid',               [$this, 'formatBeforeAndAftersGridData'], 10, 3 );
-    add_filter( 'll-ba-slider_files',                                          [$this, 'injectBeforeAndAfterSliderTemplate'] );
-    add_filter( 'lifted_logic/component/format_data/ll_ba_slider',             [$this, 'formatBeforeAndAfterSliderData'], 10, 3 );
+    add_filter( 'acf/load_field', [$this, 'injectLayouts'] );
+
+    if ( apply_filters( 'll_bag/register_component/ll_ba_related_bna', true ) ) {
+      add_filter( 'll-ba-related-bna_files',                              [$this, 'injectRelatedBnaTemplate'] );
+      add_filter( 'lifted_logic/component/format_data/ll_ba_related_bna', [$this, 'formatRelatedBnaData'], 10, 3 );
+    }
+
+    if ( apply_filters( 'll_bag/register_component/ll_ba_grid', true ) ) {
+      add_filter( 'll-ba-grid_files',                              [$this, 'injectBeforeAndAftersGridTemplate'] );
+      add_filter( 'lifted_logic/component/format_data/ll_ba_grid', [$this, 'formatBeforeAndAftersGridData'], 10, 3 );
+    }
+
+    if ( apply_filters( 'll_bag/register_component/ll_ba_slider', true ) ) {
+      add_filter( 'll-ba-slider_files',                              [$this, 'injectBeforeAndAfterSliderTemplate'] );
+      add_filter( 'lifted_logic/component/format_data/ll_ba_slider', [$this, 'formatBeforeAndAfterSliderData'], 10, 3 );
+    }
   }
 
   public function registerLocalFields(): void {
@@ -35,50 +44,57 @@ class ThemeComponentInjector {
     // field store so that the AJAX handler can find the field config (post_type
     // etc.) via acf_get_field(). The sub_fields definition in the layout handles
     // admin form rendering; this handles the AJAX query.
-    acf_add_local_field( [
-      'key'           => 'field_ll_ba_rba_posts',
-      'label'         => 'Before & After Posts',
-      'name'          => 'll_ba_related_bna_posts',
-      '_name'         => 'll_ba_related_bna_posts',
-      'type'          => 'relationship',
-      'post_type'     => [ 'll_before_after' ],
-      'filters'       => [ 'search' ],
-      'elements'      => [],
-      'return_format' => 'object',
-      'min'           => '',
-      'max'           => '3',
-      'parent'        => 'layout_ll_ba_related_bna',
-    ] );
 
-    acf_add_local_field( [
-      'key'           => 'field_ll_ba_bag_grid_posts',
-      'label'         => 'Before & After Posts',
-      'name'          => 'll_ba_grid_posts',
-      '_name'         => 'll_ba_grid_posts',
-      'type'          => 'relationship',
-      'post_type'     => [ 'll_before_after' ],
-      'filters'       => [ 'search' ],
-      'elements'      => [],
-      'return_format' => 'object',
-      'min'           => '',
-      'max'           => '',
-      'parent'        => 'layout_ll_ba_grid',
-    ] );
+    if ( apply_filters( 'll_bag/register_component/ll_ba_related_bna', true ) ) {
+      acf_add_local_field( [
+        'key'           => 'field_ll_ba_rba_posts',
+        'label'         => 'Before & After Posts',
+        'name'          => 'll_ba_related_bna_posts',
+        '_name'         => 'll_ba_related_bna_posts',
+        'type'          => 'relationship',
+        'post_type'     => [ 'll_before_after' ],
+        'filters'       => [ 'search' ],
+        'elements'      => [],
+        'return_format' => 'object',
+        'min'           => '',
+        'max'           => '3',
+        'parent'        => 'layout_ll_ba_related_bna',
+      ] );
+    }
 
-    acf_add_local_field( [
-      'key'           => 'field_ll_ba_slider_posts',
-      'label'         => 'Before & After Posts',
-      'name'          => 'll_ba_slider_posts',
-      '_name'         => 'll_ba_slider_posts',
-      'type'          => 'relationship',
-      'post_type'     => [ 'll_before_after' ],
-      'filters'       => [ 'search' ],
-      'elements'      => [],
-      'return_format' => 'object',
-      'min'           => '',
-      'max'           => '',
-      'parent'        => 'layout_ll_ba_slider',
-    ] );
+    if ( apply_filters( 'll_bag/register_component/ll_ba_grid', true ) ) {
+      acf_add_local_field( [
+        'key'           => 'field_ll_ba_bag_grid_posts',
+        'label'         => 'Before & After Posts',
+        'name'          => 'll_ba_grid_posts',
+        '_name'         => 'll_ba_grid_posts',
+        'type'          => 'relationship',
+        'post_type'     => [ 'll_before_after' ],
+        'filters'       => [ 'search' ],
+        'elements'      => [],
+        'return_format' => 'object',
+        'min'           => '',
+        'max'           => '',
+        'parent'        => 'layout_ll_ba_grid',
+      ] );
+    }
+
+    if ( apply_filters( 'll_bag/register_component/ll_ba_slider', true ) ) {
+      acf_add_local_field( [
+        'key'           => 'field_ll_ba_slider_posts',
+        'label'         => 'Before & After Posts',
+        'name'          => 'll_ba_slider_posts',
+        '_name'         => 'll_ba_slider_posts',
+        'type'          => 'relationship',
+        'post_type'     => [ 'll_before_after' ],
+        'filters'       => [ 'search' ],
+        'elements'      => [],
+        'return_format' => 'object',
+        'min'           => '',
+        'max'           => '',
+        'parent'        => 'layout_ll_ba_slider',
+      ] );
+    }
   }
 
   public function formatRelatedBnaData( array $new_data, string $component_name, array $data ): array {
@@ -114,9 +130,15 @@ class ThemeComponentInjector {
       return $field;
     }
 
-    $field['layouts']['layout_ll_ba_related_bna'] = $this->relatedBeforeAndAftersLayout();
-    $field['layouts']['layout_ll_ba_grid']        = $this->beforeAndAftersGridLayout();
-    $field['layouts']['layout_ll_ba_slider']      = $this->beforeAndAfterSliderLayout();
+    if ( apply_filters( 'll_bag/register_component/ll_ba_related_bna', true ) ) {
+      $field['layouts']['layout_ll_ba_related_bna'] = $this->relatedBeforeAndAftersLayout();
+    }
+    if ( apply_filters( 'll_bag/register_component/ll_ba_grid', true ) ) {
+      $field['layouts']['layout_ll_ba_grid'] = $this->beforeAndAftersGridLayout();
+    }
+    if ( apply_filters( 'll_bag/register_component/ll_ba_slider', true ) ) {
+      $field['layouts']['layout_ll_ba_slider'] = $this->beforeAndAfterSliderLayout();
+    }
 
     usort( $field['layouts'], fn( $a, $b ) => strcmp( $a['label'], $b['label'] ) );
 

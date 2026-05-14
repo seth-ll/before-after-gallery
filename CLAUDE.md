@@ -133,26 +133,46 @@ Plugin components can be injected into the LL theme's flexible content field so 
 - Sub-field names must follow `{layout_name}_{field_name}` convention so `ll_format_component_data` strips the prefix and delivers them as `$component_data['{field_name}']`
 - ACF's `ll_format_component_data` is NOT used for field delivery — the `format_data` filter handles this directly
 
-**Disabling all component injection on a specific theme:**
+**Disabling components (must be in `functions.php`, checked on `after_setup_theme`):**
 
 ```php
-// In theme functions.php
+// Disable one component
+add_filter( 'll_bag/register_component/ll_ba_slider', '__return_false' );
+add_filter( 'll_bag/register_component/ll_ba_grid',   '__return_false' );
+add_filter( 'll_bag/register_component/ll_ba_related_bna', '__return_false' );
+
+// Disable all components (master switch)
 add_filter( 'll_bag/register_components', '__return_false' );
 ```
 
-Must be in `functions.php` — the filter is checked on `after_setup_theme`, which fires after `functions.php` is included. Adding it on a later hook (e.g. `init`) will be too late.
+Disabling a component removes it from `injectLayouts()`, `maybeRegisterHooks()`, and `registerLocalFields()` — layout, template serving, format_data filter, and AJAX field are all gated by the same filter check.
+
+**Current components** (all in `ThemeComponentInjector`):
+
+| Layout name | Label | Slug (for file filter) |
+|---|---|---|
+| `ll_ba_related_bna` | Related Before & Afters | `ll-ba-related-bna` |
+| `ll_ba_grid` | Before & Afters Grid | `ll-ba-grid` |
+| `ll_ba_slider` | Before & After Slider | `ll-ba-slider` |
 
 **Adding a new plugin component:**
 
 1. Create `components/{ComponentName}/` with `.php`, `.css`, `.js` files
 2. Import CSS and JS in `frontend.js` under `// Components`
 3. Add a `private function {name}Layout(): array` to `ThemeComponentInjector` with all required keys
-4. Call it in `injectLayouts()` alongside the existing layout
+4. Call it in `injectLayouts()` alongside the existing layouts
 5. Add a `{component-slug}_files` filter + inject method for the template
 6. Add a `lifted_logic/component/format_data/{layout_name}` filter + format method for data mapping
-7. In the template, read fields via `$component_data['{field_name}']` — NOT `get_sub_field()`
+7. If the component has a relationship field, also register it via `acf_add_local_field()` in `registerLocalFields()` — the AJAX handler needs this to find the field config when populating the selector
+8. In the template, read fields via `$component_data['{field_name}']` — NOT `get_sub_field()`
 
 **Why not `get_sub_field()`:** The theme uses `foreach (get_field('components'))`, not `have_rows()`. There is no ACF row context active when the template is included. All data arrives through `$component_data`.
+
+**`ba_grid-cols-container` gotcha:** This theme class creates a 3-column grid (left bleed / content / right bleed). Every direct child that should be in the content column must have `grid-column: 2 / 3` in its CSS. Without it, the element is auto-placed into a bleed column and becomes invisible even though the HTML is correct and JS runs. This applies to pagination containers, sensitive image bars, and all sibling elements inside this wrapper.
+
+**Client-side pagination:** Use `renderPagination(el, totalPages, currentPage, callback)` from `pagination.js`. Count `.ll-ba-card` elements with `querySelectorAll`, compute `Math.ceil(count / PAGE_SIZE)`, and pass a `showPage` function as the callback. The pagination container must have `grid-column: 2 / 3` to be visible inside `ba_grid-cols-container`. See `components/BeforeAndAftersGrid/before-and-afters-grid.js` for the reference implementation.
+
+**Relationship fields in components:** The ACF relationship AJAX handler calls `acf_get_field($key)` to get the field config. If the field is only defined inside a layout's `sub_fields` (in memory via `acf/load_field`), it won't be found and the dropdown returns empty. Register it separately via `acf_add_local_field()` in `registerLocalFields()` to fix this.
 
 ### Dynamic CSS Variables
 

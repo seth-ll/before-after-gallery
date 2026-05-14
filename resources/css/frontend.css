@@ -4,6 +4,7 @@
 @import './partials/single-post.css';
 @import './partials/archive.css';
 @import './partials/hero-banner.css';
+@import './partials/archive-category.css';
 
 .fit-image {
   position: absolute;
