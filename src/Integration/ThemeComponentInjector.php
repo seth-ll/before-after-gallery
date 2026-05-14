@@ -22,6 +22,8 @@ class ThemeComponentInjector {
     add_filter( 'acf/load_field',                                              [$this, 'injectLayouts'] );
     add_filter( 'll-ba-related-bna_files',                                     [$this, 'injectRelatedBnaTemplate'] );
     add_filter( 'lifted_logic/component/format_data/ll_ba_related_bna',        [$this, 'formatRelatedBnaData'], 10, 3 );
+    add_filter( 'll-ba-grid_files',                                            [$this, 'injectBeforeAndAftersGridTemplate'] );
+    add_filter( 'lifted_logic/component/format_data/ll_ba_grid',               [$this, 'formatBeforeAndAftersGridData'], 10, 3 );
   }
 
   public function registerLocalFields(): void {
@@ -44,6 +46,21 @@ class ThemeComponentInjector {
       'min'           => '',
       'max'           => '3',
       'parent'        => 'layout_ll_ba_related_bna',
+    ] );
+
+    acf_add_local_field( [
+      'key'           => 'field_ll_ba_bag_grid_posts',
+      'label'         => 'Before & After Posts',
+      'name'          => 'll_ba_grid_posts',
+      '_name'         => 'll_ba_grid_posts',
+      'type'          => 'relationship',
+      'post_type'     => [ 'll_before_after' ],
+      'filters'       => [ 'search' ],
+      'elements'      => [],
+      'return_format' => 'object',
+      'min'           => '',
+      'max'           => '',
+      'parent'        => 'layout_ll_ba_grid',
     ] );
   }
 
@@ -81,6 +98,7 @@ class ThemeComponentInjector {
     }
 
     $field['layouts']['layout_ll_ba_related_bna'] = $this->relatedBeforeAndAftersLayout();
+    $field['layouts']['layout_ll_ba_grid']        = $this->beforeAndAftersGridLayout();
 
     usort( $field['layouts'], fn( $a, $b ) => strcmp( $a['label'], $b['label'] ) );
 
@@ -156,6 +174,45 @@ class ThemeComponentInjector {
       'min'        => '',
       'max'        => '',
       'sub_fields' => $sub_fields,
+    ];
+  }
+
+  public function injectBeforeAndAftersGridTemplate( array $files ): array {
+    $plugin_file = LL_BAG_PATH . 'components/BeforeAndAftersGrid/before-and-afters-grid.php';
+    array_unshift( $files, $this->relativePathFromTheme( $plugin_file ) );
+    return $files;
+  }
+
+  public function formatBeforeAndAftersGridData( array $new_data, string $component_name, array $data ): array {
+    $new_data['posts'] = $data['ll_ba_grid_posts'] ?? [];
+    return $new_data;
+  }
+
+  private function beforeAndAftersGridLayout(): array {
+    return [
+      'key'        => 'layout_ll_ba_grid',
+      'name'       => 'll_ba_grid',
+      '_name'      => 'll_ba_grid',
+      'label'      => 'Before & Afters Grid',
+      'display'    => 'block',
+      'layout'     => 'block',
+      'min'        => '',
+      'max'        => '',
+      'sub_fields' => [
+        [
+          'key'           => 'field_ll_ba_bag_grid_posts',
+          'label'         => 'Before & After Posts',
+          'name'          => 'll_ba_grid_posts',
+          '_name'         => 'll_ba_grid_posts',
+          'type'          => 'relationship',
+          'post_type'     => [ 'll_before_after' ],
+          'filters'       => [ 'search' ],
+          'elements'      => [],
+          'return_format' => 'object',
+          'min'           => '',
+          'max'           => '',
+        ],
+      ],
     ];
   }
 }

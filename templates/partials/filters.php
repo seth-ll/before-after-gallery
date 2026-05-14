@@ -84,7 +84,7 @@ if ($filters->isEmpty()) {
                   data-term-name="<?= esc_attr($term->name); ?>"
                 >
                 <span class="ll-ba-checkbox-ui" aria-hidden="true">
-                  <svg class="icon icon-check"><use xlink:href="#icon-check"></use></svg>
+                  <svg class="icon icon-check-mark"><use xlink:href="#icon-check-mark"></use></svg>
                 </span>
                 <?= esc_html($term->name); ?>
               </label>

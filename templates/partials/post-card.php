@@ -113,6 +113,24 @@ $provider_link   = $provider_term ? get_field( 'll_ba_provider_link',  'term_' .
             </div>
           <?php endif; ?>
         </div>
+      <?php elseif ( $card_image['option'] === 'video' ) : ?>
+          <?php if ( $card_image['single_image_id'] ) : ?>
+            <div class="ll-ba-card__image <?= $card_image['ratio'] ?>">
+              <?php bag_include_partial( 'fit-image', [
+                'image_id'       => $card_image['single_image_id'],
+                'thumbnail_size' => 'large',
+                'fit'            => 'object-cover',
+                'position'       => 'object-center',
+                'loading'        => true,
+              ] ); ?>
+              <div class="ll-ba-single__video-overlay">
+                  <a class="ll-ba-single__video-trigger js-init-video" href="<?= $image['video_url'] ?>" data-title="<?= $image['video_title'] ?>">
+                      <svg class="ll-ba-single__video-icon icon icon-play-triangle" aria-hidden="true"><use xlink:href="#icon-play-triangle"></use></svg>
+                      <span class="sr-only">View <?= $image['video_title'] ?> video</span>
+                  </a>
+              </div>
+            </div>
+          <?php endif; ?>
       <?php endif; ?>
     <?php endif; ?>
   </div>

@@ -39,6 +39,7 @@ class SettingsPage {
       !== LL_BAG_PATH . 'templates/partials/before-after-hero-banner.php';
     $heroBannerFieldsEnabled = apply_filters( 'll_bag/hero_banner_fields_enabled', !$heroBannerOverridden );
 
+
     $fields = [
       [
         'key'       => 'field_ll_bag_archive_settings_tab',
