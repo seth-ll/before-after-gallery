@@ -3,5 +3,30 @@
    ========================================================================== */
 
 .ll-ba-related-bna {
+   background-color: var(--background-fill);
+}
 
+.ll-ba-related-bna__container {
+   grid-column: 2 / 3;
+}
+
+.ll-ba-related-bna__heading-content {
+   display: flex;
+   flex-direction: column;
+   gap: 32px;
+   margin-bottom: 40px;
+
+   @media screen and (min-width: 1024px) {
+      flex-direction: row;
+      justify-content: space-between;
+   }
+}
+
+.ll-ba-related-bna__card-grid {
+   display: grid;
+   grid-template-columns: 1fr;
+   gap: 32px;
+   @media screen and (min-width: 1024px) {
+      grid-template-columns: 1fr 1fr 1fr;
+   }
 }

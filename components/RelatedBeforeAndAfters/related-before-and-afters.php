@@ -11,23 +11,37 @@
 
 defined('ABSPATH') || exit;
 
+use LiftedLogic\LLBag\Frontend\TemplateLoader;
+
 $content = $component_data['content'] ?? '';
 $link    = $component_data['link']    ?? [];
-
+$posts   = $component_data['posts']   ?? [];
+$color_theme = $component_data['color_theme'] ?? '';
 ?>
 
-<div class="ll-ba-related-bna">
-  <?php if ( $content ) : ?>
-    <div class="wysiwyg">
-      <?= $content ?>
-    </div>
-  <?php endif; ?>
-  <?php if ( $link ) : ?>
-    <a class="btn-primary" href="<?= $link['url']; ?>" <?= $link['target'] ? 'target="' . $link['target'] . '"' : '' ?>>
-      <?= $link['title']; ?>
-      <?php if($link['target'] === '_blank') : ?>
-        <span class="sr-only"> (opens in new tab)</span>
+<div class="ll-ba-related-bna <?= $color_theme ?> component-spacing ba_grid-cols-container">
+  <div class="ll-ba-related-bna__container">
+    <div class="ll-ba-related-bna__heading-content">
+      <?php if ( $content ) : ?>
+        <div class="wysiwyg">
+          <?= $content ?>
+        </div>
       <?php endif; ?>
-    </a>
-  <?php endif; ?>
+      <?php if ( $link ) : ?>
+        <a class="btn-primary" href="<?= $link['url']; ?>" <?= $link['target'] ? 'target="' . $link['target'] . '"' : '' ?>>
+          <?= $link['title']; ?>
+          <?php if($link['target'] === '_blank') : ?>
+            <span class="sr-only"> (opens in new tab)</span>
+          <?php endif; ?>
+        </a>
+      <?php endif; ?>
+    </div>
+    <?php if( !empty($posts) ) : ?>    
+      <div class="ll-ba-related-bna__card-grid">
+        <?php foreach( $posts as $post ) : ?>
+          <?php TemplateLoader::get('partials/post-card.php', ['post' => $post]); ?>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
+  </div>
 </div>

@@ -19,7 +19,7 @@ $hero_image   = $hero['image']   ?? null;
       'image_id'       => $hero_image,
       'thumbnail_size' => 'large',
       'position'       => '',
-      'fit'            => '',
+      'fit'            => 'object-cover',
       'loading'        => '',
     ] ); ?>
   <?php endif; ?>

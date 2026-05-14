@@ -45,6 +45,22 @@ class PostTerms {
       return ['terms' => [], 'visible' => [], 'overflow' => 0, 'label' => '', 'taxonomy' => ''];
     }
 
-    return self::get($postId, $taxonomy, $limit);
+    $result = self::get($postId, $taxonomy, $limit);
+
+    // Prepend a synthetic NSFW pill as the first visible term when applicable.
+    // Template checks $term->is_nsfw to render the info icon instead of a text label.
+    if ( get_field('ll_ba_is_nsfw', $postId) ) {
+      $nsfw_term = (object) [
+        'term_id' => 0,
+        'name'    => 'Sensitive Image',
+        'slug'    => '',
+        'is_nsfw' => true,
+      ];
+      array_unshift( $result['terms'],   $nsfw_term );
+      array_unshift( $result['visible'], $nsfw_term );
+      $result['overflow'] = max( 0, count( $result['terms'] ) - 1 - $limit );
+    }
+
+    return $result;
   }
 }

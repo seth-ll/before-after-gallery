@@ -208,8 +208,16 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-  
+
     icon.icon-multiple {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+    }
+
+    svg.icon {
+      color: var(--ui-tags-elements);
+      fill: var(--ui-tags-elements);
       width: 12px;
       height: 12px;
       flex-shrink: 0;

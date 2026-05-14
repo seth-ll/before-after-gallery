@@ -9,9 +9,42 @@ class ThemeComponentInjector {
   const COMPONENTS_FC_KEY = 'field_5d0d37adc1475';
 
   public function register(): void {
+    add_action( 'after_setup_theme', [$this, 'maybeRegisterHooks'] );
+  }
+
+  public function maybeRegisterHooks(): void {
+    if ( !apply_filters( 'll_bag/register_components', true ) ) {
+      return;
+    }
+
+    $this->registerLocalFields();
+
     add_filter( 'acf/load_field',                                              [$this, 'injectLayouts'] );
     add_filter( 'll-ba-related-bna_files',                                     [$this, 'injectRelatedBnaTemplate'] );
     add_filter( 'lifted_logic/component/format_data/ll_ba_related_bna',        [$this, 'formatRelatedBnaData'], 10, 3 );
+  }
+
+  public function registerLocalFields(): void {
+    if ( !function_exists( 'acf_add_local_field' ) ) return;
+
+    // Relationship fields need to be independently registered in ACF's local
+    // field store so that the AJAX handler can find the field config (post_type
+    // etc.) via acf_get_field(). The sub_fields definition in the layout handles
+    // admin form rendering; this handles the AJAX query.
+    acf_add_local_field( [
+      'key'           => 'field_ll_ba_rba_posts',
+      'label'         => 'Before & After Posts',
+      'name'          => 'll_ba_related_bna_posts',
+      '_name'         => 'll_ba_related_bna_posts',
+      'type'          => 'relationship',
+      'post_type'     => [ 'll_before_after' ],
+      'filters'       => [ 'search' ],
+      'elements'      => [],
+      'return_format' => 'object',
+      'min'           => '',
+      'max'           => '3',
+      'parent'        => 'layout_ll_ba_related_bna',
+    ] );
   }
 
   public function formatRelatedBnaData( array $new_data, string $component_name, array $data ): array {
@@ -19,7 +52,8 @@ class ThemeComponentInjector {
     // 'll_ba_related_bna_content'; when not (empty-string fallback), use $data[''].
     $new_data['content'] = $data['ll_ba_related_bna_content'] ?? $data[''] ?? '';
     $new_data['link']    = $data['ll_ba_related_bna_link']    ?? null;
-    $new_data['theme']   = $data['ll_ba_related_bna_theme'] ?? 'theme-one';
+    $new_data['posts']   = $data['ll_ba_related_bna_posts']   ?? [];
+    $new_data['theme']   = $data['ll_ba_related_bna_color_theme'] ?? 'theme-one';
     return $new_data;
   }
 
@@ -54,29 +88,12 @@ class ThemeComponentInjector {
   }
 
   private function relatedBeforeAndAftersLayout(): array {
-    $sub_fields = [
-      [
-        'key'   => 'field_ll_ba_rba_content',
-        'label' => 'Content',
-        'name'  => 'll_ba_related_bna_content',
-        '_name' => 'll_ba_related_bna_content',
-        'type'  => 'wysiwyg',
-      ],
-      [
-        'key'           => 'field_ll_ba_rba_link',
-        'label'         => 'Link',
-        'name'          => 'll_ba_related_bna_link',
-        '_name'         => 'll_ba_related_bna_link',
-        'type'          => 'link',
-        'return_format' => 'array',
-      ],
-    ];
+    $sub_fields = [];
 
+    // Theme picker first — only on sites that have ComponentThemePickerFieldGroup
     if ( class_exists( 'LiftedLogic\\Components\\UtilityComponents\\ComponentThemePickerFieldGroup' ) ) {
       $picker_class = 'LiftedLogic\\Components\\UtilityComponents\\ComponentThemePickerFieldGroup';
 
-      // Ensure the field group is registered in ACF's local store.
-      // ComponentProvider may not have called boot() yet at this point.
       $picker_field = acf_get_local_field( 'field_5f592y688ra43' );
       if ( !$picker_field ) {
         ( new $picker_class() )->boot();
@@ -88,8 +105,8 @@ class ThemeComponentInjector {
       $sub_fields[] = [
         'key'           => 'field_ll_ba_rba_theme',
         'label'         => 'Theme',
-        'name'          => 'll_ba_related_bna_theme',
-        '_name'         => 'll_ba_related_bna_theme',
+        'name'          => 'll_ba_related_bna_color_theme',
+        '_name'         => 'll_ba_related_bna_color_theme',
         'type'          => 'button_group',
         'choices'       => $choices,
         'default_value' => array_key_first( $choices ),
@@ -97,6 +114,37 @@ class ThemeComponentInjector {
         'return_format' => 'value',
       ];
     }
+
+    $sub_fields[] = [
+      'key'   => 'field_ll_ba_rba_content',
+      'label' => 'Content',
+      'name'  => 'll_ba_related_bna_content',
+      '_name' => 'll_ba_related_bna_content',
+      'type'  => 'wysiwyg',
+    ];
+
+    $sub_fields[] = [
+      'key'           => 'field_ll_ba_rba_link',
+      'label'         => 'Link',
+      'name'          => 'll_ba_related_bna_link',
+      '_name'         => 'll_ba_related_bna_link',
+      'type'          => 'link',
+      'return_format' => 'array',
+    ];
+
+    $sub_fields[] = [
+      'key'           => 'field_ll_ba_rba_posts',
+      'label'         => 'Before & After Posts',
+      'name'          => 'll_ba_related_bna_posts',
+      '_name'         => 'll_ba_related_bna_posts',
+      'type'          => 'relationship',
+      'post_type'     => [ 'll_before_after' ],
+      'filters'       => [ 'search' ],
+      'elements'      => [],
+      'return_format' => 'object',
+      'min'           => '',
+      'max'           => '3',
+    ];
 
     return [
       'key'        => 'layout_ll_ba_related_bna',

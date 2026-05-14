@@ -358,6 +358,16 @@ All injection logic lives in `src/Integration/ThemeComponentInjector.php`. For e
 ]
 ```
 
+### Disabling plugin components on a specific theme
+
+All component injection is gated by the `ll_bag/register_components` filter. To prevent the plugin from injecting any components into the theme's flexible content field, add this to the theme's `functions.php`:
+
+```php
+add_filter( 'll_bag/register_components', '__return_false' );
+```
+
+This must be in `functions.php` (not a later hook) so it runs before `after_setup_theme` fires, which is when the plugin checks the filter.
+
 ---
 
 ## Structure

@@ -153,9 +153,16 @@ $provider_link   = $provider_term ? get_field( 'll_ba_provider_link',  'term_' .
 
       <div class="ll-ba-card__pill-group">
         <?php foreach ($visibleTerms as $term) : ?>
-          <div class="ll-ba-card__pill">
-            <?= esc_html($term->name); ?>
-          </div>
+          <?php if ( !empty($term->is_nsfw) ) : ?>
+            <div class="ll-ba-card__pill">
+              <svg class='icon icon-info' aria-hidden='true'><use xlink:href='#icon-info'></use></svg>
+              <span>Sensitive Image</span>
+            </div>
+          <?php else : ?>
+            <div class="ll-ba-card__pill">
+              <?= esc_html($term->name); ?>
+            </div>
+          <?php endif; ?>
         <?php endforeach; ?>
         <?php if ($overflow > 0) : ?>
           <span class="ll-ba-card__pill">+<?= $overflow; ?></span>
@@ -183,9 +190,16 @@ $provider_link   = $provider_term ? get_field( 'll_ba_provider_link',  'term_' .
 
       <div class="ll-ba-card__pill-group">
         <?php foreach ($visibleTerms as $term) : ?>
-          <div class="ll-ba-card__pill">
-            <?= esc_html($term->name); ?>
-          </div>
+          <?php if ( !empty($term->is_nsfw) ) : ?>
+            <div class="ll-ba-card__pill">
+              <svg class='icon icon-info' aria-hidden='true'><use xlink:href='#icon-info'></use></svg>
+              <span>Sensitive Image</span>
+            </div>
+          <?php else : ?>
+            <div class="ll-ba-card__pill">
+              <?= esc_html($term->name); ?>
+            </div>
+          <?php endif; ?>
         <?php endforeach; ?>
         <?php if ($overflow > 0) : ?>
           <span class="ll-ba-card__pill">+<?= $overflow; ?></span>

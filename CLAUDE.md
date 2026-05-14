@@ -133,6 +133,15 @@ Plugin components can be injected into the LL theme's flexible content field so 
 - Sub-field names must follow `{layout_name}_{field_name}` convention so `ll_format_component_data` strips the prefix and delivers them as `$component_data['{field_name}']`
 - ACF's `ll_format_component_data` is NOT used for field delivery — the `format_data` filter handles this directly
 
+**Disabling all component injection on a specific theme:**
+
+```php
+// In theme functions.php
+add_filter( 'll_bag/register_components', '__return_false' );
+```
+
+Must be in `functions.php` — the filter is checked on `after_setup_theme`, which fires after `functions.php` is included. Adding it on a later hook (e.g. `init`) will be too late.
+
 **Adding a new plugin component:**
 
 1. Create `components/{ComponentName}/` with `.php`, `.css`, `.js` files
