@@ -35,8 +35,8 @@ class SettingsPage {
   }
 
   public function registerFields(): void {
-    $heroBannerOverridden    = TemplateLoader::resolve( 'partials/before-after-hero-banner.php' )
-      !== LL_BAG_PATH . 'templates/partials/before-after-hero-banner.php';
+    $heroBannerOverridden    = TemplateLoader::resolve( 'partials/archive-hero-banner.php' )
+      !== LL_BAG_PATH . 'templates/partials/archive-hero-banner.php';
     $heroBannerFieldsEnabled = apply_filters( 'll_bag/hero_banner_fields_enabled', !$heroBannerOverridden );
 
 
@@ -59,6 +59,7 @@ class SettingsPage {
         'instructions'  => 'The page used for the "View All Before & Afters" link on the category archive.',
       ],
     ];
+
 
     // Themes can inject additional fields into the Archive Settings tab via this filter.
     // Fields are inserted after the plugin's own archive fields and before the next tab.
@@ -100,7 +101,7 @@ class SettingsPage {
     $fields = array_merge( $fields, [
       [
         'key'       => 'field_ll_bag_global_options_tab',
-        'label'     => 'Global Single Page Options',
+        'label'     => 'Single Page',
         'type'      => 'tab',
         'placement' => 'left',
         'endpoint'  => 0,
@@ -145,6 +146,67 @@ class SettingsPage {
         'type'          => 'color_picker',
         'default_value' => '#B8C2B0',
         'instructions'  => 'Background color shown behind the Before and After post cards.',
+      ],
+      [
+        'key'       => 'field_ll_bag_category_settings_tab',
+        'label'     => 'Category Settings',
+        'type'      => 'tab',
+        'placement' => 'left',
+        'endpoint'  => 0,
+      ],
+      [
+        'key'           => 'field_ll_bag_use_category_archive',
+        'label'         => 'Use category archive?',
+        'name'          => 'll_bag_use_category_archive',
+        'type'          => 'true_false',
+        'default_value' => 1,
+        'ui'            => 1,
+        'ui_on_text'    => 'Yes',
+        'ui_off_text'   => 'No',
+      ],
+      [
+        'key'    => 'field_ll_ba_category_archive_hero',
+        'label'  => 'Category Archive Hero',
+        'name'   => 'll_ba_category_archive_hero',
+        'type'   => 'group',
+        'layout' => 'block',
+        'conditional_logic' => [
+          [ [ 'field' => 'field_ll_bag_use_category_archive', 'operator' => '==', 'value' => '1' ] ],
+        ],
+        'sub_fields' => [
+          [
+            'key'     => 'field_ll_ba_category_archive_hero_content',
+            'label'   => 'Content',
+            'name'    => 'content',
+            'type'    => 'wysiwyg',
+            'wrapper' => [ 'class' => 'll-ba-hero-banner-preview' ],
+          ],
+          [
+            'key'           => 'field_ll_ba_category_archive_hero_link',
+            'label'         => 'Link',
+            'name'          => 'link',
+            'type'          => 'link',
+            'return_format' => 'array',
+          ],
+          [
+            'key'           => 'field_ll_ba_category_archive_hero_image',
+            'label'         => 'Image',
+            'name'          => 'image',
+            'type'          => 'image',
+            'return_format' => 'id',
+          ],
+        ],
+      ],
+      [
+        'key'           => 'field_ll_ba_categories_subtitle',
+        'label'         => 'Categories Subtitle',
+        'name'          => 'll_ba_categories_subtitle',
+        'type'          => 'text',
+        'default_value' => 'Select a category below to start exploring.',
+        'instructions'  => 'Text shown above the category grid.',
+        'conditional_logic' => [
+          [ [ 'field' => 'field_ll_bag_use_category_archive', 'operator' => '==', 'value' => '1' ] ],
+        ],
       ],
     ] );
 

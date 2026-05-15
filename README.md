@@ -56,7 +56,6 @@ your-theme/
 └── ll-before-after/
     ├── single-ll_before_after.php
     ├── archive-ll_before_after.php
-    ├── archive-ll_before_after_category.php
     └── archive-ll_before_after_categories.php
 ```
 
@@ -68,16 +67,39 @@ Any partial included via `TemplateLoader::get()` can also be overridden. Place t
 your-theme/
 └── ll-before-after/
     └── partials/
-        ├── before-after-hero-banner.php   # Archive hero banner
-        ├── post-card.php                  # Grid card for archive and related slider
-        └── filters.php                    # Filter sidebar
+        ├── archive-hero-banner.php       # Archive page hero banner
+        ├── categories-hero-banner.php    # Categories listing page hero banner
+        ├── category-card.php             # Individual category card
+        ├── post-card.php                 # Grid card for archive and related slider
+        └── filters.php                   # Filter sidebar
 ```
 
 > **Note:** Partials included via `bag_include_partial()` (e.g. `fit-image`) are hardcoded to the plugin directory and cannot be overridden from the theme.
 
+#### Categories archive page
+
+The categories listing lives at `/{archive-slug}/categories/` and is controlled via **B&A Posts → Settings → Category Settings**:
+
+- **Use category archive?** — master toggle. When off, the URL returns 404 and all fields below hide.
+- **Category Archive Hero** — content/link/image for the hero banner on that page.
+- **Categories Subtitle** — text shown above the category grid (defaults to "Select a category below to start exploring.").
+
+Category cards link directly to the main archive pre-filtered by category (`?category={slug}`). There are no individual per-category archive pages — the archive's filter/restore URL logic handles the rest.
+
+#### Independent hero banners
+
+The archive page (`archive-ll_before_after.php`) and the categories page (`archive-ll_before_after_categories.php`) each have their own hero banner partial:
+
+| Partial | Page | ACF field |
+|---|---|---|
+| `archive-hero-banner.php` | Main archive | `ll_ba_hero_banner` (Archive Settings tab) |
+| `categories-hero-banner.php` | Categories listing | `ll_ba_category_archive_hero` (Category Settings tab) |
+
+A theme can override either file independently. `categories-hero-banner.php` is not a delegate — it reads from its own distinct ACF field.
+
 #### Hero Banner ACF fields
 
-The plugin registers ACF fields for `before-after-hero-banner.php` in **B&A Posts → Settings → Archive Settings**. When a theme overrides that partial, those fields are automatically removed from the admin — the plugin detects the override at registration time and skips them.
+The plugin registers ACF fields for `archive-hero-banner.php` in **B&A Posts → Settings → Archive Settings**. When a theme overrides that partial, those fields are automatically removed from the admin — the plugin detects the override at registration time and skips them.
 
 **When you override the partial, register your own field group on the same settings page:**
 
@@ -395,28 +417,13 @@ All injection logic lives in `src/Integration/ThemeComponentInjector.php`. For e
 
 ### Disabling plugin components on a specific theme
 
-Components can be disabled individually or all at once. All filters must be in `functions.php` — they are evaluated on `after_setup_theme`, which fires after `functions.php` is included.
-
-**Disable a single component:**
-
-```php
-// Disable only the Before & After Slider
-add_filter( 'll_bag/register_component/ll_ba_slider', '__return_false' );
-
-// Disable only the Before & Afters Grid
-add_filter( 'll_bag/register_component/ll_ba_grid', '__return_false' );
-
-// Disable only Related Before & Afters
-add_filter( 'll_bag/register_component/ll_ba_related_bna', '__return_false' );
-```
-
-**Disable all components at once (master switch):**
+All component injection is gated by the `ll_bag/register_components` filter. To prevent the plugin from injecting any components into the theme's flexible content field, add this to the theme's `functions.php`:
 
 ```php
 add_filter( 'll_bag/register_components', '__return_false' );
 ```
 
-When a component is disabled, its layout is removed from the ACF "Add Component" dropdown, its template file filter is not registered, and its relationship field AJAX handler is not registered.
+This must be in `functions.php` (not a later hook) so it runs before `after_setup_theme` fires, which is when the plugin checks the filter.
 
 ---
 

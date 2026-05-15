@@ -11,7 +11,6 @@ class BeforeAfterPostType {
   public function register(): void {
     add_action('init', [$this, 'registerPostType']);
     add_action('init', [$this, 'registerRewriteRules']);
-    add_action('pre_get_posts', [$this, 'scopeCategoryArchive']);
     add_filter('query_vars', [$this, 'registerQueryVars']);
   }
 
@@ -34,26 +33,14 @@ class BeforeAfterPostType {
   }
 
   public function registerRewriteRules(): void {
+    if ( !get_option( 'options_ll_bag_use_category_archive' ) ) return;
+
     $slug = $this->getRewriteSlug();
     add_rewrite_rule(
       '^' . preg_quote($slug, '/') . '/categories/?$',
       'index.php?ll_ba_view=categories',
       'top'
     );
-    add_rewrite_rule(
-      '^' . preg_quote($slug, '/') . '/category/([^/]+)/?$',
-      'index.php?category_name=$matches[1]',
-      'top'
-    );
-  }
-
-  /**
-   * Scope category archives so they only show ll_before_after posts.
-   */
-  public function scopeCategoryArchive(\WP_Query $query): void {
-    if (!is_admin() && $query->is_main_query() && $query->is_category()) {
-      $query->set('post_type', self::SLUG);
-    }
   }
 
   public function registerPostType(): void {

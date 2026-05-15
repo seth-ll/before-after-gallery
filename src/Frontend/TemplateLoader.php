@@ -75,11 +75,7 @@ class TemplateLoader {
       return self::resolve('archive-ll_before_after.php') ?? $template;
     }
 
-    if (is_category()) {
-      return self::resolve('archive-ll_before_after_category.php') ?? $template;
-    }
-
-    if (get_query_var('ll_ba_view') === 'categories') {
+    if ( get_query_var('ll_ba_view') === 'categories' && get_field( 'll_bag_use_category_archive', 'option' ) ) {
       return self::resolve('archive-ll_before_after_categories.php') ?? $template;
     }
 

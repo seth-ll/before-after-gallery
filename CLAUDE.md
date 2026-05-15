@@ -51,6 +51,17 @@ All ACF field groups are registered programmatically via `acf_add_local_field_gr
 - `src/PostType/Fields.php` — fields on the `ll_before_after` post type and on taxonomy terms
 - `src/Admin/SettingsPage.php` — fields on the options page (`ll-bag-settings`)
 
+**Category taxonomy fields** (`src/BeforeAfterPostType/Fields.php`, `group_ll_ba_category`):
+- `ll_ba_category_bg_image` — background image for the category card grid
+- `ll_ba_category_hero_image` — hero image for the category page (future use)
+
+**Category Settings tab** (`SettingsPage.php`):
+- `ll_bag_use_category_archive` — master toggle; controls URL routing and field visibility
+- `ll_ba_category_archive_hero` — group with content/link/image for the categories page hero
+- `ll_ba_categories_subtitle` — subtitle text above the category grid
+
+**`get_option()` vs `get_field()` in early hooks:** Never call `get_field()` inside a `pre_get_posts` callback. ACF's `get_field()` calls `get_posts()` internally to look up field registration, which fires `pre_get_posts` again → infinite recursion → fatal error. Use `get_option('options_{field_name}')` instead — it reads directly from the options table with no query. Example: `get_option('options_ll_bag_use_category_archive')` in `registerRewriteRules()` and `scopeCategoryArchive()`. `TemplateLoader::loadTemplate()` (on `template_include`) is safe to use `get_field()` since it fires much later.
+
 The images repeater field (`ll_ba_images`) is the core data structure for the single post. Each row has:
 - `ll_ba_image_options` — `one-image` | `two-images` | `video`
 - `ll_ba_image_ratio` — `wide` | `square` | `panorama` | `vertical`

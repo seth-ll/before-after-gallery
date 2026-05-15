@@ -17,7 +17,7 @@ $filters = (new FilterManager())->getEnabled();
 ?>
 
 <div class="ll-ba-archive">
-  <?php TemplateLoader::get( 'partials/before-after-hero-banner.php' ); ?>
+  <?php TemplateLoader::get( 'partials/archive-hero-banner.php' ); ?>
   <div class="ll-ba-archive__inner">
     <!-- Sensitive images bar (shown/hidden by JS based on whether sensitive cards are in the grid) -->
     <div class="ll-ba-sensitive-bar ll-ba-hidden" id="ll-ba-sensitive-bar">

@@ -3,7 +3,6 @@
  * Template: Before & After categories archive
  *
  * Displays a grid of all categories that have published ll_before_after posts.
- * Loaded when visiting the page set in B&A Settings → Categories Archive Page.
  * Override: place this file at {theme}/ll-before-after/archive-ll_before_after_categories.php
  */
 
@@ -12,36 +11,47 @@ defined('ABSPATH') || exit;
 use LiftedLogic\LLBag\Admin\SettingsPage;
 use LiftedLogic\LLBag\Frontend\TemplateLoader;
 
-$categories = get_terms([
+$categories = get_terms( [
     'taxonomy'   => 'category',
     'hide_empty' => true,
-]);
+] );
 
-if (is_wp_error($categories)) {
+if ( is_wp_error( $categories ) ) {
     $categories = [];
 }
 
+$subtitle    = get_field( 'll_ba_categories_subtitle', 'option' ) ?: 'Select a category below to start exploring.';
+$allPostsUrl = SettingsPage::getPostsPageUrl();
 ?>
 
 <div class="ll-ba-archive-categories">
 
-    <div class="flex items-center justify-between px-4 py-4 md:px-0">
-      <?php $allPostsUrl = SettingsPage::getPostsPageUrl(); ?>
-      <?php if ($allPostsUrl) : ?>
-      <a href="<?php echo esc_url($allPostsUrl); ?>" class="flex items-center gap-1 text-sm">
-          View All Before &amp; Afters <span aria-hidden="true">→</span>
-      </a>
-      <?php endif; ?>
-    </div>
+  <?php TemplateLoader::get( 'partials/categories-hero-banner.php' ); ?>
 
-    <?php if (!empty($categories)) : ?>
-    <div class="grid grid-cols-2">
-        <?php foreach ($categories as $category) :
-          TemplateLoader::get('partials/category-card.php', ['category' => $category]);
-        endforeach; ?>
+  <div class="ll-ba-archive-categories__body">
+    <div class="ll-ba-archive-categories__inner ba_grid-cols-container">
+      <div class="ll-ba-archive-categories__container">
+
+        <div class="ll-ba-archive-categories__header">
+          <p class="ll-ba-archive-categories__subtitle"><?= esc_html( $subtitle ) ?></p>
+          <?php if ( $allPostsUrl ) : ?>
+            <a class="ll-ba-archive-categories__all-link" href="<?= esc_url( $allPostsUrl ) ?>">
+              View All Before &amp; Afters
+              <svg class='icon icon-arrow-right' aria-hidden='true'><use xlink:href='#icon-arrow-right'></use></svg>
+            </a>
+          <?php endif; ?>
+        </div>
+
+        <?php if ( !empty( $categories ) ) : ?>
+          <div class="ll-ba-archive-categories__grid">
+            <?php foreach ( $categories as $category ) :
+              TemplateLoader::get( 'partials/category-card.php', ['category' => $category] );
+            endforeach; ?>
+          </div>
+        <?php endif; ?>
+
+      </div>
     </div>
-    <?php else : ?>
-    <p class="py-12 text-sm text-center text-gray-500">No categories found.</p>
-    <?php endif; ?>
+  </div>
 
 </div>
